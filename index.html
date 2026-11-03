@@ -1138,6 +1138,7 @@ a.cay__nut:active{background:var(--dong-nhat)}
 .cd-dem.nen-nhang>div b#cd-so{font:700 20px/24px var(--font-serif)}
 .cd-dem.nen-nhang small{grid-column:1/-1;position:static;white-space:normal;font-size:12px;line-height:16px}
 .cd-dem.nen-nhang>.nn{flex-direction:row;align-items:flex-end}.cd-dem.nen-nhang .nn__que{flex:none;display:block}
+.cd,.cd canvas{touch-action:none}.cd .cd-duoi,.cd .vm-bang{touch-action:pan-x pan-y}
 </style>
 </head>
 <body>
@@ -1420,7 +1421,11 @@ if("mediaSession" in navigator){try{
 addEventListener("hashchange",()=>setTimeout(capNhatMedia,50));
 document.addEventListener("pointerdown",()=>setTimeout(capNhatMedia,60),{capture:true});
 /* rời app thì dừng hẳn âm nền để thẻ trên màn hình khoá không treo mãi */
-document.addEventListener("visibilitychange",()=>{if(document.hidden){try{tatNenChua()}catch(e){}if(AC&&AC.state==="running")AC.suspend().catch(()=>{});if("mediaSession" in navigator)navigator.mediaSession.playbackState="paused"}else capNhatMedia()});
+/* rời app, khoá máy, vuốt tắt app: dừng sạch mọi âm (âm nền, giọng đọc) và đóng hẳn bộ phát, lần chạm sau tự mở lại */
+function dungHetAm(){try{tatNenChua()}catch(e){}try{typeof tatAmNen==="function"&&tatAmNen()}catch(e){}try{speechSynthesis.cancel()}catch(e){}try{clearInterval(_tuDong)}catch(e){}
+  if(AC){const c=AC;AC=null;_ra=null;try{c.close()}catch(e){}}if("mediaSession" in navigator){try{navigator.mediaSession.playbackState="none";navigator.mediaSession.metadata=null}catch(e){}}}
+document.addEventListener("visibilitychange",()=>{if(document.hidden)dungHetAm();else capNhatMedia()});
+addEventListener("pagehide",dungHetAm);addEventListener("freeze",dungHetAm);
 
 /* ================= DỮ LIỆU MẪU (tách riêng để sau này nối hệ thống) =================
    Tên, giá, số điện thoại là ví dụ. Ngày tính tương đối so với hôm nay để bản mẫu luôn "mới". */
@@ -3229,7 +3234,7 @@ function gioTroi(){const h=new Date().getHours()+new Date().getMinutes()/60;retu
 const TROI={dem:{tren:"#0b1022",duoi:"#24263f",suong:"#14162a",sang:.35,mat:"#cfd8ff"},sang:{tren:"#5c7fb3",duoi:"#f3c89a",suong:"#d9b996",sang:.85,mat:"#ffd9a8"},ngay:{tren:"#6ea4d8",duoi:"#dfeaf0",suong:"#c7d9e2",sang:1.15,mat:"#fff4e0"},chieu:{tren:"#3d4f80",duoi:"#f0a46a",suong:"#c99a7a",sang:.8,mat:"#ffc58a"}};
 
 let MO=null;
-function dungMo(canvas,g,opt={}){let vung=null,heSo=1;
+function dungMo(canvas,g,opt={}){let vung=null,heSo=1,nghieng=0,nghiengDich=0,gan=1,ganDich=1;
   const T=THREE,W=canvas.clientWidth,H=canvas.clientHeight,giam=matchMedia("(prefers-reduced-motion: reduce)").matches,tg=gioTroi(),tr=TROI[tg],dem=tg==="dem";
   const kim1=tok("--kim-1"),kim2=tok("--kim-2"),kim4=tok("--kim-4");
   const R=new T.WebGLRenderer({canvas,antialias:true});R.setPixelRatio(Math.min(devicePixelRatio,2));R.setSize(W,H,false);R.outputEncoding=T.sRGBEncoding;R.toneMapping=T.ACESFilmicToneMapping;R.toneMappingExposure=1.05;
@@ -3237,7 +3242,7 @@ function dungMo(canvas,g,opt={}){let vung=null,heSo=1;
   const cam=new T.PerspectiveCamera(48,W/H,.1,120);const DICH=opt.xa?new T.Vector3(0,.85,.35):new T.Vector3(0,1.0,.45);let yaw=0,yawDich=0,cao=0;
   function khung(w,h){cam.aspect=w/h;cam.fov=Math.min(70,Math.max(42,2*Math.atan((1.9/5.2)/(w/h))*180/Math.PI));cam.setViewOffset(w,h,0,vung?Math.round(h/2-(vung[0]+vung[1])/2):h*(opt.xa?.21:.11),w,h);cam.updateProjectionMatrix();R.setSize(w,h,false)}
   let vao=(giam||opt.xa||VM.daVao===g.id)?1:0;if(!opt.xa)VM.daVao=g.id;const vaoTu=performance.now();const nhin0=new T.Vector3(0,1.4,4),tmp=new T.Vector3(),tmp2=new T.Vector3();
-  const doiMo=moDoi(g);const datCam=()=>{const r=(opt.xa?(doiMo?7.4:6.3):doiMo?5.0:4.2)*heSo,cuoi=new T.Vector3(Math.sin(yaw)*r,(opt.xa?3.2:doiMo?2.3:1.8)-cao,Math.cos(yaw)*r+.4);
+  const doiMo=moDoi(g);const datCam=()=>{const r=(opt.xa?(doiMo?7.4:6.3):doiMo?5.0:4.2)*heSo*gan,nh=nghieng,cuoi=new T.Vector3(Math.sin(yaw)*r*(1-nh*.35),(opt.xa?3.2:doiMo?2.3:1.8)+nh*r*.9-cao,Math.cos(yaw)*r+.4);
     if(vao<1){const e=vao<.5?4*vao*vao*vao:1-Math.pow(-2*vao+2,3)/2,p0=new T.Vector3(0,2.5,25),p1=new T.Vector3(0,2.0,11);const a=p0.clone().lerp(p1,e),b=p1.clone().lerp(cuoi,e);cam.position.copy(a.lerp(b,e));tmp.copy(nhin0).lerp(DICH,e);cam.lookAt(tmp)}
     else{cam.position.copy(cuoi);cam.lookAt(DICH)}};khung(W,H);datCam();
   const M=(c,r=.8,m=0,e)=>{const x=new T.MeshStandardMaterial({color:new T.Color(c),roughness:r,metalness:m});if(e){x.emissive=new T.Color(e[0]);x.emissiveIntensity=e[1]}return x};
@@ -3324,12 +3329,21 @@ function dungMo(canvas,g,opt={}){let vung=null,heSo=1;
   const ht=new T.BufferGeometry(),hn=dem?60:40,hp=new Float32Array(hn*3);for(let i=0;i<hn;i++){hp[i*3]=(Math.random()-.5)*10;hp[i*3+1]=Math.random()*3;hp[i*3+2]=(Math.random()-.5)*10}ht.setAttribute("position",new T.BufferAttribute(hp,3));
   sc.add(new T.Points(ht,new T.PointsMaterial({color:new T.Color(dem?"#d9ff8a":"#c9a24a"),size:dem?.08:.06,map:sang,transparent:true,opacity:dem?.9:.6,blending:dem?T.AdditiveBlending:T.NormalBlending,depthWrite:false})));
   /* kéo để xoay quanh */
-  let keo=null;canvas.onpointerdown=e=>{if(vao<1){vao=1;return}keo=e.clientX;canvas.setPointerCapture(e.pointerId)};canvas.onpointermove=e=>{if(keo!=null){yawDich=yawDich-(e.clientX-keo)*.008;keo=e.clientX}};canvas.onpointerup=()=>{keo=null};
+  /* kéo ngang: xoay vòng; kéo dọc: nhìn từ cao xuống; chụm hai ngón hoặc lăn chuột: gần xa */
+  let keo=null;const ptr=new Map();let chum=null;
+  canvas.style.touchAction="none";
+  canvas.onpointerdown=e=>{if(vao<1){vao=1;return}ptr.set(e.pointerId,[e.clientX,e.clientY]);try{canvas.setPointerCapture(e.pointerId)}catch(_){}keo=[e.clientX,e.clientY];chum=null};
+  canvas.onpointermove=e=>{if(!ptr.has(e.pointerId))return;ptr.set(e.pointerId,[e.clientX,e.clientY]);
+    if(ptr.size>=2){const [a,b]=[...ptr.values()],d=Math.hypot(a[0]-b[0],a[1]-b[1]);if(chum)ganDich=Math.max(.55,Math.min(2.4,ganDich*chum/d));chum=d;keo=null;return}
+    if(keo){yawDich-=(e.clientX-keo[0])*.008;nghiengDich=Math.max(-.2,Math.min(1,nghiengDich+(e.clientY-keo[1])*.004));keo=[e.clientX,e.clientY]}};
+  const het=e=>{ptr.delete(e.pointerId);if(ptr.size<2)chum=null;if(!ptr.size)keo=null;else keo=[...ptr.values()][0]};canvas.onpointerup=het;canvas.onpointercancel=het;
+  canvas.onwheel=e=>{e.preventDefault();ganDich=Math.max(.55,Math.min(2.4,ganDich*(e.deltaY>0?1.1:.91)))};
+  ["gesturestart","gesturechange"].forEach(k=>canvas.addEventListener(k,e=>e.preventDefault()));
   let cui=0;function vai(){cui=1}
   let chay=true,id=0,t0=performance.now();
   function lap(now){if(!chay)return;id=requestAnimationFrame(lap);const t=(now-t0)/1000;
     if(vao<1)vao=Math.min(1,(now-vaoTu)/3800);
-    yaw+=(yawDich-yaw)*.06;if(!giam&&keo==null)yawDich+=Math.sin(t*.1)*.0004;cui*=.95;cao=Math.sin(Math.min(1,cui)*Math.PI)*.5;datCam();
+    yaw+=(yawDich-yaw)*.06;gan+=(ganDich-gan)*.12;nghieng+=(nghiengDich-nghieng)*.1;if(!giam&&keo==null)yawDich+=Math.sin(t*.1)*.0004;cui*=.95;cao=Math.sin(Math.min(1,cui)*Math.PI)*.5;datCam();
     nhang.forEach((n,i)=>n.material.opacity=.7+Math.sin(t*3+i)*.3);
     khoiP.forEach(s=>{const u=s.userData;u.t+=.016;const life=u.t%4/4;s.position.set(Math.sin(u.t*1.2+u.n)*.05*life+life*.08,.83+life*1.3,1.06+Math.cos(u.t+u.n)*.03);s.scale.setScalar(.06+life*.45);s.material.opacity=giam?0:Math.sin(life*Math.PI)*.3});
     if(xemThu&&!giam){const k=.55+Math.sin(t*3)*.12;xemThu.position.y=(xemK==="denNL"?.14:xemK==="cay"||xemK==="co"?0:.47)+Math.sin(t*2)*.01;}
@@ -3411,8 +3425,9 @@ function dungMo(canvas,g,opt={}){let vung=null,heSo=1;
       const sp=sprite(sg>0?"#ff8a5a":"#ffd27a",dem?.9:.3,dem?.8:.25);sp.position.set(0,-.2,0);dl.add(sp);dongNC.push(t=>{dl.rotation.z=Math.sin(t*1.1+sg)*.06;sp.material.opacity=(dem?.7:.2)+Math.sin(t*5+sg)*.08})});
   }
   /* khung nhìn theo phần màn còn trống giữa thẻ trên và bảng dưới: mộ luôn nằm giữa, bảng cao thì lùi máy ra */
+  function toanCanh(bat){if(bat){ganDich=1.55;nghiengDich=.45}else{ganDich=1;nghiengDich=0}}
   function datVung(tren,duoi){if(!(duoi>tren))return;vung=[tren,duoi];const cao=duoi-tren;heSo=Math.max(.95,Math.min(1.7,380/cao));khung(canvas.clientWidth,canvas.clientHeight);datCam()}
-  return {datVung,trangTri,dat,xem,thaDen,vai,tg,datDen,datDongTam,dens:()=>dens,huy(){chay=false;cancelAnimationFrame(id);removeEventListener("resize",doi);document.removeEventListener("visibilitychange",an);R.dispose();sc.traverse(o=>{if(o.geometry)o.geometry.dispose()})}}}
+  return {toanCanh,datVung,trangTri,dat,xem,thaDen,vai,tg,datDen,datDongTam,dens:()=>dens,huy(){chay=false;cancelAnimationFrame(id);removeEventListener("resize",doi);document.removeEventListener("visibilitychange",an);R.dispose();sc.traverse(o=>{if(o.geometry)o.geometry.dispose()})}}}
 
 /* âm thanh nền: gió nhẹ, chim ban ngày, dế ban đêm */
 let _nen=null;
@@ -3522,11 +3537,12 @@ ACT["vm-cung"]=()=>{const g=gtById(VM.gt);if(VM.dongTam){VM.dongTam=0;clearTimeo
   VM.dongTam=1;VM.cungVoi=[];MO&&MO.datDongTam(1);ac();batAmNen();AMT.vaoChua();veBang();bao("Bản mô phỏng: người nhà lần lượt mở app cùng giờ.");
   let k=0;const toi=()=>{if(!VM.dongTam||k>=ve2.length)return;const h=ve2[k++];VM.cungVoi.push(h.id);VM.dongTam=1+VM.cungVoi.length;capNhatDen(VM.cungVoi.map(id=>({ai:id,ten:tenNguoi(id),mac:macCua(id),moi:true})));MO&&MO.datDongTam(VM.dongTam);AMT.thanhCong();bao(`${tenNguoi(h.id)} vừa vào cùng khấn.`);veBang();_dt=setTimeout(toi,2600)};_dt=setTimeout(toi,1800)};
 
-ACT["vm-thu"]=()=>{VM.thu=!VM.thu;const d=$(".cd-duoi.vm-duoi");if(d){d.classList.toggle("thu",VM.thu);const k=d.querySelector(".vm-keo");k.querySelector("b").textContent=VM.thu?"Mở bảng":"Thu gọn · xem toàn cảnh";k.setAttribute("aria-label",VM.thu?"Mở bảng":"Thu bảng để xem toàn cảnh")}AMT.giay();setTimeout(canhVung,320)};
+ACT["vm-thu"]=()=>{VM.thu=!VM.thu;const d=$(".cd-duoi.vm-duoi");if(d){d.classList.toggle("thu",VM.thu);const k=d.querySelector(".vm-keo");k.querySelector("b").textContent=VM.thu?"Mở bảng · kéo để xoay, chụm hai ngón để phóng":"Thu gọn · xem toàn cảnh";k.setAttribute("aria-label",VM.thu?"Mở bảng":"Thu bảng để xem toàn cảnh")}AMT.giay();MO&&MO.toanCanh&&MO.toanCanh(VM.thu);setTimeout(canhVung,320)};
 /* đổi phần mộ đang viếng: chọn ở tiêu đề trên cùng */
 ACT["vm-doi-mo"]=()=>{const ds=DATA.giaTien.filter(g=>!moDoi(g)||benMacDinh(g.xung)==="phai");
   moSheet(`<div class="tm-sheet__dau"><h2 class="t-tieu-de">Viếng phần mộ khác</h2><button class="tm-icbtn" data-act="dong-sheet" aria-label="Đóng">${ic("dong")}</button></div>
   <div class="tm-ds">${ds.map(g=>{const dang=VM.gt===g.id||moDoi(gtById(VM.gt))?.id===g.id;return `<a class="tm-dong" href="#/gia-tien/${g.id}/vieng" ${dang?'aria-current="true"':""}>${avGT(g,48,dang?"vang":"")}<span class="tm-dong__giua"><span class="tm-dong__ten serif">${esc(tenMo(g))}</span><span class="tm-dong__phu">${esc(g.nghiaTrang)}${dang?" · đang viếng":""}</span></span>${dang?ic("xong","tm-gt__mui"):ic("toi","tm-gt__mui")}</a>`}).join("")}</div>`,"Đổi phần mộ")};
+document.addEventListener("gesturestart",e=>{if(e.target&&e.target.closest&&e.target.closest(".cd"))e.preventDefault()},{passive:false});
 
 /* ================= NÂNG CẤP HOA VIÊN · MỘ ĐÔI · KHU MỘ TỘC ================= */
 Object.assign(IC,{"nha-mo":'<path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/>',
@@ -3743,7 +3759,7 @@ function cayToc(t){const tim2=id=>t.doi.flatMap(d=>d.mo).find(m=>m.id===id);
   return `<div class="cay-khung"><div class="cay cay--toc"><svg class="cay__net" aria-hidden="true"></svg>${t.doi.map(d=>`<div class="cay__doi"><span class="cay__nhan">${d.doi}</span><div class="cay__hang">${d.mo.filter(m=>!d.mo.some(x=>x.voChong===m.id)).map(nut).join("")}</div></div>`).join("")}</div></div>
   <p class="t-nho">Gia phả theo các ngôi trong khu. Viền vàng là gia tiên đã khai trong app, chạm để xem. Kéo ngang nếu cây rộng hơn màn hình.</p>`}
 
-const VER="1793720143";try{fetch("ver.txt?"+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{v=(v||"").trim();if(v&&v!==VER){let ok=true;try{ok=!sessionStorage.getItem("tm-rl"+v);sessionStorage.setItem("tm-rl"+v,"1")}catch(e){}if(ok)location.reload()}}).catch(()=>{})}catch(e){}
+const VER="1793721482";try{fetch("ver.txt?"+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{v=(v||"").trim();if(v&&v!==VER){let ok=true;try{ok=!sessionStorage.getItem("tm-rl"+v);sessionStorage.setItem("tm-rl"+v,"1")}catch(e){}if(ok)location.reload()}}).catch(()=>{})}catch(e){}
 apTheme();ghiNgan();ve();
 if(matchMedia)matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>{});</script>
 
