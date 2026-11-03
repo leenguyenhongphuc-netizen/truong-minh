@@ -1095,6 +1095,49 @@ a.cay__nut:active{background:var(--dong-nhat)}
 .qua-them__mon img{width:48px;height:48px;border-radius:50%;object-fit:cover}
 .qua-them__mon span{font:500 12px/16px var(--font-sans)}.qua-them__mon b{font:600 12px/16px var(--font-sans)}
 .qua-them__cong{position:absolute;top:4px;right:4px;width:18px;height:18px;color:var(--dong)}
+
+/* viếng: thu bảng, đổi mộ, trạng thái khấn */
+.cd-ten__nut{background:none;border:0;padding:0;color:inherit;font:inherit;display:flex;flex-direction:column;align-items:center;min-width:0;max-width:100%;cursor:pointer;min-height:44px;justify-content:center}
+.cd-ten__nut>span{display:inline-flex;align-items:center;gap:4px;max-width:100%}
+.cd-ten__mui{width:16px;height:16px;flex:none;color:var(--dong)}
+.vm-keo{position:absolute;top:2px;left:50%;transform:translateX(-50%);z-index:3;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:200px;min-height:44px;padding:6px 12px 0;border:0;background:none;color:var(--muc-phu);font:500 12px/16px var(--font-sans);cursor:pointer}
+.vm-keo span{width:40px;height:4px;border-radius:2px;background:var(--vien)}
+.vm-duoi{transition:transform .32s cubic-bezier(.2,.7,.2,1)}
+.vm-duoi.thu{transform:translateY(calc(100% - 64px))}
+.vm-duoi.thu>*:not(.vm-keo){visibility:hidden}
+.vm-khan-nut.xong{background:var(--reu-nhat);color:var(--reu);box-shadow:0 0 0 5px var(--reu-nhat);border:2px solid var(--reu)}
+.vm-khan-nut.xong small{font:500 11px/14px var(--font-sans);text-align:center;max-width:76px}
+.vm-khan-nut.xong svg{width:22px;height:22px}
+.vm-giong.dang{background:var(--dong);color:var(--tren-dong);border-style:solid;animation:tm-nhip 1.6s ease-in-out infinite}
+.vm-giong.lai{border-style:solid;border-color:var(--dong)}
+@keyframes tm-nhip{50%{opacity:.75}}
+@media (prefers-reduced-motion:reduce){.vm-giong.dang{animation:none}.vm-duoi{transition:none}}
+.nc-tab{display:flex;overflow-x:auto;scrollbar-width:none}.nc-tab button{flex:1 0 auto;padding-left:10px;padding-right:10px;white-space:nowrap}
+
+/* chánh điện: thời kinh cho gia tiên, ba nén nhang */
+.cd-cho{display:flex;align-items:center;gap:6px;overflow-x:auto;scrollbar-width:none;margin-bottom:2px}
+.cd-cho__nhan{flex:none;font:600 12px/16px var(--font-sans);color:var(--muc-phu)}
+.cd-cho__ai{flex:none;display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:2px 10px 2px 3px;border:1px solid var(--vien);border-radius:22px;background:none;color:var(--muc);font:500 13px/18px var(--font-sans)}
+.cd-cho__ai[aria-checked="true"]{border-color:var(--dong);background:var(--dong-nhat);color:var(--dong-dam)}
+.nen-nhang{display:flex;flex-direction:column;align-items:center;gap:4px}
+.nn{display:flex;gap:10px;align-items:flex-end;height:70px}
+.nn__que{position:relative;width:5px;height:64px;border-radius:2px;background:linear-gradient(var(--son),var(--son) 82%,var(--kim-3) 82%)}
+.nn__chay{position:absolute;left:0;right:0;top:0;height:0;background:var(--be-mat-2);border-radius:2px}
+.nn__dom{position:absolute;left:50%;width:7px;height:7px;margin-left:-3.5px;border-radius:50%;background:var(--kim-1);box-shadow:0 0 8px 3px rgba(255,170,90,.6);opacity:0;top:calc(var(--f,0)*100% - 3px)}
+.nn__que.dang .nn__dom{opacity:1;animation:tm-nhip 1.4s ease-in-out infinite}
+.nn__que.het{opacity:.35}
+.hh-gan{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.hh-gan__dau{display:flex;align-items:center;gap:10px}.hh-gan__dau b{display:block;font:700 15px/20px var(--font-serif)}.hh-gan__dau span{font:400 13px/18px var(--font-sans);color:var(--muc-phu)}
+.hh-gui{flex:none;min-height:44px;padding:0 14px}
+.hh-gan-ghi{margin:0 0 10px}
+.cd-dem.nen-nhang{width:110px;height:auto;display:grid;grid-template-columns:auto 1fr;align-items:center;gap:8px;text-align:left}
+.cd-dem.nen-nhang .nn{gap:7px;height:62px}
+.cd-dem.nen-nhang .nn__que{width:5px;height:58px}
+.cd-dem.nen-nhang .nn__que b,.cd-dem.nen-nhang .nn__que i{font:inherit}
+.cd-dem.nen-nhang>div:not(.nn){align-items:flex-start}
+.cd-dem.nen-nhang>div b#cd-so{font:700 20px/24px var(--font-serif)}
+.cd-dem.nen-nhang small{grid-column:1/-1;position:static;white-space:normal;font-size:12px;line-height:16px}
+.cd-dem.nen-nhang>.nn{flex-direction:row;align-items:flex-end}.cd-dem.nen-nhang .nn__que{flex:none;display:block}
 </style>
 </head>
 <body>
@@ -1923,8 +1966,10 @@ route("/gia-tien/:id/qua/:q",({id,q})=>{const g=gtById(id),ds=dsQua(q);if(!g||!d
     <div class="tm-gu cot-giua"><div class="qua-chum">${ds.slice(0,4).map(o=>`<img src="${anh(o.x.anh)}" alt="">`).join("")}</div>
       <h2 class="t-tieu-de chu-kim">Đã dâng ${esc(g.xung)}</h2><p class="t-than">${esc(tenQua(ds))}</p>
       <p class="t-nho">${ds.some(o=>o.x.ao)?`Quà tưởng niệm hiện ngay trên mộ, cả nhà cùng thấy. `:""}${coThat?`${esc(ng.ten[0].toUpperCase()+ng.ten.slice(1))} mang lễ ra mộ lần thăm tới${toi?` (${tenNgayAm(info(toi)).toLowerCase()} ${dmy(toi)})`:""} và gửi ảnh về.`:""}</p></div>
-    <div class="tm-thong-bao reu">${ic("hang")}<span>+${Math.max(1,Math.round(tong/10000))} điểm cho hạng ${esc(DATA.toi.hang)}.</span></div>`,
-    day:`<div class="tm-hai-nut"><button class="tm-btn tm-btn--phu" data-act="mo-qua" data-gt="${id}">Dâng thêm</button>${S.veVieng===id?`<a class="tm-btn tm-btn--chinh" href="#/gia-tien/${id}/vieng">Về viếng ${esc(g.xung)}</a>`:`<a class="tm-btn tm-btn--chinh" href="#/gia-tien/${id}">Về trang ${esc(g.xung)}</a>`}</div>`};}
+    ${coThat?`<section class="tm-muc"><h3 class="t-tieu-muc">Lễ mang ra mộ</h3><ol class="tm-ds ds-ol">${[["Đã nhận đơn","Hôm nay",1],[`${esc(ng.ten[0].toUpperCase()+ng.ten.slice(1))} chuẩn bị lễ`,"Mua tươi trong ngày",0],[`Mang ra mộ${toi?` ${tenNgayAm(info(toi)).toLowerCase()} ${dmy(toi)}`:""}`,"Bày lễ, thắp nhang, chụp ảnh lúc dâng",0],["Ảnh gửi về app","Cả nhà nhận thông báo",0]].map(([a2,b2,x],k)=>`<li class="tm-dong tm-dong--tinh"><span class="tm-dong__ic ${x?"reu":""}">${x?ic("xong"):`<span class="so">${k+1}</span>`}</span><span class="tm-dong__giua"><span class="tm-dong__ten">${a2}</span><span class="tm-dong__phu">${b2}</span></span></li>`).join("")}</ol></section>`:""}
+    <section class="tm-muc"><h3 class="t-tieu-muc">Trong Sổ nhà của ${esc(g.xung)}</h3><div class="tm-ds"><div class="tm-dong tm-dong--tinh">${avNguoi("minh",40)}<span class="tm-dong__giua"><span class="tm-dong__ten">Bạn dâng ${esc(tenQua(ds))}</span><span class="tm-dong__phu">Vừa xong · +${Math.max(1,Math.round(tong/10000))} điểm hạng ${esc(DATA.toi.hang)}</span></span></div>
+     ${SO_NHA.filter(x=>x.gt===id&&x.ai!=="minh"&&!x.rieng).slice(0,2).map(x=>`<div class="tm-dong tm-dong--tinh" style="opacity:.75">${avNguoi(x.ai,40)}<span class="tm-dong__giua"><span class="tm-dong__ten">${esc(tenNguoi(x.ai))} ${esc((VIEC_LOAI[x.loai]?.[0]||"").toLowerCase())} ${esc(g.xung)}</span><span class="tm-dong__phu">${dmy(tuIso(x.ngay))} lúc ${x.gio}</span></span></div>`).join("")}</div></section>`,
+    day:`<div class="tm-hai-nut"><a class="tm-btn tm-btn--phu" href="#/gia-tien/${id}/nha">Xem Sổ nhà</a>${S.veVieng===id?`<a class="tm-btn tm-btn--chinh" href="#/gia-tien/${id}/vieng">Về viếng ${esc(g.xung)}</a>`:`<a class="tm-btn tm-btn--chinh" href="#/gia-tien/${id}">Về trang ${esc(g.xung)}</a>`}</div>`};}
   return {tieuDe:"Xác nhận dâng quà",lui:S.veVieng===id?`/gia-tien/${id}/vieng`:`/gia-tien/${id}`,tab:"/gia-tien",nav:false,body:`
   <div class="tm-ds">${ds.map(o=>`<div class="tm-dong tm-dong--tinh"><img class="tm-dong__anh tron" src="${anh(o.x.anh)}" alt=""><span class="tm-dong__giua"><span class="tm-dong__ten">${esc(o.x.ten)}${o.sl>1?` × ${o.sl}`:""}</span><span class="tm-dong__phu">${o.x.ao?"Quà tưởng niệm · hiện ngay trên mộ":"Mang ra mộ thật"}</span></span>${tien(o.x.gia*o.sl)}</div>`).join("")}</div>
   <div class="tm-ds">
@@ -2492,7 +2537,7 @@ ACT["mo-nap"]=()=>{S.nap={};dongSheet(true);di("/vi/nap")};
 
 /* ================= CHÁNH ĐIỆN 3D: gõ mõ, tụng kinh, dâng hương, thỉnh chuông, hồi hướng ================= */
 const KINH=[
- {id:"niem-phat",ten:"Niệm Phật",phu:"Mỗi tiếng mõ một câu, đủ 108 hạt là trọn một chuỗi",niem:true,dong:["Nam mô A Di Đà Phật"]},
+ {id:"niem-phat",ten:"Niệm Phật",phu:"Mỗi tiếng mõ một câu. Ba nén nhang cháy hết là trọn một thời kinh",niem:true,dong:["Nam mô A Di Đà Phật"]},
  {id:"bat-nha",ten:"Bát Nhã Tâm Kinh",phu:"Bản Hán Việt, ngài Huyền Trang dịch",dong:[
   "Ma Ha Bát Nhã Ba La Mật Đa Tâm Kinh.",
   "Quán Tự Tại Bồ Tát, hành thâm Bát nhã Ba la mật đa thời,",
@@ -2675,14 +2720,16 @@ function veKinh(){const k=kinhCD(),el=$("#cd-kinh");if(!el)return;
   const L=k.dong,i=CD.dong,ra=[];for(let j=i-2;j<=i+2;j++){if(j<0||j>=L.length){ra.push(`<p class="cd-dong rong">&nbsp;</p>`);continue}
     if(j===i)ra.push(`<p class="cd-dong dang">${tuCua(L[j]).map((w,x)=>`<span class="${x<CD.tu?"sang":""}">${esc(w)}</span>`).join(" ")}</p>`);else ra.push(`<p class="cd-dong ${Math.abs(j-i)===1?"gan":"xa"}">${esc(L[j])}</p>`)}
   el.innerHTML=ra.join("")}
-function veDem(){const k=kinhCD(),so=$("#cd-so"),tong=$("#cd-tong"),phu=$("#cd-phu-dem"),vong=$("#cd-vong");if(!so)return;
-  if(k.niem){so.textContent=CD.niem%108||(CD.niem?108:0);tong.textContent="/108";vong.style.strokeDashoffset=String(276.5*(1-((CD.niem%108)||(CD.niem?108:0))/108));}
-  else{so.textContent=Math.min(CD.dong+1,k.dong.length);tong.textContent="/"+k.dong.length;vong.style.strokeDashoffset=String(276.5*(1-(CD.dong+CD.tu/Math.max(1,tuCua(k.dong[Math.min(CD.dong,k.dong.length-1)]).length))/k.dong.length))}
-  phu.textContent=`${CD.homNay.mo.toLocaleString("vi-VN")} tiếng mõ hôm nay`}
+/* tiến độ thời kinh hiện bằng ba nén nhang cháy dần (không đếm chuỗi hạt) */
+function veDem(){const k=kinhCD(),so=$("#cd-so"),tong=$("#cd-tong"),phu=$("#cd-phu-dem");if(!so)return;
+  const p=k.niem?((CD.niem%108)||(CD.niem?108:0))/108:(CD.dong+CD.tu/Math.max(1,tuCua(k.dong[Math.min(CD.dong,k.dong.length-1)]).length))/k.dong.length;
+  [0,1,2].forEach(i=>{const e=$("#nn"+i);if(e){const f=Math.max(0,Math.min(1,p*3-i));e.style.height=(f*100)+"%";e.parentElement.style.setProperty("--f",f);e.parentElement.classList.toggle("dang",f>0&&f<1);e.parentElement.classList.toggle("het",f>=1)}});
+  const nen=Math.min(3,Math.floor(p*3)+(p<1?1:0));so.textContent=p>=1?"Trọn":`Nén ${nen}`;tong.textContent=p>=1?" thời kinh":"/3";
+  const g=gtById(CD.hoiHuong);phu.textContent=`Dành cho ${g?g.xung:"gia tiên"} · ${CD.homNay.mo.toLocaleString("vi-VN")} câu hôm nay`}
 function goMo(tay){amMo();CANH&&CANH.goMo();const m=$(".cd-mo");if(m){m.classList.remove("go");void m.offsetWidth;m.classList.add("go")}
   CD.homNay.mo++;tuSuKien("mo");const k=kinhCD();
-  if(k.niem){CD.niem++;CD.niemSang=true;setTimeout(()=>{CD.niemSang=false;veKinh()},260);if(CD.niem%108===0){tuSuKien("chuoi");amChuong(.8);CANH&&CANH.thinhChuong();CD.homNay.kinh++;moHoiHuong(`Trọn một chuỗi 108 câu niệm Phật.`)}}
-  else{CD.tu++;if(CD.tu>=tuCua(k.dong[CD.dong]).length){CD.dong++;CD.tu=0;if(CD.dong>=k.dong.length){CD.dong=k.dong.length-1;CD.tu=tuCua(k.dong[CD.dong]).length;amChuong();CANH&&CANH.thinhChuong();CD.homNay.kinh++;tuSuKien("kinh",k.id);luuCD();veKinh();veDem();
+  if(k.niem){CD.niem++;CD.niemSang=true;setTimeout(()=>{CD.niemSang=false;veKinh()},260);if(CD.niem%108===0){tuSuKien("chuoi");amChuong(.8);CANH&&CANH.thinhChuong();CD.homNay.kinh++;ghiThoiKinh();moHoiHuong(`Trọn một thời kinh · 108 câu niệm Phật.`)}}
+  else{CD.tu++;if(CD.tu>=tuCua(k.dong[CD.dong]).length){CD.dong++;CD.tu=0;if(CD.dong>=k.dong.length){CD.dong=k.dong.length-1;CD.tu=tuCua(k.dong[CD.dong]).length;amChuong();CANH&&CANH.thinhChuong();CD.homNay.kinh++;ghiThoiKinh();tuSuKien("kinh",k.id);luuCD();veKinh();veDem();
       dungTuDong();moHoiHuong(`Đã tụng trọn ${k.ten}.`);return}}}
   if(CD.homNay.mo%10===0)luuCD();veKinh();veDem()}
 let _tuDong=null;
@@ -2720,22 +2767,29 @@ route("/chua/chanh-dien",()=>({tran:true,tieuDe:"Chánh điện",body:`
  <div class="cd-hud" id="cd-hud">${hudHTML()}</div>
  <nav class="cd-cot" aria-label="Tiện ích chánh điện"><button class="cd-nut-tron" data-act="tu-cua-hang" data-v="le" aria-label="Cửa hàng">${ic("cua-hang")}</button><button class="cd-nut-tron" data-act="cd-hanh-huong" aria-label="Hành hương, bản đồ chùa">${ic("ban-do")}</button><button class="cd-nut-tron" data-act="tu-ho-so" data-v="cua-toi" aria-label="Đèn nhà mình">${ic("tai-khoan")}</button><button class="cd-nut-tron nut-viec-cd" data-act="vc-mo" aria-label="Việc giữ lửa${soQua()?`, ${soQua()} quà chưa nhận`:""}">${ic("viec")}${soQua()?`<i class="nut-viec__so so">${soQua()}</i>`:""}</button></nav>
  <div class="cd-duoi">
+  <div class="cd-cho" role="radiogroup" aria-label="Thời kinh này dành cho">${choCD()}</div>
   <div class="cd-tabs" role="tablist" aria-label="Chọn bài tụng">${KINH.map(k=>`<button class="cd-tab" role="tab" data-act="cd-kinh" data-v="${k.id}" aria-selected="${CD.kinh===k.id}">${k.ten}</button>`).join("")}</div>
   <p class="cd-phu" id="cd-phu">${esc(kinhCD().phu)}</p>
   <div class="cd-kinh" id="cd-kinh" aria-live="off"></div>
   <div class="cd-dieu">
-   <div class="cd-dem"><svg viewBox="0 0 100 100" class="cd-vong-svg" aria-hidden="true"><circle cx="50" cy="50" r="44" class="nen"/><circle cx="50" cy="50" r="44" class="chay" id="cd-vong"/></svg><div><b id="cd-so" class="so">0</b><span id="cd-tong" class="so"></span></div><small id="cd-phu-dem"></small></div>
+   <div class="cd-dem nen-nhang"><div class="nn" aria-hidden="true">${[0,1,2].map(i=>`<span class="nn__que"><i class="nn__chay" id="nn${i}"></i><b class="nn__dom"></b></span>`).join("")}</div><div><b id="cd-so" class="so">0</b><span id="cd-tong" class="so"></span></div><small id="cd-phu-dem"></small></div>
    <button class="cd-mo" data-act="cd-go" aria-label="Gõ mõ (phím cách)">${moSVG}</button>
    <div class="cd-tuy"><label class="cd-tuy-dong" for="cd-tu-dong"><span>Mõ tự động</span><input type="checkbox" class="tm-sw" id="cd-tu-dong" data-doi="cd-tu-dong" ${CD.tuDong?"checked":""}></label>
     <label class="cd-tuy-cot" for="cd-nhip"><span>Nhịp <b id="cd-nhip-so" class="so">${CD.nhip}</b>/phút</span><input type="range" id="cd-nhip" min="40" max="120" step="5" value="${CD.nhip}" data-nhap="cd-nhip"></label></div>
   </div>
-  <div class="cd-hanh"><button class="cd-hanh-nut" data-act="cd-dang-le">${ic("nhang")}<span>Dâng lễ</span></button><button class="cd-hanh-nut" data-act="cd-chuong">${ic("thong-bao")}<span>Thỉnh chuông</span></button><button class="cd-hanh-nut" data-act="cd-hh">${ic("hoa-sen")}<span>Hồi hướng</span></button></div>
+  <div class="cd-hanh"><button class="cd-hanh-nut" data-act="cd-dang-le">${ic("nhang")}<span>Dâng lễ</span></button><button class="cd-hanh-nut" data-act="cd-chuong">${ic("thong-bao")}<span>Thỉnh chuông</span></button><button class="cd-hanh-nut" data-act="cd-hh">${ic("hoa-sen")}<span id="cd-hh-nhan">Hồi hướng</span></button></div>
  </div>
 </section>`,sau(){
   vaoChua(TU.chua);veHud();const nenCham=()=>batNenChua();if(AC&&AC.state==="running")batNenChua();else document.addEventListener("pointerdown",nenCham,{once:true});veKinh();veDem();chayTuDong();
   const phim=e=>{if((e.code==="Space"||e.key===" ")&&!e.target.closest("input,button,select,textarea")){e.preventDefault();goMo(true)}};addEventListener("keydown",phim);
   let huy=false;taiThree().then(()=>{if(huy||!$("#cd-canh"))return;try{CANH=dungCanh($("#cd-canh"))}catch(e){$("#cd-du-phong").hidden=false}}).catch(()=>{$("#cd-du-phong").hidden=false});
   window._donDep=()=>{huy=true;tatNenChua();document.removeEventListener("pointerdown",nenCham);removeEventListener("keydown",phim);clearInterval(_tuDong);luuCD();if(CANH){CANH.huy();CANH=null}}}}));
+
+/* thời kinh dành cho ai: chọn gia tiên trước khi tụng, hồi hướng mặc định về người đó */
+function choCD(){if(CD.hoiHuong==="tat-ca")CD.hoiHuong="ba";const ds=DATA.giaTien.filter(g=>!moDoi(g)||benMacDinh(g.xung)==="phai");
+  return `<span class="cd-cho__nhan">Thời kinh cho</span>${ds.map(g=>{const ids=[g.id,moDoi(g)?.id].filter(Boolean),on=ids.includes(CD.hoiHuong);return `<button class="cd-cho__ai" role="radio" aria-checked="${on}" data-act="cd-cho" data-v="${g.id}">${avGT(g,28,on?"vang":"")}<span>${esc(tenMo(g))}</span></button>`}).join("")}`}
+ACT["cd-cho"]=t=>{CD.hoiHuong=t.dataset.v;const k=$(".cd-cho");if(k)k.innerHTML=choCD();veDem();AMT.tab()};
+function ghiThoiKinh(){TU.tungCho=TU.tungCho||{};const g=gtById(CD.hoiHuong);const id=g?(moDoi(g)&&benMacDinh(g.xung)!=="phai"?moDoi(g).id:g.id):"ba";TU.tungCho[id]=(TU.tungCho[id]||0)+1;luuTU()}
 
 /* ================= TU TẬP: hồ sơ, cửa hàng chánh điện, hành hương ================= */
 Object.assign(IC,{
@@ -2954,11 +3008,23 @@ function theHH(){const c=chuaById(HH.chon||TU.chua),da=TU.an[c.id],i=CHUA.indexO
   return `<div class="hh-the">${ANH_CHUA[c.id]?`<figure class="hh-anh"><img src="${anh("chua-"+c.id)}" alt="${esc(c.ten)}" loading="lazy"><figcaption>Ảnh: ${esc(ANH_CHUA[c.id])}, Wikimedia Commons</figcaption></figure>`:""}<div class="hh-the__dau"><button class="tm-icbtn" data-act="hh-buoc" data-v="${(i+CHUA.length-1)%CHUA.length}" aria-label="Chùa trước">${ic("lui")}</button><span class="gian giua-chu"><b class="t-tieu-muc khoi">${esc(c.ten)}</b><span class="t-nho">${esc(c.noi)}</span></span><button class="tm-icbtn" data-act="hh-buoc" data-v="${(i+1)%CHUA.length}" aria-label="Chùa tiếp">${ic("toi")}</button></div>
    <p class="hh-trang ${da?"da":""}">${ic(da?"da-xac-minh":"hoa-sen")}<span>${da?`Đã viếng, có ấn ngày ${dmyy(new Date(da))}`:"Chưa viếng · vào chùa nhận ấn và +10 công đức"}${TU.chua===c.id?" · bạn đang ở đây":""}</span></p>
    <div class="tm-hai-nut"><button class="tm-btn ${TU.chua===c.id?"tm-btn--phu":"tm-btn--chinh"}" data-act="hh-vao" data-v="${c.id}">${TU.chua===c.id?"Về chánh điện":"Vào chùa"}</button><button class="tm-btn tm-btn--phu" data-act="hh-su" data-v="${c.id}">Thông tin chùa</button></div></div>`}
+/* chùa gần nơi an nghỉ: tính theo toạ độ mộ của từng gia tiên */
+const kmGiua=(a1,o1,a2,o2)=>{const r=Math.PI/180,d=Math.sin((a2-a1)*r/2)**2+Math.cos(a1*r)*Math.cos(a2*r)*Math.sin((o2-o1)*r/2)**2;return 6371*2*Math.asin(Math.sqrt(d))};
+function ganMoHTML(){const ds=DATA.giaTien.filter(g=>(!moDoi(g)||benMacDinh(g.xung)==="phai")&&/^[\d.]+,\s*[\d.]+$/.test(g.toaDo||""));
+  return `<p class="t-nho hh-gan-ghi">Mỗi phần mộ có vài ngôi chùa gần. Người giữ đèn ghé chùa sau buổi thăm mộ, gửi lễ cúng hộ cho gia tiên đó.</p>`+ds.map(g=>{const [a,o]=g.toaDo.split(",").map(Number),gan=CHUA.map(c=>({c,km:kmGiua(a,o,c.lat,c.lng)})).sort((x,y)=>x.km-y.km).slice(0,3);
+    return `<section class="hh-gan"><div class="hh-gan__dau">${avGT(g,44,"vang")}<div class="mw0"><b>${esc(tenMo(g))}</b><span>${esc(g.nghiaTrang)}</span></div></div>
+    <div class="tm-ds">${gan.map(({c,km})=>`<div class="tm-dong tm-dong--tinh">${ANH_CHUA[c.id]?`<img class="tm-dong__anh" src="${anh("chua-"+c.id)}" alt="">`:`<span class="tm-dong__ic">${ic("chua")}</span>`}<span class="tm-dong__giua"><span class="tm-dong__ten">${esc(c.ten)}</span><span class="tm-dong__phu so">${km<1?"dưới 1":km.toFixed(km<10?1:0).replace(".",",")} km từ mộ · ${esc(c.noi)}</span></span><button class="tm-btn tm-btn--phu hh-gui" data-act="hh-gui-le" data-v="${c.id}" data-gt="${g.id}">Gửi lễ</button></div>`).join("")}</div></section>`}).join("")}
+ACT["hh-gui-le"]=t=>{const g=gtById(t.dataset.gt);S.fLe={le:"cau-sieu",chua:t.dataset.v,ai:[g.id],tien:lcById("cau-sieu").goiY[0],khac:""};di("/chua/le/cau-sieu/tien")};
+/* sổ công đức theo từng gia tiên: thời kinh, hồi hướng, lễ đã gửi chùa */
+function soCongDuc(){const ds=DATA.giaTien.filter(g=>!moDoi(g)||benMacDinh(g.xung)==="phai");
+  return `<div class="hh-ho-chieu-dau"><b class="t-tieu-muc khoi">${ic("hoa-sen")} Sổ công đức của nhà</b></div><div class="tm-ds">${ds.map(g=>{const ids=[g.id,moDoi(g)?.id].filter(Boolean),hh=SO_NHA.filter(x=>ids.includes(x.gt)&&x.loai==="hh").length,tk=(TU.tungCho||{})[g.id]||0,le=DON_CHUA.filter(d=>d.ai.some(a=>ids.includes(a))).length;
+    return `<div class="tm-dong tm-dong--tinh">${avGT(g,44,"vang")}<span class="tm-dong__giua"><span class="tm-dong__ten">${esc(tenMo(g))}</span><span class="tm-dong__phu so">${tk} thời kinh · ${hh} lần hồi hướng · ${le} lễ gửi chùa</span></span></div>`}).join("")}</div>`}
 function noiDungHH(){
   if(HH.tab==="ban-do")return `<div class="tm-chips tm-chips--cuon hh-loc">${[["tat-ca","Tất cả"],...TUYEN.map(t=>[t.id,`${t.ten} ${t.ds.filter(c=>TU.an[c]).length}/${t.ds.length}`])].map(([v,t])=>`<button class="tm-chip" aria-pressed="${HH.loc===v}" data-act="hh-loc" data-v="${v}">${esc(t)}</button>`).join("")}</div>
     <div class="hh-khung">${veBanDo()}<div class="hh-zoom"><button class="cd-nut-tron" data-act="hh-zoom" data-v=".7" aria-label="Phóng to">${ic("cong")}</button><button class="cd-nut-tron" data-act="hh-zoom" data-v="1.43" aria-label="Thu nhỏ">${ic("tru")}</button></div>
     <div class="hh-chu-giai"><span><i class="cg-chua"></i>Chưa viếng</span><span><i class="cg-da"></i>Đã viếng</span><span><i class="cg-dang"></i>Bạn ở đây</span></div><span class="hh-minh-hoa">Bản đồ minh hoạ, vị trí gần đúng</span></div>${theHH()}`;
-  if(HH.tab==="ho-chieu")return `<div class="hh-ho-chieu-dau"><b class="t-tieu-muc khoi">${ic("da-xac-minh")} Hộ chiếu hành hương</b><span class="so">${Object.keys(TU.an).length}/${CHUA.length} ấn chùa</span></div><div class="tu-thanh hh-thanh"><i style="width:${Math.round(Object.keys(TU.an).length/CHUA.length*100)}%"></i></div>
+  if(HH.tab==="gan-mo")return ganMoHTML();
+  if(HH.tab==="ho-chieu")return soCongDuc()+`<div class="hh-ho-chieu-dau"><b class="t-tieu-muc khoi">${ic("da-xac-minh")} Dấu chùa đã ghé</b><span class="so">${Object.keys(TU.an).length}/${CHUA.length} ấn chùa</span></div><div class="tu-thanh hh-thanh"><i style="width:${Math.round(Object.keys(TU.an).length/CHUA.length*100)}%"></i></div>
     <div class="hh-an">${CHUA.map(c=>{const da=TU.an[c.id];return `<button class="hh-an__o ${da?"co":""}" data-act="hh-di" data-v="${c.id}"><span class="hh-dau">${c.ngan}</span><b>${esc(c.ten.replace("Chùa ",""))}</b><span class="t-nho">${da?`Ấn kết duyên · ${dmyy(new Date(da))}`:"Chưa có ấn"}</span></button>`}).join("")}</div>`;
   return `<div class="tu-ds">${TUYEN.map(t=>{const xong=t.ds.filter(c=>TU.an[c]).length,du=xong===t.ds.length,nhan=TU.thuong.includes(t.id),le=LE_AO.find(l=>l.id===t.le[0]);
     return `<div class="hh-tuyen"><div class="hh-hang"><b class="t-tieu-muc khoi">${esc(t.ten)}</b><span class="so">${xong}/${t.ds.length}</span></div><p class="t-nho">${esc(t.phu)}</p>
@@ -2997,7 +3063,7 @@ function vaoChua(id){TU.chua=id;if(!TU.an[id]){TU.an[id]=iso(homNay);themCD(10);
 ACT["cd-hanh-huong"]=()=>di("/chua/hanh-huong");
 route("/chua/hanh-huong",()=>{if(!HH.vb){HH.vb=[0,0,700,800];HH.vuaLai=true}if(!HH.chon)HH.chon=TU.chua;return {tran:true,tieuDe:"Hành hương",body:`
 <section class="hh" aria-label="Hành hương">
- <header class="hh-tren"><span class="hh-ic" aria-hidden="true">${ic("ban-do")}</span><div class="hh-tabs" role="tablist">${[["ban-do","Bản đồ"],["ho-chieu","Hộ chiếu"],["tuyen","Tuyến"]].map(([v,t])=>`<button class="hh-tab" role="tab" data-act="hh-tab" data-v="${v}" aria-selected="${HH.tab===v}">${t}</button>`).join("")}</div><button class="cd-nut-tron" data-lui="/chua/chanh-dien" aria-label="Đóng, về chánh điện">${ic("dong")}</button></header>
+ <header class="hh-tren"><span class="hh-ic" aria-hidden="true">${ic("ban-do")}</span><div class="hh-tabs" role="tablist">${[["ban-do","Bản đồ"],["gan-mo","Gần mộ"],["ho-chieu","Sổ công đức"]].map(([v,t])=>`<button class="hh-tab" role="tab" data-act="hh-tab" data-v="${v}" aria-selected="${HH.tab===v}">${t}</button>`).join("")}</div><button class="cd-nut-tron" data-lui="/chua/chanh-dien" aria-label="Đóng, về chánh điện">${ic("dong")}</button></header>
  <div class="hh-lich"><span class="hh-pill">${ic("lich-am")}${amLichDong()}</span><span class="hh-pill hh-pill--kim">${ic("hoa-sen")}Đang ở: ${esc(chuaById(TU.chua).ten.replace("Chùa ",""))}</span></div>
  <div id="hh-noi" class="hh-noi">${noiDungHH()}</div>
 </section>`,sau(){ganKeo();if(HH.vuaLai){HH.vuaLai=false;requestAnimationFrame(vuaBanDo)}}}});
@@ -3228,7 +3294,7 @@ function dungMo(canvas,g,opt={}){let vung=null,heSo=1;
     else if(k==="cay"){const t=new T.Mesh(new T.CylinderGeometry(.025,.035,.5,6),than);t.position.y=.25;o.add(t);const c=new T.Mesh(new T.SphereGeometry(.22,12,10),M("#3f7a32",.8));c.scale.y=.85;c.position.y=.6;o.add(c)}
     else if(k==="co"){const r=new T.Mesh(new T.RingGeometry(1.75,2.4,48),M("#4f8a34",.9));r.rotation.x=-Math.PI/2;r.scale.set(1,1.3,1);r.position.y=.012;o.add(r)}
     return o}
-  const datDuoc=[];let xemThu=null,xemK=null;
+  const datDuoc=[];let xemThu=null,xemK=null;const dongNC=[];
   function dat(ds){datDuoc.forEach(o=>sc.remove(o));datDuoc.length=0;ds.slice(0,CHO.length).forEach((d,i)=>{const o=hinh(d.k);o.position.set(...CHO[i]);o.rotation.y=Math.random()*.6-.3;if(d.ma){o.traverse(m=>{if(m.material&&!m.isSprite){m.material=m.material.clone();m.material.transparent=true;m.material.opacity=.45}})}sc.add(o);datDuoc.push(o)})}
   function xem(k){if(xemThu){sc.remove(xemThu);xemThu=null}if(xemK==="sonBia")mats.forEach(m=>{m.material.map=chuBia(false,m.userData.p);m.material.needsUpdate=true});if(xemK==="batMoi")bat.material.color.set("#c9b48a");xemK=k;if(!k)return;
     if(k==="sonBia"){mats.forEach(m=>{m.material.map=chuBia(true,m.userData.p);m.material.needsUpdate=true});return}
@@ -3239,7 +3305,7 @@ function dungMo(canvas,g,opt={}){let vung=null,heSo=1;
   const ht=new T.BufferGeometry(),hn=dem?60:40,hp=new Float32Array(hn*3);for(let i=0;i<hn;i++){hp[i*3]=(Math.random()-.5)*10;hp[i*3+1]=Math.random()*3;hp[i*3+2]=(Math.random()-.5)*10}ht.setAttribute("position",new T.BufferAttribute(hp,3));
   sc.add(new T.Points(ht,new T.PointsMaterial({color:new T.Color(dem?"#d9ff8a":"#c9a24a"),size:dem?.08:.06,map:sang,transparent:true,opacity:dem?.9:.6,blending:dem?T.AdditiveBlending:T.NormalBlending,depthWrite:false})));
   /* kéo để xoay quanh */
-  let keo=null;canvas.onpointerdown=e=>{if(vao<1){vao=1;return}keo=e.clientX;canvas.setPointerCapture(e.pointerId)};canvas.onpointermove=e=>{if(keo!=null){yawDich=Math.max(-1.1,Math.min(1.1,yawDich-(e.clientX-keo)*.006));keo=e.clientX}};canvas.onpointerup=()=>{keo=null};
+  let keo=null;canvas.onpointerdown=e=>{if(vao<1){vao=1;return}keo=e.clientX;canvas.setPointerCapture(e.pointerId)};canvas.onpointermove=e=>{if(keo!=null){yawDich=yawDich-(e.clientX-keo)*.008;keo=e.clientX}};canvas.onpointerup=()=>{keo=null};
   let cui=0;function vai(){cui=1}
   let chay=true,id=0,t0=performance.now();
   function lap(now){if(!chay)return;id=requestAnimationFrame(lap);const t=(now-t0)/1000;
@@ -3250,6 +3316,7 @@ function dungMo(canvas,g,opt={}){let vung=null,heSo=1;
     if(xemThu&&!giam){const k=.55+Math.sin(t*3)*.12;xemThu.position.y=(xemK==="denNL"?.14:xemK==="cay"||xemK==="co"?0:.47)+Math.sin(t*2)*.01;}
     const a=ht.attributes.position.array;if(!giam)for(let i=0;i<hn;i++){if(dem){a[i*3]+=Math.sin(t+i)*.004;a[i*3+1]+=Math.cos(t*.7+i)*.003}else{a[i*3+1]-=.004;a[i*3]+=Math.sin(t+i)*.003;if(a[i*3+1]<0)a[i*3+1]=3}}ht.attributes.position.needsUpdate=true;
     for(let i=bay.length-1;i>=0;i--){const b=bay[i];b.t+=.016;b.o.position.set(b.x*b.t,1.2+b.t*.8,1.0-b.t*.4);b.o.children.forEach(c=>c.material.opacity=Math.max(0,1-b.t/6));if(b.t>6){sc.remove(b.o);bay.splice(i,1)}}
+    if(!giam)dongNC.forEach(f=>f(t));
     dens.forEach((d,i)=>{if(d.moi<1){d.moi=Math.min(1,d.moi+.08);d.o.scale.setScalar(d.moi)}const ph=dongTam?t*9:t*12.7+d.pha,r=Math.sin(ph)*.05+Math.sin(ph*.56)*.04;
       d.den.lua.scale.set(1-r*.4,1+r+(dongTam?.25+dongTam*.06:0),1-r*.4);d.den.quang.material.opacity=dongTam?.95:.7;d.den.quang.scale.setScalar(dongTam?1.2+dongTam*.15+Math.sin(t*3)*.08:.85)});
     R.render(sc,cam)}
@@ -3269,7 +3336,7 @@ function dungMo(canvas,g,opt={}){let vung=null,heSo=1;
   const beM=be.material,goc={d:da2.color.getHex(),b:beM.color.getHex()};let ncG=null;
   const W2=1.3*RX,daNC=M("#bdb5a5",.85),laNC=M("#2f6a2c",.85),laSang=M("#4f8f3a",.85),thanNC=M("#5a4130",.9),coNhung=M("#6aa84a",.95),sonDo=M("#6b2a1a",.6),denDa=M("#f6e7c0",.4,0,[kim4,dem?1.4:.3]);
   const KIEU={"nguyen-ban":[goc.d,goc.b,.8,0],"da-xanh":[0x7f8d88,0x6f7b77,.85,0],"hoa-cuong":[0x2b2a2e,0x3b3a3e,.25,.3],"da-trang":[0xf1ede4,0xe4dfd3,.5,0],"mai-dinh":[0xcbbf9f,0xb8ad90,.8,0]};
-  function trangTri(cfg){if(ncG){sc.remove(ncG);ncG.traverse(o=>{if(o.geometry)o.geometry.dispose()})}ncG=new T.Group();sc.add(ncG);
+  function trangTri(cfg){dongNC.length=0;if(ncG){sc.remove(ncG);ncG.traverse(o=>{if(o.geometry)o.geometry.dispose()})}ncG=new T.Group();sc.add(ncG);
     const k=(cfg&&cfg.kieu)||"nguyen-ban",ds=new Set((cfg&&cfg.them)||[]);const [c1,c2,r,m]=KIEU[k]||KIEU["nguyen-ban"];da2.color.setHex(c1);da2.roughness=r;da2.metalness=m;beM.color.setHex(c2);
     const add=(geo,mat,x,y,z,o={})=>{const h=new T.Mesh(geo,mat);h.position.set(x,y,z);if(o.ry)h.rotation.y=o.ry;if(o.rx)h.rotation.x=o.rx;if(o.rz)h.rotation.z=o.rz;(o.g||ncG).add(h);return h};
     const B=(w,h,d)=>new T.BoxGeometry(w,h,d);
@@ -3296,6 +3363,33 @@ function dungMo(canvas,g,opt={}){let vung=null,heSo=1;
       const x=W2+.06,z=1.76;rail(-x,-z,x,-z);rail(-x,-z,-x,z);rail(x,-z,x,z);rail(-x,z,-.55,z);rail(.55,z,x,z)}
     if(ds.has("lu-huong")){const o=cay(0,2.15,1,()=>{});add(B(.36,.2,.36),daNC,0,.1,0,{g:o});const l=new T.Mesh(new T.LatheGeometry([[0,0],[.1,0],[.14,.04],[.2,.14],[.21,.24],[.18,.28]].map(p=>new T.Vector2(p[0],p[1])),24),daNC);l.position.y=.2;o.add(l);mirror(sg=>add(new T.TorusGeometry(.05,.015,6,12),daNC,sg*.21,.42,0,{g:o,ry:Math.PI/2}))}
     if(ds.has("lan-da"))mirror(sg=>{const o=cay(sg*.95*RX,2.15,1,()=>{});o.rotation.y=-sg*.35;add(B(.3,.16,.4),daNC,0,.08,0,{g:o});const th=add(B(.2,.22,.3),daNC,0,.27,0,{g:o});add(new T.SphereGeometry(.12,12,10),daNC,0,.46,.1,{g:o});add(new T.SphereGeometry(.05,8,6),daNC,0,.42,.21,{g:o})});
+    /* linh vật, người, cảnh: có cử động nhẹ */
+    const cho=(x,z,ry,mau,mau2)=>{const o=cay(x,z,1,()=>{});o.rotation.y=ry;const m=M(mau,.85),m2=M(mau2,.85);
+      const than=add(new T.SphereGeometry(.16,14,10),m,0,.14,0,{g:o});than.scale.set(1,.7,1.6);
+      const dau=add(new T.SphereGeometry(.1,14,10),m,0,.26,.26,{g:o});[-1,1].forEach(k=>{const tai=add(new T.ConeGeometry(.04,.09,8),m2,k*.06,.35,.25,{g:o});tai.rotation.z=-k*.4});
+      add(new T.SphereGeometry(.045,10,8),m2,0,.23,.36,{g:o});add(new T.SphereGeometry(.014,6,4),M("#1a1410",.4),0,.25,.4,{g:o});
+      [[-.09,.18],[.09,.18]].forEach(([x2,z2])=>{const c=add(new T.CylinderGeometry(.03,.03,.16,8),m,x2,.06,z2,{g:o});c.rotation.x=Math.PI/2});
+      const duoi=new T.Group();duoi.position.set(0,.2,-.24);o.add(duoi);const d2=add(new T.CylinderGeometry(.02,.012,.16,6),m,0,.07,-.02,{g:duoi});d2.rotation.x=-.9;
+      dongNC.push(t=>{duoi.rotation.y=Math.sin(t*7)*.6;dau.rotation.y=Math.sin(t*.7)*.25})};
+    if(ds.has("cun-vang"))cho(-(W2+.85),1.75,.5,"#c99a52","#8a5f2c");
+    if(ds.has("cun-muc"))cho(W2+.85,1.75,-.5,"#2b2420","#4a3b30");
+    if(ds.has("chu-tieu")){const o=cay(1.25,3.0,1,()=>{});o.rotation.y=-.6;const ao=M("#b07a3a",.8),da3=M("#e2bf95",.7);
+      add(new T.CylinderGeometry(.11,.17,.5,12),ao,0,.25,0,{g:o});const dau=add(new T.SphereGeometry(.1,14,10),da3,0,.6,0,{g:o});
+      const tay=new T.Group();tay.position.set(.1,.42,.05);o.add(tay);add(new T.CylinderGeometry(.012,.012,.7,6),M("#6b4a2a",.8),.05,-.2,.12,{g:tay,rx:.5});
+      const choi=add(new T.ConeGeometry(.08,.16,10),M("#c9a35a",.9),.05,-.52,.3,{g:tay,rx:.5});
+      dongNC.push(t=>{tay.rotation.y=Math.sin(t*1.8)*.5;o.position.y=Math.abs(Math.sin(t*1.8))*.01})}
+    if(ds.has("hac"))mirror(sg=>{const o=cay(sg*(W2+.35),-.6,1,()=>{});const dg=M(kim2,.35,.7);add(new T.CylinderGeometry(.02,.02,.55,6),dg,0,.28,0,{g:o});
+      const th=add(new T.SphereGeometry(.09,12,8),dg,0,.6,0,{g:o});th.scale.set(1,.8,1.5);const co2=add(new T.CylinderGeometry(.012,.015,.32,6),dg,0,.78,.1,{g:o,rx:.35});add(new T.ConeGeometry(.012,.12,6),dg,0,.95,.2,{g:o,rx:1.3});add(new T.CylinderGeometry(.14,.16,.06,12),dg,0,.03,0,{g:o})});
+    if(ds.has("rua")){const o=cay(-(W2+.7),-1.9,1,()=>{});const dr=M("#9a9488",.9);const mai2=add(new T.SphereGeometry(.22,14,10),dr,0,.08,0,{g:o});mai2.scale.set(1,.45,1.25);const dau=add(new T.SphereGeometry(.07,10,8),dr,0,.08,.3,{g:o});
+      dongNC.push(t=>{dau.position.z=.3+Math.sin(t*.5)*.03})}
+    if(ds.has("hoa-giay"))mirror(sg=>{const o=cay(sg*(W2+.75),-1.6,1,()=>{});add(new T.CylinderGeometry(.04,.06,.6,8),thanNC,0,.3,0,{g:o});
+      for(let i=0;i<14;i++){const a=i/14*Math.PI*2,r=.25+((i*7)%5)*.04;add(new T.SphereGeometry(.12,8,6),M(i%3?"#d24d8f":"#3f7a32",.85),Math.cos(a)*r,.6+((i*5)%4)*.08,Math.sin(a)*r*.7,{g:o})}});
+    if(ds.has("ho-sen")){const o=cay(-(W2+1.45),2.9,1,()=>{});add(new T.CylinderGeometry(.5,.52,.12,28),daNC,0,.06,0,{g:o});const nuoc=add(new T.CylinderGeometry(.44,.44,.02,28),M("#3d6b74",.2,.1),0,.12,0,{g:o});
+      [[.15,.1],[-.18,-.05],[.05,-.2]].forEach(([x,z],k)=>{const la2=add(new T.CircleGeometry(.12,16),M("#4f8a3a",.8),x,.135,z,{g:o,rx:-Math.PI/2});if(k===0){const b2=add(new T.ConeGeometry(.05,.12,8),M("#ec9fb0",.6),x,.22,z,{g:o})}});
+      dongNC.push(t=>{nuoc.material.color.setHSL(.53,.3,.33+Math.sin(t*1.3)*.02)})}
+    if(ds.has("den-long"))mirror(sg=>{const o=cay(sg*(W2+.45),-1.75,1,()=>{});add(new T.CylinderGeometry(.03,.035,1.6,8),M("#5a3a22",.8),0,.8,0,{g:o});add(new T.BoxGeometry(.32,.03,.03),M("#5a3a22",.8),sg*-.14,1.55,0,{g:o});
+      const dl=new T.Group();dl.position.set(sg*-.26,1.5,0);o.add(dl);const ld=add(new T.SphereGeometry(.12,14,10),M(sg>0?"#d9533a":"#e2b23a",.6,0,[sg>0?"#ff7a4a":"#ffd27a",dem?1.2:.25]),0,-.2,0,{g:dl});ld.scale.y=1.25;
+      const sp=sprite(sg>0?"#ff8a5a":"#ffd27a",dem?.9:.3,dem?.8:.25);sp.position.set(0,-.2,0);dl.add(sp);dongNC.push(t=>{dl.rotation.z=Math.sin(t*1.1+sg)*.06;sp.material.opacity=(dem?.7:.2)+Math.sin(t*5+sg)*.08})});
   }
   /* khung nhìn theo phần màn còn trống giữa thẻ trên và bảng dưới: mộ luôn nằm giữa, bảng cao thì lùi máy ra */
   function datVung(tren,duoi){if(!(duoi>tren))return;vung=[tren,duoi];const cao=duoi-tren;heSo=Math.max(.95,Math.min(1.7,380/cao));khung(canvas.clientWidth,canvas.clientHeight);datCam()}
@@ -3317,14 +3411,14 @@ function vatTren(g){const ds=DATA.daDang.filter(d=>d.gt===g.id&&conNgay(d.luc)>=
 function capNhatVat(){const g=gtById(VM.gt);if(MO&&g)MO.dat(vatTren(g))}
 
 /* ---------- bảng điều khiển ---------- */
-function veKhan(){const g=gtById(VM.gt),L=loiKhan(g),i=VM.khan.dong,ra=[];for(let j=i;j<=i+1;j++){if(j<0||j>=L.length){ra.push(`<p class="cd-dong rong">&nbsp;</p>`);continue}
+function veKhan(){const g=gtById(VM.gt),L=loiKhan(g),i=VM.khan.dong,ra=[],xongK=i>=L.length-1&&VM.khan.tu>=tuCua(L[L.length-1]).length;for(let j=i;j<=i+1;j++){if(j<0||j>=L.length){ra.push(`<p class="cd-dong rong">&nbsp;</p>`);continue}
   if(j===i)ra.push(`<p class="cd-dong dang">${tuCua(L[j]).map((w,x)=>`<span class="${x<VM.khan.tu?"sang":""}">${esc(w)}</span>`).join(" ")}</p>`);else ra.push(`<p class="cd-dong gan">${esc(L[j])}</p>`)}
   const cung=nguoiHomNay(g.id,"khan");
   return `${VM.dongTam?`<p class="vm-dong-tam dang">${["minh",...(VM.cungVoi||[])].map(a=>avNguoi(a,24)).join("")}<span>Đang cùng khấn: bạn${(VM.cungVoi||[]).map(a=>", "+tenNguoi(a)).join("")} · đèn cháy chung một nhịp</span></p>`:""}${cung.length&&!VM.dongTam?`<p class="vm-dong-tam">${cung.map(a=>avNguoi(a,24)).join("")}<span>${cung.map(tenNguoi).join(", ")} đã khấn ${esc(g.xung)} hôm nay · bạn khấn xong, đèn chung +${cung.length*10}%</span></p>`:""}<div class="cd-kinh vm-khan" aria-live="off">${ra.join("")}</div>
   <div class="vm-dieu"><button class="vm-vai" data-act="vm-vai" aria-label="Vái, đã vái ${VM.vai} trên 3">${ic("hoa-sen")}<span>Vái <b class="so">${VM.vai}/3</b></span></button>
-   <button class="vm-khan-nut" data-act="vm-khan" aria-label="Khấn tiếp (phím cách)"><span class="vm-khan-nut__vong" style="--p:${Math.round((i+VM.khan.tu/Math.max(1,tuCua(L[Math.min(i,L.length-1)]).length))/L.length*100)}"></span>${ic("nhang")}<b>Khấn</b></button>
+   ${xongK?`<button class="vm-khan-nut xong" data-act="vm-khan-lai" aria-label="Đã khấn xong, chạm để khấn lại">${ic("xong")}<b>Đã khấn</b><small>Chạm để khấn lại</small></button>`:`<button class="vm-khan-nut" data-act="vm-khan" aria-label="Khấn tiếp (phím cách)"><span class="vm-khan-nut__vong" style="--p:${Math.round((i+VM.khan.tu/Math.max(1,tuCua(L[Math.min(i,L.length-1)]).length))/L.length*100)}"></span>${ic("nhang")}<b>Khấn</b></button>`}
    <label class="vm-tu-doc"><span>Tự chạy chữ</span><input type="checkbox" class="tm-sw" data-doi="vm-tu-doc" ${VM.tuDoc?"checked":""}></label></div>
-   <div class="vm-hai"><button class="vm-giong vm-cung" data-act="vm-cung" aria-pressed="${!!VM.dongTam}">${ic("den")}<span>${VM.dongTam?"Dừng cùng khấn":"Cùng người nhà"}</span></button><button class="vm-giong" data-act="vm-giong" aria-pressed="${!!VM.giong}">${ic("loa")}<span>${VM.giong?"Dừng đọc":"Nghe đọc mẫu"}</span></button></div>`}
+   <div class="vm-hai"><button class="vm-giong vm-cung" data-act="vm-cung" aria-pressed="${!!VM.dongTam}">${ic("den")}<span>${VM.dongTam?"Dừng cùng khấn":"Cùng người nhà"}</span></button><button class="vm-giong ${VM.giong?"dang":xongK?"lai":""}" data-act="vm-giong" aria-pressed="${!!VM.giong}">${ic("loa")}<span>${VM.giong?"Đang đọc · chạm để dừng":xongK?"Nghe đọc lại":"Nghe đọc mẫu"}</span></button></div>`}
 function veQuaVM(){const g=gtById(VM.gt),ao=DATA.qua.filter(q=>q.ao),that=DATA.qua.filter(q=>!q.ao&&MO_HINH[q.id]),ng=ngGiu(g.chan),toi=lanThamToi(g);VM.gio=VM.gio||{};
   const ds=Object.entries(VM.gio).filter(([,n])=>n>0).map(([id,sl])=>({x:quaById(id),sl})),tong=ds.reduce((s,o)=>s+o.x.gia*o.sl,0),soMon=ds.reduce((s,o)=>s+o.sl,0);
   const o=q=>{const n=VM.gio[q.id]||0;return `<button class="vm-mon" data-act="vm-chon" data-v="${q.id}" aria-pressed="${n>0}" aria-label="${esc(q.ten)}${n?`, đã chọn ${n}`:""}, chạm để thêm"><img src="${anh(q.anh)}" alt="">${n?`<i class="vm-mon__sl so">${n}</i>`:""}<span>${esc(q.ten)}</span><b class="so">${tien(q.gia)}</b></button>`};
@@ -3383,12 +3477,13 @@ route("/gia-tien/:id/vieng",({id})=>{const g=gtById(id);if(!g)return null;if(VM.
 <section class="cd vm" aria-label="Viếng ${esc(g.xung)}">
  <canvas id="vm-canh" aria-label="Cảnh nơi an nghỉ của ${esc(g.xung)} tại ${esc(g.nghiaTrang)}, kéo để xoay"></canvas>
  <div class="cd-du-phong" id="cd-du-phong" hidden><img src="${anh(g.anh)}" alt=""><p>Máy này chưa hiện được cảnh 3D. Vẫn khấn, dâng quà, nhắn gửi bình thường.</p></div>
- <header class="cd-tren"><button class="cd-nut-tron cd-lui" data-lui="/gia-tien/${id}" aria-label="Về trang ${esc(g.xung)}">${ic("lui")}</button><h1 class="cd-ten"><span>Viếng ${esc(tenMo(g))}</span><small>${esc(g.nghiaTrang)} · ${esc(g.viTri.split(" · ")[0])}</small></h1><button class="cd-nut-tron" data-act="vm-am" aria-pressed="${AM.bat}" aria-label="${AM.bat?"Tắt âm thanh":"Bật âm thanh"}">${icAm()}</button></header>
+ <header class="cd-tren"><button class="cd-nut-tron cd-lui" data-lui="/gia-tien/${id}" aria-label="Về trang ${esc(g.xung)}">${ic("lui")}</button><h1 class="cd-ten"><button class="cd-ten__nut" data-act="vm-doi-mo" aria-label="Đổi sang phần mộ khác"><span>Viếng ${esc(tenMo(g))} ${ic("xuong","cd-ten__mui")}</span><small>${esc(g.nghiaTrang)} · ${esc(g.viTri.split(" · ")[0])}</small></button></h1><button class="cd-nut-tron" data-act="vm-am" aria-pressed="${AM.bat}" aria-label="${AM.bat?"Tắt âm thanh":"Bật âm thanh"}">${icAm()}</button></header>
  <div class="vm-tin">
   ${v?`<a class="vm-the" href="#/lan-tham/${v.id}"><span class="vm-the__ic">${ic("anh-tai-mo")}</span><span class="gian mw0"><b>${conNgay(v.ngay)>=-1?`${esc(ng.ten[0].toUpperCase()+ng.ten.slice(1))} thắp nhang lúc ${v.buoc[v.buoc.length-1][1]}${conNgay(v.ngay)===0?" sáng nay":" hôm qua"}`:`Lần thăm gần nhất: ${khi(v.ngay).toLowerCase()}`}</b><span>Cảnh theo lần thăm thật · xem ảnh</span></span>${ic("toi")}</a>`:""}
 
  </div>
- <div class="cd-duoi vm-duoi">
+ <div class="cd-duoi vm-duoi ${VM.thu?"thu":""}">
+  <button class="vm-keo" data-act="vm-thu" aria-label="${VM.thu?"Mở bảng":"Thu bảng để xem toàn cảnh"}"><span></span><b>${VM.thu?"Mở bảng":"Thu gọn · xem toàn cảnh"}</b></button>
   <div class="vm-pills"><button class="vm-nha vm-che" data-act="vm-che" aria-pressed="${!!VM.rieng}">${icChe()}</button><a class="vm-nha" href="#/gia-tien/${id}/nha">${ic("cay")}Nhà chung</a>${nutViec("vm-nha")}${don?`<a class="vm-nha" href="#/don/${don.id}">${ic("le-vat")}Lễ ${dmy(don.ngay)} đang chuẩn bị · món mờ sắp mang ra</a>`:""}<span class="vm-nha">${nha.map(d=>`${esc(d.ai)} dâng ${esc(quaById(d.qua).ten.toLowerCase())} ${khi(d.luc).toLowerCase()}`).join(" · ")}${nha.length?" · ":""}Giỗ còn ${conNgay(gd)} ngày</span></div>
   <div class="cd-tabs" role="tablist" aria-label="Việc khi viếng">${[["khan","Khấn"],["qua","Dâng quà"],["nhan","Nhắn gửi"],["dv","Dịch vụ"]].map(([v2,t])=>`<button class="cd-tab vm-tab" role="tab" data-act="vm-tab" data-v="${v2}" aria-selected="${VM.tab===v2}">${t}</button>`).join("")}</div>
   <div id="vm-bang" class="vm-bang"></div>
@@ -3408,6 +3503,12 @@ ACT["vm-cung"]=()=>{const g=gtById(VM.gt);if(VM.dongTam){VM.dongTam=0;clearTimeo
   VM.dongTam=1;VM.cungVoi=[];MO&&MO.datDongTam(1);ac();batAmNen();AMT.vaoChua();veBang();bao("Bản mô phỏng: người nhà lần lượt mở app cùng giờ.");
   let k=0;const toi=()=>{if(!VM.dongTam||k>=ve2.length)return;const h=ve2[k++];VM.cungVoi.push(h.id);VM.dongTam=1+VM.cungVoi.length;capNhatDen(VM.cungVoi.map(id=>({ai:id,ten:tenNguoi(id),mac:macCua(id),moi:true})));MO&&MO.datDongTam(VM.dongTam);AMT.thanhCong();bao(`${tenNguoi(h.id)} vừa vào cùng khấn.`);veBang();_dt=setTimeout(toi,2600)};_dt=setTimeout(toi,1800)};
 
+ACT["vm-thu"]=()=>{VM.thu=!VM.thu;const d=$(".cd-duoi.vm-duoi");if(d){d.classList.toggle("thu",VM.thu);const k=d.querySelector(".vm-keo");k.querySelector("b").textContent=VM.thu?"Mở bảng":"Thu gọn · xem toàn cảnh";k.setAttribute("aria-label",VM.thu?"Mở bảng":"Thu bảng để xem toàn cảnh")}AMT.giay();setTimeout(canhVung,320)};
+/* đổi phần mộ đang viếng: chọn ở tiêu đề trên cùng */
+ACT["vm-doi-mo"]=()=>{const ds=DATA.giaTien.filter(g=>!moDoi(g)||benMacDinh(g.xung)==="phai");
+  moSheet(`<div class="tm-sheet__dau"><h2 class="t-tieu-de">Viếng phần mộ khác</h2><button class="tm-icbtn" data-act="dong-sheet" aria-label="Đóng">${ic("dong")}</button></div>
+  <div class="tm-ds">${ds.map(g=>{const dang=VM.gt===g.id||moDoi(gtById(VM.gt))?.id===g.id;return `<a class="tm-dong" href="#/gia-tien/${g.id}/vieng" ${dang?'aria-current="true"':""}>${avGT(g,48,dang?"vang":"")}<span class="tm-dong__giua"><span class="tm-dong__ten serif">${esc(tenMo(g))}</span><span class="tm-dong__phu">${esc(g.nghiaTrang)}${dang?" · đang viếng":""}</span></span>${dang?ic("xong","tm-gt__mui"):ic("toi","tm-gt__mui")}</a>`}).join("")}</div>`,"Đổi phần mộ")};
+
 /* ================= NÂNG CẤP HOA VIÊN · MỘ ĐÔI · KHU MỘ TỘC ================= */
 Object.assign(IC,{"nha-mo":'<path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/>',
   "ghe-da":'<path d="M4 11h16"/><path d="M6 11v7M18 11v7"/><path d="M4 15h16"/>',
@@ -3415,7 +3516,7 @@ Object.assign(IC,{"nha-mo":'<path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/>
   "ho-toc":'<path d="M4 20V10l4-3 4 3v10"/><path d="M12 20V8l4-3 4 3v12"/><path d="M2 20h20"/>'});
 
 /* catalog: kim cương = giá trong cảnh viếng online; doi = giá khi là mộ đôi */
-const NC_NHOM=[["kieu","Kiểu mộ","nha-mo"],["cay","Cây","cay"],["ghe","Ghế đá","ghe-da"],["da","Đồ đá","den-da"]];
+const NC_NHOM=[["kieu","Kiểu mộ","nha-mo"],["cay","Cây","cay"],["ghe","Ghế đá","ghe-da"],["da","Đồ đá","den-da"],["linh","Linh vật","tim"]];
 const NC=[
   {id:"nguyen-ban",nhom:"kieu",ten:"Như mộ thật",phu:"Giữ đúng dáng mộ người giữ đèn chụp",kc:0},
   {id:"da-xanh",nhom:"kieu",ten:"Mộ đá xanh tam cấp",phu:"Đá xanh Thanh Hoá, ba bậc lên",kc:390,doi:620},
@@ -3434,7 +3535,15 @@ const NC=[
   {id:"lu-huong",nhom:"da",ten:"Lư hương đá lớn",phu:"Đặt trước bậc mộ",kc:110},
   {id:"cuon-thu",nhom:"da",ten:"Cuốn thư đá",phu:"Bình phong sau mộ, chữ Tổ đức lưu quang",kc:220,doi:300},
   {id:"lan-can",nhom:"da",ten:"Lan can đá",phu:"Bao quanh phần mộ",kc:180,doi:260},
-  {id:"lan-da",nhom:"da",ten:"Cặp lân đá",phu:"Hai bên bậc lên",kc:260}];
+  {id:"lan-da",nhom:"da",ten:"Cặp lân đá",phu:"Hai bên bậc lên",kc:260},
+  {id:"den-long",nhom:"da",ten:"Cặp đèn lồng Hội An",phu:"Treo cột gỗ sau mộ, sáng ấm về đêm",kc:100},
+  {id:"hoa-giay",nhom:"cay",ten:"Cặp khóm hoa giấy",phu:"Hồng thắm, nở quanh năm",kc:70},
+  {id:"ho-sen",nhom:"cay",ten:"Hồ sen nhỏ",phu:"Bể đá, lá sen và một búp sen hồng",kc:160},
+  {id:"cun-vang",nhom:"linh",ten:"Cún vàng giữ mộ",phu:"Nằm bên trái bậc mộ, vẫy đuôi",kc:120},
+  {id:"cun-muc",nhom:"linh",ten:"Cún mực giữ mộ",phu:"Nằm bên phải bậc mộ",kc:120},
+  {id:"chu-tieu",nhom:"linh",ten:"Chú tiểu quét sân",phu:"Quét lá bên lối vào",kc:180},
+  {id:"hac",nhom:"linh",ten:"Đôi hạc đồng",phu:"Đứng hai bên phía sau mộ",kc:200},
+  {id:"rua",nhom:"linh",ten:"Rùa đá",phu:"Nằm yên góc sau, biểu tượng trường thọ",kc:90}];
 const ncById=id=>NC.find(x=>x.id===id);
 const moKey=g=>g.mo||g.id;
 const giaNC=(x,g)=>moDoi(g)&&x.doi?x.doi:x.kc;
@@ -3615,7 +3724,7 @@ function cayToc(t){const tim2=id=>t.doi.flatMap(d=>d.mo).find(m=>m.id===id);
   return `<div class="cay-khung"><div class="cay cay--toc"><svg class="cay__net" aria-hidden="true"></svg>${t.doi.map(d=>`<div class="cay__doi"><span class="cay__nhan">${d.doi}</span><div class="cay__hang">${d.mo.filter(m=>!d.mo.some(x=>x.voChong===m.id)).map(nut).join("")}</div></div>`).join("")}</div></div>
   <p class="t-nho">Gia phả theo các ngôi trong khu. Viền vàng là gia tiên đã khai trong app, chạm để xem. Kéo ngang nếu cây rộng hơn màn hình.</p>`}
 
-const VER="1793719062";try{fetch("ver.txt?"+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{v=(v||"").trim();if(v&&v!==VER){let ok=true;try{ok=!sessionStorage.getItem("tm-rl"+v);sessionStorage.setItem("tm-rl"+v,"1")}catch(e){}if(ok)location.reload()}}).catch(()=>{})}catch(e){}
+const VER="1793719838";try{fetch("ver.txt?"+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{v=(v||"").trim();if(v&&v!==VER){let ok=true;try{ok=!sessionStorage.getItem("tm-rl"+v);sessionStorage.setItem("tm-rl"+v,"1")}catch(e){}if(ok)location.reload()}}).catch(()=>{})}catch(e){}
 apTheme();ghiNgan();ve();
 if(matchMedia)matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>{});</script>
 
