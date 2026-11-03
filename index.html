@@ -1076,6 +1076,10 @@ a.cay__nut:active{background:var(--dong-nhat)}
 .cay__nut.them.nho{min-width:64px;max-width:76px;padding:8px 2px}
 .cay--toc .cay__nut{min-width:80px;max-width:118px;padding:8px 4px}.cay--toc .cay__nut.doi{max-width:156px}
 .cay--toc .cay__nut b{font-size:12.5px;line-height:16px}
+
+.cay__doi.them-doi{gap:4px}
+.cay__them-doi{display:flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:8px;border:1px dashed var(--dong);border-radius:var(--radius-sm);color:var(--dong-dam);font:600 13px/18px var(--font-sans);text-decoration:none}
+.cay__them-doi svg{width:16px;height:16px}
 </style>
 </head>
 <body>
@@ -1954,14 +1958,14 @@ ACT.vai=t=>{S.fMoi.vai=t.dataset.v;S.fMoi.sdt=$("#m-sdt").value;ve(true)};
 ACT["sao-chep"]=async t=>{try{await navigator.clipboard.writeText(t.dataset.v);bao("Đã sao chép. Dán vào tin nhắn gửi người thân.")}catch(e){bao(t.dataset.v)}};
 
 /* ---------- 20. Thêm gia tiên ---------- */
-function manThemGT(){const q=hienTai().q;const f=S.fGT||(S.fGT={xung:"",ten:"",nhom:q.nhom||"noi",nt:"",viTri:"",ngay:"",thang:"",anh:"",loi:{}});
+function manThemGT(){const q=hienTai().q;if(S.fGT&&q.goi&&S.fGT.xung!==q.goi)S.fGT=null;const f=S.fGT||(S.fGT={xung:q.goi||"",ten:"",nhom:q.nhom||"noi",nt:"",viTri:"",ngay:"",thang:"",anh:"",loi:{}});
   if(S.daThemGT)return {tieuDe:"Đã gửi",lui:"/gia-tien",tab:"/gia-tien",nav:false,body:`
    <div class="tm-gu cot-giua"><span class="tm-hang__huy to">${ic("da-xac-minh")}</span><h2 class="t-tieu-de chu-kim">Đã nhận thông tin ${esc(S.daThemGT)}</h2><p class="t-nho">Điều phối Trường Minh sẽ gọi cho ${esc(DATA.toi.goi)} trong 24 giờ để hẹn gọi video tại mộ, xác nhận đúng vị trí trước lần thăm đầu.</p></div>
    <ol class="tm-ds ds-ol">${[["Điều phối gọi lại","Trong 24 giờ"],["Gọi video tại mộ","Gia đình xác nhận đúng mộ"],["Chọn gói hoặc lần thăm","Sau khi xác minh"]].map((b,i)=>`<li class="tm-dong tm-dong--tinh"><span class="tm-dong__ic so">${i+1}</span><span class="tm-dong__giua"><span class="tm-dong__ten">${b[0]}</span><span class="tm-dong__phu">${b[1]}</span></span></li>`).join("")}</ol>`,
    day:`<a class="tm-btn tm-btn--chinh tm-btn--rong" href="#/gia-tien" data-act="xong-them">Về danh sách gia tiên</a>`};
   return {tieuDe:"Thêm gia tiên",lui:"/gia-tien",tab:"/gia-tien",nav:false,body:`
   <form class="tm-muc" id="f-gt" novalidate>
-   <div class="tm-truong"><span class="tm-truong__nhan">Gia đình gọi là</span><div class="tm-chips">${["Ba","Mẹ","Ông Nội","Bà Nội","Ông Ngoại","Bà Ngoại"].map(x=>`<button type="button" class="tm-chip" data-act="gt-xung" data-v="${x}" aria-pressed="${f.xung===x}">${x}</button>`).join("")}</div>
+   <div class="tm-truong"><span class="tm-truong__nhan">Gia đình gọi là</span><div class="tm-chips">${["Ba","Mẹ","Ông Nội","Bà Nội","Ông Ngoại","Bà Ngoại","Cụ ông nội","Cụ bà nội","Cụ ông ngoại","Cụ bà ngoại","Kỵ ông","Kỵ bà"].map(x=>`<button type="button" class="tm-chip" data-act="gt-xung" data-v="${x}" aria-pressed="${f.xung===x}">${x}</button>`).join("")}</div>
     <input class="tm-o" id="g-xung" data-nhap="fgt" data-k="xung" value="${esc(f.xung)}" placeholder="Hoặc gõ cách gọi khác" aria-label="Cách gọi khác" ${f.loi.xung?'aria-invalid="true"':""}>${f.loi.xung?`<p class="tm-loi">${ic("canh-bao")}${f.loi.xung}</p>`:""}</div>
    <div class="tm-truong"><label for="g-ten">Họ và tên trên bia</label><input class="tm-o" id="g-ten" data-nhap="fgt" data-k="ten" value="${esc(f.ten)}" placeholder="Ông Nguyễn Văn …" ${f.loi.ten?'aria-invalid="true" aria-describedby="l-gten"':""}>${f.loi.ten?`<p class="tm-loi" id="l-gten">${ic("canh-bao")}${f.loi.ten}</p>`:""}</div>
    <div class="tm-truong"><span class="tm-truong__nhan">Thuộc bên</span><div class="tm-phan" role="tablist">${DATA.nhom.map(n=>`<button type="button" role="tab" aria-selected="${f.nhom===n.id}" data-act="gt-nhom" data-v="${n.id}">${n.ten}</button>`).join("")}</div></div>
@@ -3509,7 +3513,7 @@ if(luu.get("tm3-full",false))apFull();
 
 /* ================= CÂY GIA ĐÌNH: ảnh đại diện, cây gia tiên, gia phả khu mộ tộc ================= */
 const DAI_DIEN=luu.get("tm3-dai-dien",{});
-const laNu=x=>/^(Bà|Mẹ|Má|Cô|Dì|Thím|Mợ|Chị|Cụ bà|Em gái)/i.test((x||"").trim());
+const laNu=x=>/^(Bà|Mẹ|Má|Cô|Dì|Thím|Mợ|Chị|Cụ bà|Kỵ bà|Em gái)/i.test((x||"").trim());
 /* ảnh mặc định: chân dung nét vàng trên nền gỗ gụ, nam đội khăn đóng, nữ búi tóc */
 const AV_MD={};
 function avMacDinh(nu){const k=nu?"nu":"nam";if(AV_MD[k])return AV_MD[k];
@@ -3543,7 +3547,15 @@ function ganCay(){const ks=[...document.querySelectorAll(".cay")];const f=()=>ks
   document.querySelectorAll(".cay img").forEach(i=>i.complete||i.addEventListener("load",f,{once:true}));addEventListener("resize",f);const cu=window._donDep;window._donDep=()=>{removeEventListener("resize",f);cu&&cu()}}
 
 /* ---------- cây gia tiên của bạn ---------- */
-const doiGT=g=>/^Cụ/.test(g.xung)?0:/^(Ông|Bà)/.test(g.xung)?1:2;
+/* các đời trước ông bà: cụ (đời 0), kỵ (đời -1); luôn có một hàng "thêm đời trước" ở trên cùng */
+const chaDoi=(arr,d,id)=>arr.some(g=>doiGT(g)===d)?id:"";
+function hangDoi(arr,d,id,nhom,ten,cha){const ds=arr.filter(g=>doiGT(g)===d);return ds.map((g,i)=>nutGT(g,id+(i?i:""),cha)).join("")}
+function doiTruoc(noi,ngoai){const top=Math.min(0,...[...noi,...ngoai].map(doiGT))-1+1,rows=[];
+  for(let d=-1;d<=0;d++){if(![...noi,...ngoai].some(g=>doiGT(g)===d))continue;const nm=d===0?"Đời cụ":"Đời kỵ";
+    rows.push(`<div class="cay__doi"><span class="cay__nhan">${nm}</span><div class="cay__hang hai"><div class="cay__hang">${hangDoi(noi,d,d?"kn":"cn0","noi","nội",d===0?chaDoi(noi,-1,"kn"):"")||""}</div><div class="cay__hang">${hangDoi(ngoai,d,d?"kg":"cg0","ngoai","ngoại",d===0?chaDoi(ngoai,-1,"kg"):"")||""}</div></div></div>`)}
+  const len=arr=>arr.some(g=>doiGT(g)===0)?["Kỵ ông","kỵ"]:["Cụ ông","cụ"];
+  return `<div class="cay__doi them-doi"><span class="cay__nhan">Đời trước</span><div class="cay__hang hai">${[["noi","nội",noi],["ngoai","ngoại",ngoai]].map(([n,t,arr])=>{const l=len(arr);return `<a class="cay__them-doi" href="#/gia-tien/them?nhom=${n}&goi=${encodeURIComponent(l[0]+" "+t)}">${ic("cong")}Thêm ${l[1]} ${t}</a>`}).join("")}</div></div>`+rows.join("")}
+const doiGT=g=>/^Kỵ/i.test(g.xung)?-1:/^Cụ/i.test(g.xung)?0:/^(Ông|Bà)/.test(g.xung)?1:2;
 function nutGT(g,id,cha){const d=moDoi(g);
   if(d){if(benMacDinh(g.xung)!=="phai")return "";const [a,b]=[g,d].sort((x,y)=>(benMacDinh(x.xung)==="phai"?0:1)-(benMacDinh(y.xung)==="phai"?0:1));
     return `<a class="cay__nut doi" href="#/gia-tien/${a.id}" data-id="${id}" ${cha?`data-cha="${cha}"`:""}><span class="cay__cap">${avGT(a,60,"vang")}${avGT(b,60,"vang")}</span><b>${esc(a.xung)} & ${esc(b.xung)}</b><small>Mộ đôi · giỗ ${a.gio[0]}/${a.gio[1]}, ${b.gio[0]}/${b.gio[1]}</small></a>`}
@@ -3551,14 +3563,15 @@ function nutGT(g,id,cha){const d=moDoi(g);
 const nutThem=(nhan,nhom,id,cha)=>`<a class="cay__nut them" href="#/gia-tien/them?nhom=${nhom}" data-id="${id}" ${cha?`data-cha="${cha}"`:""}><span class="av av--them" style="--c:56px">${ic("cong")}</span><b>${nhan}</b><small>Thêm vào cây</small></a>`;
 const nutSong=(nhan,phu,id,cha)=>`<div class="cay__nut song" data-id="${id}" ${cha?`data-cha="${cha}"`:""}>${avTen(nhan,52,"mo")}<b>${esc(nhan)}</b><small>${esc(phu)}</small></div>`;
 function cayGiaTien(){const ds=DATA.giaTien,noi=ds.filter(g=>g.nhom==="noi"),ngoai=ds.filter(g=>g.nhom==="ngoai"),vo=ds.filter(g=>g.nhom==="vo");
-  const ongBa=(arr,nhom,id,ten)=>{const tren=arr.filter(g=>doiGT(g)===1);if(!tren.length)return nutThem(`Ông bà ${ten}`,nhom,id);
-    const n=tren.map((g,i)=>nutGT(g,id+(i?i:""))).join("");const coOng=tren.some(g=>/^Ông/.test(g.xung)),coBa=tren.some(g=>/^Bà/.test(g.xung)||moDoi(g));
+  const ongBa=(arr,nhom,id,ten,cha)=>{const tren=arr.filter(g=>doiGT(g)===1);if(!tren.length)return nutThem(`Ông bà ${ten}`,nhom,id,cha);
+    const n=tren.map((g,i)=>nutGT(g,id+(i?i:""),cha)).join("");const coOng=tren.some(g=>/^Ông/.test(g.xung)),coBa=tren.some(g=>/^Bà/.test(g.xung)||moDoi(g));
     return n+(coOng&&!coBa?`<a class="cay__nut them nho" href="#/gia-tien/them?nhom=${nhom}"><span class="av av--them" style="--c:44px">${ic("cong")}</span><b>Bà ${ten}</b><small>Thêm</small></a>`:"")};
   const chaMe=(arr,nhom,id,cha,thay)=>{const g=arr.filter(x=>doiGT(x)===2);return g.length?g.map((x,i)=>nutGT(x,id+(i?i:""),cha)).join(""):thay};
   const idsNoi=noi.filter(g=>doiGT(g)===1).length?"pn":"pn",idsNgoai="pg";
   return `<section class="tm-muc"><div class="tm-muc__dau"><h2>Cây gia tiên</h2><a class="tm-lk" href="#/gia-tien/them">${ic("cong")}Thêm</a></div>
   <div class="cay-khung"><div class="cay cay--nha"><svg class="cay__net" aria-hidden="true"></svg>
-   <div class="cay__doi"><span class="cay__nhan">Đời ông bà</span><div class="cay__hang hai"><div class="cay__nhanh"><span class="cay__ben">Bên nội</span><div class="cay__hang">${ongBa(noi,"noi","pn","nội")}</div></div><div class="cay__nhanh"><span class="cay__ben">Bên ngoại</span><div class="cay__hang">${ongBa(ngoai,"ngoai","pg","ngoại")}</div></div></div></div>
+   ${doiTruoc(noi,ngoai)}
+   <div class="cay__doi"><span class="cay__nhan">Đời ông bà</span><div class="cay__hang hai"><div class="cay__nhanh"><span class="cay__ben">Bên nội</span><div class="cay__hang">${ongBa(noi,"noi","pn","nội",chaDoi(noi,0,"cn0"))}</div></div><div class="cay__nhanh"><span class="cay__ben">Bên ngoại</span><div class="cay__hang">${ongBa(ngoai,"ngoai","pg","ngoại",chaDoi(ngoai,0,"cg0"))}</div></div></div></div>
    <div class="cay__doi"><span class="cay__nhan">Đời cha mẹ</span><div class="cay__hang hai"><div class="cay__hang">${chaMe(noi,"noi","cn","pn",nutSong("Ba","đang sống","cn","pn"))}</div><div class="cay__hang">${chaMe(ngoai,"ngoai","cg","pg",nutSong("Mẹ","đang sống","cg","pg"))}</div></div></div>
    <div class="cay__doi"><span class="cay__nhan">Con cháu</span><div class="cay__hang">${nutSong("Bạn",DATA.toi.ten,"toi","cn cg")}</div></div>
   </div></div>
@@ -3573,7 +3586,7 @@ function cayToc(t){const tim2=id=>t.doi.flatMap(d=>d.mo).find(m=>m.id===id);
   return `<div class="cay-khung"><div class="cay cay--toc"><svg class="cay__net" aria-hidden="true"></svg>${t.doi.map(d=>`<div class="cay__doi"><span class="cay__nhan">${d.doi}</span><div class="cay__hang">${d.mo.filter(m=>!d.mo.some(x=>x.voChong===m.id)).map(nut).join("")}</div></div>`).join("")}</div></div>
   <p class="t-nho">Gia phả theo các ngôi trong khu. Viền vàng là gia tiên đã khai trong app, chạm để xem. Kéo ngang nếu cây rộng hơn màn hình.</p>`}
 
-const VER="1793717286";try{fetch("ver.txt?"+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{v=(v||"").trim();if(v&&v!==VER){let ok=true;try{ok=!sessionStorage.getItem("tm-rl"+v);sessionStorage.setItem("tm-rl"+v,"1")}catch(e){}if(ok)location.reload()}}).catch(()=>{})}catch(e){}
+const VER="1793717919";try{fetch("ver.txt?"+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{v=(v||"").trim();if(v&&v!==VER){let ok=true;try{ok=!sessionStorage.getItem("tm-rl"+v);sessionStorage.setItem("tm-rl"+v,"1")}catch(e){}if(ok)location.reload()}}).catch(()=>{})}catch(e){}
 apTheme();ghiNgan();ve();
 if(matchMedia)matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>{});</script>
 
