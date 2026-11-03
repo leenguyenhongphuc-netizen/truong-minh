@@ -1024,6 +1024,16 @@ button.nh-nguoi:active{transform:scale(.98)}
 .mk-o input{min-height:64px;font-size:28px}
 #f-mk{display:flex;flex-direction:column;gap:4px}
 .mk-co{display:flex;flex-direction:column;gap:8px}
+
+.hh-anh{margin:0 0 8px;position:relative;border-radius:var(--radius-sm);overflow:hidden;aspect-ratio:16/9;background:var(--be-mat-2)}
+.hh-anh.lon{aspect-ratio:4/3}
+.hh-anh img{width:100%;height:100%;object-fit:cover;display:block}
+.hh-anh figcaption{position:absolute;left:0;right:0;bottom:0;padding:14px 8px 4px;font:500 11px/14px var(--font-sans);color:#fff;background:linear-gradient(transparent,rgba(0,0,0,.6))}
+.tm-dong__ten.wrap{white-space:normal}
+.hh-svg{touch-action:none}
+.tm-sheet>*{flex-shrink:0}
+.hh-the .hh-anh{aspect-ratio:auto;height:112px}
+.hh-anh img{object-position:50% 40%}
 </style>
 </head>
 <body>
@@ -1178,7 +1188,7 @@ addEventListener("hashchange",()=>{ghiNgan();if(document.querySelector(".tm-shee
 
 /* ================= BẢNG TRƯỢT, THÔNG BÁO NHỎ ================= */
 let _truocSheet=null;
-function moSheet(html,nhan){dongSheet(true);_truocSheet=document.activeElement;const d=document.createElement("div");d.className="tm-man-che";d.id="sheet";
+function moSheet(html,nhan){const cu=$("#sheet");if(cu){const sh=cu.querySelector(".tm-sheet"),y=sh.scrollTop;sh.setAttribute("aria-label",nhan||"");sh.innerHTML=`<div class="tm-sheet__cam"></div>${html}`;sh.scrollTop=y;return}dongSheet(true);_truocSheet=document.activeElement;const d=document.createElement("div");d.className="tm-man-che";d.id="sheet";
   d.innerHTML=`<div class="tm-sheet" role="dialog" aria-modal="true" aria-label="${esc(nhan)}"><div class="tm-sheet__cam"></div>${html}</div>`;document.body.appendChild(d);
   d.addEventListener("click",e=>{if(e.target===d)dongSheet()});const f=d.querySelector("button,a,input");if(f)f.focus()}
 function dongSheet(im){const d=$("#sheet");if(d)d.remove();if(!im&&_truocSheet&&_truocSheet.focus)_truocSheet.focus()}
@@ -1274,11 +1284,11 @@ bao=function(msg){const m=String(msg);
 ACT["am-sw"]=t=>{AM[t.dataset.v]=t.checked;luuAM();if(t.dataset.v==="bat"&&t.checked){ac();AMT.thanhCong()}ve(true)};
 ACT["am-to"]=t=>{datAmLuong(+t.value/100);const o=$("#am-to-so");if(o)o.textContent=t.value+"%"};
 ACT["am-thu"]=()=>{ac();AMT.thanhCong();setTimeout(()=>amChuong(.5),500)};
-const _moSheetGoc=moSheet;moSheet=function(h,n){AMT.moSheet();return _moSheetGoc(h,n)};
+const _moSheetGoc=moSheet;moSheet=function(h,n){if(!$("#sheet"))AMT.moSheet();return _moSheetGoc(h,n)};
 
 /* ================= DỮ LIỆU MẪU (tách riêng để sau này nối hệ thống) =================
    Tên, giá, số điện thoại là ví dụ. Ngày tính tương đối so với hôm nay để bản mẫu luôn "mới". */
-const PHOTO_ALIAS={"mam-ngu-qua": "mam-ngu-qua-viet", "tao-mo": "nghia-trang-viet", "quet-mo": "don-co"};const PHOTO_CO=["banh-chung", "banh-keo", "bat-huong", "ca-phe", "cay-tuong-niem", "chua-viet", "den-long", "den-nang-luong", "don-co", "hoa-cuc-trang", "hoa-cuc-vang", "hoa-dang", "hoa-sen", "mam-ngu-qua", "mam-ngu-qua-viet", "nen-den", "nghia-trang-viet", "nhang-mo", "nhang-tram", "sach-anh", "son-bia", "tao-mo", "trai-cay", "trau-cau", "vang-ma", "video-call", "xoi-ga"];const PHOTO_THIEU=["ban-tho", "tay-nguoi-giu"]; /* build.py điền: khoá -> tên file thật có trong thư mục photos */
+const PHOTO_ALIAS={"mam-ngu-qua": "mam-ngu-qua-viet", "tao-mo": "nghia-trang-viet", "quet-mo": "don-co"};const PHOTO_CO=["banh-chung", "banh-keo", "bat-huong", "ca-phe", "cay-tuong-niem", "chua-chuc-thanh", "chua-hai-tang", "chua-linh-ung-ba-na", "chua-linh-ung-bai-but", "chua-linh-ung-non-nuoc", "chua-long-tuyen", "chua-pho-da", "chua-phuoc-lam", "chua-tam-thai", "chua-viet", "den-long", "den-nang-luong", "don-co", "hoa-cuc-trang", "hoa-cuc-vang", "hoa-dang", "hoa-sen", "mam-ngu-qua", "mam-ngu-qua-viet", "nen-den", "nghia-trang-viet", "nhang-mo", "nhang-tram", "sach-anh", "son-bia", "tao-mo", "trai-cay", "trau-cau", "vang-ma", "video-call", "xoi-ga"];const PHOTO_THIEU=["ban-tho", "tay-nguoi-giu"]; /* build.py điền: khoá -> tên file thật có trong thư mục photos */
 const N=n=>cong(homNay,n);
 const truocNgay=(ad,tu=-1)=>{for(let i=-tu;i<60;i++){const d=cong(homNay,-i);if(info(d).ad===ad)return d}return cong(homNay,-10)};
 const GIO_BA=gioToi({gio:[5,10]});
@@ -2601,7 +2611,7 @@ function moHoiHuong(dau=""){const ds=DATA.giaTien;
   <p class="cd-ke">Nguyện đem công đức này,<br>hướng về khắp tất cả,<br>đệ tử và chúng sinh,<br>đều trọn thành Phật đạo.</p>
   <div class="tm-truong"><span class="tm-truong__nhan">Hồi hướng cho</span><div class="tm-chips" role="radiogroup">${[...ds.map(g=>[g.id,g.xung]),["tat-ca","Tất cả gia tiên"]].map(([v,t])=>`<button class="tm-chip" role="radio" aria-checked="${CD.hoiHuong===v}" data-act="cd-chon-hh" data-v="${v}">${esc(t)}</button>`).join("")}</div></div>
   <div class="tm-sheet__day"><button class="tm-btn tm-btn--chinh tm-btn--rong" data-act="cd-hoi-huong">Hồi hướng cho ${esc(CD.hoiHuong==="tat-ca"?"tất cả gia tiên":gtById(CD.hoiHuong).xung)}</button></div>`,"Hồi hướng công đức")}
-ACT["cd-chon-hh"]=t=>{CD.hoiHuong=t.dataset.v;dongSheet(true);moHoiHuong()};
+ACT["cd-chon-hh"]=t=>{CD.hoiHuong=t.dataset.v;moHoiHuong()};
 ACT["cd-hoi-huong"]=()=>{const ai=CD.hoiHuong==="tat-ca"?"tất cả gia tiên":gtById(CD.hoiHuong).xung,gt=CD.hoiHuong==="tat-ca"?"ba":CD.hoiHuong;dongSheet(true);CANH&&CANH.thaDen();amChuong(.6);tuSuKien("hh");ghiNha(gt,"hh",`Hồi hướng cho ${ai}`);
   moSheet(`<div class="tm-sheet__dau"><h2 class="t-tieu-de">Đã hồi hướng cho ${esc(ai)}</h2><button class="tm-icbtn" data-act="dong-sheet" aria-label="Đóng">${ic("dong")}</button></div>
   <p class="t-than">Ngọn đèn nhỏ vừa bay lên từ bát hương mang theo lời nguyện của ${esc(DATA.toi.goi)}.</p>
@@ -2686,14 +2696,25 @@ const CHUA=[
   {id:"chuc-thanh",ten:"Chùa Chúc Thánh",ngan:"CT",lat:15.889,lng:108.318,noi:"Hội An",su:"Tổ đình cổ ở Hội An, khởi nguồn dòng thiền Lâm Tế Chúc Thánh lan rộng khắp miền Trung."},
   {id:"phuoc-lam",ten:"Chùa Phước Lâm",ngan:"PL",lat:15.896,lng:108.331,noi:"Hội An",su:"Ngôi chùa cổ gần chùa Chúc Thánh, cùng dòng thiền Lâm Tế Chúc Thánh, khuôn viên yên tĩnh giữa vườn cây."},
   {id:"long-tuyen",ten:"Chùa Long Tuyền",ngan:"LT",lat:15.883,lng:108.345,noi:"Hội An",su:"Ngôi chùa ven phố cổ Hội An, được nhiều người dân địa phương gắn bó qua nhiều thế hệ."},
-  {id:"hai-tang",ten:"Chùa Hải Tạng",ngan:"HT",lat:15.957,lng:108.507,noi:"Cù Lao Chàm, Hội An",su:"Ngôi chùa trên đảo Cù Lao Chàm, tựa lưng vào núi, nhìn ra biển. Muốn tới phải đi tàu từ Cửa Đại."},
-  {id:"buu-chau",ten:"Chùa Bửu Châu",ngan:"BC",lat:15.574,lng:108.476,noi:"Tam Kỳ, Quảng Nam",su:"Ngôi chùa lớn ở Tam Kỳ, quen thuộc với Phật tử phía nam Quảng Nam."}];
+  {id:"hai-tang",ten:"Chùa Hải Tạng",ngan:"HT",lat:15.957,lng:108.507,noi:"Cù Lao Chàm, Hội An",su:"Ngôi chùa trên đảo Cù Lao Chàm, tựa lưng vào núi, nhìn ra biển. Muốn tới phải đi tàu từ Cửa Đại."}];
+/* thông tin chùa theo nguồn công khai (tra 11/2026); chỗ chưa có nguồn ghi rõ "đang cập nhật" */
+const CHUA_TT={
+ "linh-ung-bai-but":{lap:"Khởi công 2004, khánh thành 2010",khai:"Hoà thượng Thích Thiện Nguyện (viên tịch 2016)",ghi:"Tượng Quán Thế Âm cao 67 m, đài sen rộng 35 m, nhìn ra vịnh Đà Nẵng.",nguon:[["Danang Fantasticity","https://danangfantasticity.com/discovery/linh-ung-pagoda-bai-but"],["Báo Thanh tra","https://thanhtra.com.vn/an-sinh-AFA9C5670/ky-2-chuyen-ve-nguoi-xay-ba-ngoi-chua-vang-danh-bon-bien-A04BF5E2.html"]]},
+ "linh-ung-non-nuoc":{lap:"Có từ trước thời Gia Long; vua Minh Mạng cho dựng lại năm 1825; tái thiết từ 1992",khai:"Chưa tìm được nguồn",ghi:"Tên cũ Ứng Chân tự, đổi thành Linh Ứng tự năm 1891. Thuộc khu di tích quốc gia Ngũ Hành Sơn (1990).",nguon:[["Danang Fantasticity","https://danangfantasticity.com/danh-thang-ngu-hanh-son-da-nang/"]]},
+ "tam-thai":{lap:"Năm 1825 vua Minh Mạng cho dựng lại bằng gạch ngói và phong quốc tự (nguồn ghi năm khởi lập khác nhau)",khai:"Chưa tìm được nguồn",ghi:"Quốc tự triều Nguyễn trên núi Thủy Sơn; sập vì bão năm 1901, dựng lại sau đó, đại tu năm 1995.",nguon:[["Báo Pháp luật","https://baophapluat.vn/quoc-tu-tam-thai-post130285.html"],["Danang Fantasticity","https://danangfantasticity.com/danh-thang-ngu-hanh-son-da-nang/"]]},
+ "linh-ung-ba-na":{lap:"Khởi dựng từ năm 1999",khai:"Hoà thượng Thích Thiện Nguyện",ghi:"Tượng Phật Thích Ca cao 27 m trên đỉnh Bà Nà.",nguon:[["Báo Thanh tra","https://thanhtra.com.vn/an-sinh-AFA9C5670/ky-2-chuyen-ve-nguoi-xay-ba-ngoi-chua-vang-danh-bon-bien-A04BF5E2.html"]]},
+ "pho-da":{lap:"Am tranh năm 1915, dựng chùa năm 1927 (tên cũ Phổ Thiên tự)",khai:"Hoà thượng Thích Tôn Thắng",ghi:"340 Phan Châu Trinh, Hải Châu. Được ban biển Sắc tứ năm 1936; nay là trụ sở Trường Trung cấp Phật học Đà Nẵng.",nguon:[["Tạp chí Nghiên cứu Phật học","https://tapchinghiencuuphathoc.vn/2pdf/chua-pho-da-trong-phong-trao-chan-hung-phat-giao-viet-nam-tai-mien-trung-1935-1938"]]},
+ "chuc-thanh":{lap:"Năm 1684; trùng tu lớn năm 1845 và 1911",khai:"Thiền sư Minh Hải – Pháp Bảo",ghi:"Tổ đình của dòng thiền Lâm Tế Chúc Thánh.",nguon:[["Hồ sơ di tích Hội An","https://hoianheritage.danang.gov.vn/uploads/download/chua-chuc-thanh.pdf"]]},
+ "phuoc-lam":{lap:"Đầu thế kỷ XVIII; trùng tu các năm 1864, 1891, 1965",khai:"Nguồn ghi khác nhau: Hoà thượng Minh Giác hoặc Thiền sư Ân Triêm",ghi:"Một trong các tổ đình của dòng Chúc Thánh, gần chùa Chúc Thánh.",nguon:[["Hồ sơ di tích Hội An","https://hoianheritage.danang.gov.vn/uploads/download/chua-phuoc-lam.pdf"]]},
+ "long-tuyen":{lap:"Năm 1909, từ một am nhỏ",khai:"Thiền sư Phổ Thoại (1875–1954)",ghi:"Được ban sắc tứ năm 1933.",nguon:[["Hội An Heritage","https://hoianheritage.net/uploads/download/phieu-kiem-ke-thien-phai-lam-te-chuc-thanh-o-hoi-an.pdf"]]},
+ "hai-tang":{lap:"Năm 1758; dời về vị trí hiện nay năm 1848",khai:"Chưa có trong hồ sơ di tích",tru:"Không có trụ trì thường trú, người dân bầu ban quản lý chăm lo (VietNamNet, 6/2026)",ghi:"Di tích cấp quốc gia trên đảo Cù Lao Chàm, đi tàu từ Cửa Đại.",nguon:[["Hồ sơ di tích Hội An","https://hoianheritage.danang.gov.vn/uploads/download/chua-hai-tang.pdf"],["VietNamNet","https://vietnamnet.vn/ngoi-chua-4-khong-o-cu-lao-cham-2528229.html"]]}};
+const ANH_CHUA={"pho-da":"Dragfyre, CC BY-SA 3.0","chuc-thanh":"Christophe95, CC BY-SA 4.0","linh-ung-bai-but":"Phương Huy, CC BY-SA 4.0","linh-ung-non-nuoc":"Dragfyre, CC BY-SA 3.0","linh-ung-ba-na":"Phương Huy, CC BY-SA 4.0","phuoc-lam":"Christophe95, CC BY-SA 4.0","long-tuyen":"Christophe95, CC BY-SA 4.0","hai-tang":"Lê Thy, phạm vi công cộng","tam-thai":"Chainwit., CC BY 4.0"};
 const chuaById=id=>CHUA.find(c=>c.id===id)||CHUA[0];
 const TUYEN=[
   {id:"ba-linh-ung",ten:"Ba chùa Linh Ứng",phu:"Từ biển Sơn Trà, qua Ngũ Hành Sơn, lên đỉnh Bà Nà.",ds:["linh-ung-bai-but","linh-ung-non-nuoc","linh-ung-ba-na"],sen:150,le:["huong",3]},
   {id:"ngu-hanh-son",ten:"Non nước Ngũ Hành",phu:"Hai ngôi chùa trên núi Thủy Sơn.",ds:["tam-thai","linh-ung-non-nuoc"],sen:80,le:["nen",3]},
   {id:"hoi-an",ten:"Phố cổ Hội An",phu:"Ba ngôi chùa cổ quanh phố Hội.",ds:["chuc-thanh","phuoc-lam","long-tuyen"],sen:150,le:["hoa",3]},
-  {id:"ra-dao",ten:"Ra đảo, về nam",phu:"Từ Cù Lao Chàm về Tam Kỳ.",ds:["hai-tang","buu-chau"],sen:120,le:["den",1]}];
+  {id:"ra-dao",ten:"Phố cổ ra đảo",phu:"Từ tổ đình Chúc Thánh ra chùa Hải Tạng trên Cù Lao Chàm.",ds:["chuc-thanh","hai-tang"],sen:120,le:["den",1]}];
 const HUY=[
   {id:"chuoi",ten:"Tròn chuỗi 108",dk:()=>TU.dem.chuoi>=1},
   {id:"bat-nha",ten:"Trọn Tâm Kinh",dk:()=>TU.dem.batNha>=1},
@@ -2804,7 +2825,7 @@ function moCuaHang(tab="le"){const c=capTu();let b="";
   const tb=$(".tu-tab[aria-selected=true]");if(tb)tb.scrollIntoView({block:"nearest",inline:"center"})}
 ACT["tu-cua-hang"]=t=>moCuaHang(t.dataset.v||"le");
 function tra(t,sen,ngoc){if(t.dataset.tra==="ngoc"){if(VI.so<ngoc){bao("Chưa đủ kim cương. Nạp thêm trong Ví.");moCuaHang("nap");return false}VI.so-=ngoc;VI.ls.unshift({loai:"tieu",kc:-ngoc,ly:"Làng nghề: "+((t.closest(".lng-the,.tu-sp")?.querySelector("b")?.firstChild?.textContent||"đồ trang trí").trim()),ngay:iso(homNay)});luuVI()}else{if(TU.sen<sen){bao("Chưa đủ giọt dầu. Gõ mõ, khấn, viếng gia tiên để tích thêm.");return false}TU.sen-=sen}return true}
-ACT["tu-mua-le"]=t=>{const l=LE_AO.find(x=>x.id===t.dataset.v);if(!tra(t,l.sen,l.ngoc))return;TU.kho[l.id]++;luuTU();veHud();bao(`Đã thỉnh ${l.ten}.`);dongSheet(true);moCuaHang("le")};
+ACT["tu-mua-le"]=t=>{const l=LE_AO.find(x=>x.id===t.dataset.v);if(!tra(t,l.sen,l.ngoc))return;TU.kho[l.id]++;luuTU();veHud();bao(`Đã thỉnh ${l.ten}.`);moCuaHang("le")};
 ACT["tu-mua-do"]=t=>{const d=doById(t.dataset.v);if(d.cap&&capTu().cap<d.cap){bao(`Đèn cần bậc ${d.cap} để dùng ${d.ten}.`);return}if(!tra(t,d.sen,d.ngoc))return;TU.co.push(d.id);TU.mac[d.loai]=d.id;luuTU();CANH&&CANH.doiMac&&CANH.doiMac();veHud();bao(`Đã đổi ${d.ten}, đèn đang dùng.`);moCuaHang(d.loai)};
 ACT["tu-mac-ch"]=t=>{const d=doById(t.dataset.v);if(!TU.co.includes(d.id))TU.co.push(d.id);TU.mac[d.loai]=d.id;luuTU();CANH&&CANH.doiMac&&CANH.doiMac();veHud();moCuaHang(d.loai)};
 ACT["tu-xem"]=t=>{const d=doById(t.dataset.v),mac={...TU.mac,[d.loai]:d.id};
@@ -2847,9 +2868,9 @@ function vuaBanDo(){const s=$("#hh-svg");if(!s)return;const r=s.getBoundingClien
   const ar=r.width/r.height;let w=x1-x0,h=y1-y0;if(w/h<ar){const nw=h*ar;x0-=(nw-w)/2;w=nw}else{const nh=w/ar;y0-=(nh-h)/2;h=nh}
   HH.vb=[x0,y0,w,h];s.setAttribute("viewBox",HH.vb.join(" "))}
 function theHH(){const c=chuaById(HH.chon||TU.chua),da=TU.an[c.id],i=CHUA.indexOf(c);
-  return `<div class="hh-the"><div class="hh-the__dau"><button class="tm-icbtn" data-act="hh-buoc" data-v="${(i+CHUA.length-1)%CHUA.length}" aria-label="Chùa trước">${ic("lui")}</button><span class="gian giua-chu"><b class="t-tieu-muc khoi">${esc(c.ten)}</b><span class="t-nho">${esc(c.noi)}</span></span><button class="tm-icbtn" data-act="hh-buoc" data-v="${(i+1)%CHUA.length}" aria-label="Chùa tiếp">${ic("toi")}</button></div>
+  return `<div class="hh-the">${ANH_CHUA[c.id]?`<figure class="hh-anh"><img src="${anh("chua-"+c.id)}" alt="${esc(c.ten)}" loading="lazy"><figcaption>Ảnh: ${esc(ANH_CHUA[c.id])}, Wikimedia Commons</figcaption></figure>`:""}<div class="hh-the__dau"><button class="tm-icbtn" data-act="hh-buoc" data-v="${(i+CHUA.length-1)%CHUA.length}" aria-label="Chùa trước">${ic("lui")}</button><span class="gian giua-chu"><b class="t-tieu-muc khoi">${esc(c.ten)}</b><span class="t-nho">${esc(c.noi)}</span></span><button class="tm-icbtn" data-act="hh-buoc" data-v="${(i+1)%CHUA.length}" aria-label="Chùa tiếp">${ic("toi")}</button></div>
    <p class="hh-trang ${da?"da":""}">${ic(da?"da-xac-minh":"hoa-sen")}<span>${da?`Đã viếng, có ấn ngày ${dmyy(new Date(da))}`:"Chưa viếng · vào chùa nhận ấn và +10 công đức"}${TU.chua===c.id?" · bạn đang ở đây":""}</span></p>
-   <div class="tm-hai-nut"><button class="tm-btn ${TU.chua===c.id?"tm-btn--phu":"tm-btn--chinh"}" data-act="hh-vao" data-v="${c.id}">${TU.chua===c.id?"Về chánh điện":"Vào chùa"}</button><button class="tm-btn tm-btn--phu" data-act="hh-su" data-v="${c.id}">Sự tích chùa</button></div></div>`}
+   <div class="tm-hai-nut"><button class="tm-btn ${TU.chua===c.id?"tm-btn--phu":"tm-btn--chinh"}" data-act="hh-vao" data-v="${c.id}">${TU.chua===c.id?"Về chánh điện":"Vào chùa"}</button><button class="tm-btn tm-btn--phu" data-act="hh-su" data-v="${c.id}">Thông tin chùa</button></div></div>`}
 function noiDungHH(){
   if(HH.tab==="ban-do")return `<div class="tm-chips tm-chips--cuon hh-loc">${[["tat-ca","Tất cả"],...TUYEN.map(t=>[t.id,`${t.ten} ${t.ds.filter(c=>TU.an[c]).length}/${t.ds.length}`])].map(([v,t])=>`<button class="tm-chip" aria-pressed="${HH.loc===v}" data-act="hh-loc" data-v="${v}">${esc(t)}</button>`).join("")}</div>
     <div class="hh-khung">${veBanDo()}<div class="hh-zoom"><button class="cd-nut-tron" data-act="hh-zoom" data-v=".7" aria-label="Phóng to">${ic("cong")}</button><button class="cd-nut-tron" data-act="hh-zoom" data-v="1.43" aria-label="Thu nhỏ">${ic("tru")}</button></div>
@@ -2861,10 +2882,16 @@ function noiDungHH(){
     <div class="hh-chuoi">${t.ds.map(id=>`<span class="hh-nut ${TU.an[id]?"co":""}" title="${esc(chuaById(id).ten)}">${TU.an[id]?ic("xong"):chuaById(id).ngan}</span>`).join("<i></i>")}</div>
     <div class="hh-hang"><span class="t-nho">Thưởng: <b class="so">${t.sen}</b> giọt dầu · ${t.le[1]} ${esc(le.ten)}</span>${du&&!nhan?`<button class="tm-btn tm-btn--chinh" data-act="hh-nhan" data-v="${t.id}">Nhận thưởng</button>`:nhan?`<span class="tm-badge tm-badge--reu">Đã nhận</span>`:`<button class="tm-btn tm-btn--phu" data-act="hh-xem-tuyen" data-v="${t.id}">Xem đường đi</button>`}</div></div>`}).join("")}</div>`}
 function veHH(){const k=$("#hh-noi");if(!k)return;k.innerHTML=noiDungHH();if(HH.vuaLai){HH.vuaLai=false;requestAnimationFrame(vuaBanDo)}document.querySelectorAll(".hh-tab").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.v===HH.tab)));ganKeo()}
-function ganKeo(){const s=$("#hh-svg");if(!s)return;let keo=null;
-  s.onpointerdown=e=>{if(e.target.closest(".hh-ghim"))return;keo=[e.clientX,e.clientY];s.setPointerCapture(e.pointerId)};
-  s.onpointermove=e=>{if(!keo)return;const k=HH.vb[2]/s.clientWidth;HH.vb[0]-=(e.clientX-keo[0])*k;HH.vb[1]-=(e.clientY-keo[1])*k;keo=[e.clientX,e.clientY];s.setAttribute("viewBox",HH.vb.join(" "))};
-  s.onpointerup=()=>{keo=null}}
+function ganKeo(){const s=$("#hh-svg");if(!s)return;const ptr=new Map();let dau=null;
+  const datVB=()=>s.setAttribute("viewBox",HH.vb.map(v=>v.toFixed(1)).join(" "));
+  const zoom=(k,cx,cy)=>{const r=s.getBoundingClientRect(),[x,y,w,h]=HH.vb,nw=Math.min(1100,Math.max(230,w*k)),kk=nw/w,px=x+(cx-r.left)/r.width*w,py=y+(cy-r.top)/r.height*h;HH.vb=[px-(px-x)*kk,py-(py-y)*kk,nw,h*kk];datVB()};
+  s.onpointerdown=e=>{ptr.set(e.pointerId,[e.clientX,e.clientY]);if(ptr.size===1&&e.target.closest(".hh-ghim"))return;try{s.setPointerCapture(e.pointerId)}catch(_){}dau=null};
+  s.onpointermove=e=>{if(!ptr.has(e.pointerId))return;const cu=ptr.get(e.pointerId);ptr.set(e.pointerId,[e.clientX,e.clientY]);
+    if(ptr.size===2){const [a,b]=[...ptr.values()],dist=Math.hypot(a[0]-b[0],a[1]-b[1]);if(dau)zoom(dau/dist,(a[0]+b[0])/2,(a[1]+b[1])/2);dau=dist;return}
+    if(ptr.size===1&&s.hasPointerCapture&&s.hasPointerCapture(e.pointerId)){const k=HH.vb[2]/s.clientWidth;HH.vb[0]-=(e.clientX-cu[0])*k;HH.vb[1]-=(e.clientY-cu[1])*k;datVB()}};
+  const het=e=>{ptr.delete(e.pointerId);if(ptr.size<2)dau=null};s.onpointerup=het;s.onpointercancel=het;
+  s.onwheel=e=>{e.preventDefault();zoom(e.deltaY>0?1.12:.89,e.clientX,e.clientY)};
+  s.ondblclick=e=>zoom(.6,e.clientX,e.clientY)}
 function nhinChua(id){const [x,y]=chieu(chuaById(id));HH.vb=[x-HH.vb[2]/2,y-HH.vb[3]/2,HH.vb[2],HH.vb[3]]}
 ACT["hh-tab"]=t=>{HH.tab=t.dataset.v;veHH()};
 ACT["hh-chon"]=t=>{HH.chon=t.dataset.v;veHH()};
@@ -2874,9 +2901,14 @@ ACT["hh-zoom"]=t=>{const k=+t.dataset.v,[x,y,w,h]=HH.vb,cx=x+w/2,cy=y+h/2,nw=Mat
 ACT["hh-di"]=t=>{HH.tab="ban-do";HH.chon=t.dataset.v;nhinChua(HH.chon);veHH()};
 ACT["hh-xem-tuyen"]=t=>{HH.tab="ban-do";HH.loc=t.dataset.v;HH.chon=TUYEN.find(x=>x.id===HH.loc).ds[0];HH.vuaLai=true;veHH()};
 ACT["hh-nhan"]=t=>{const tu=TUYEN.find(x=>x.id===t.dataset.v);TU.thuong.push(tu.id);TU.sen+=tu.sen;TU.kho[tu.le[0]]+=tu.le[1];luuTU();amChuong(.6);bao(`Nhận ${tu.sen} giọt dầu và ${tu.le[1]} ${LE_AO.find(l=>l.id===tu.le[0]).ten.toLowerCase()}.`);veHH()};
-ACT["hh-su"]=t=>{const c=chuaById(t.dataset.v);moSheet(`<div class="tm-sheet__dau"><h2 class="t-tieu-de">${esc(c.ten)}</h2><button class="tm-icbtn" data-act="dong-sheet" aria-label="Đóng">${ic("dong")}</button></div>
-  <p class="t-nho">${esc(c.noi)}</p><p class="t-than">${esc(c.su)}</p><p class="t-nho">Lời giới thiệu ngắn, sẽ bổ sung cùng nhà chùa khi Trường Minh hợp tác.</p>
-  <div class="tm-sheet__day"><button class="tm-btn tm-btn--chinh tm-btn--rong" data-act="hh-vao" data-v="${c.id}">Vào chùa</button></div>`,"Sự tích chùa")};
+ACT["hh-su"]=t=>{const c=chuaById(t.dataset.v),x=CHUA_TT[c.id]||{};const d=(n,v)=>`<div class="tm-dong tm-dong--tinh"><span class="tm-dong__giua"><span class="tm-dong__phu">${n}</span><span class="tm-dong__ten wrap">${esc(v)}</span></span></div>`;
+  moSheet(`<div class="tm-sheet__dau"><h2 class="t-tieu-de">${esc(c.ten)}</h2><button class="tm-icbtn" data-act="dong-sheet" aria-label="Đóng">${ic("dong")}</button></div>
+  ${ANH_CHUA[c.id]?`<figure class="hh-anh lon"><img src="${anh("chua-"+c.id)}" alt="${esc(c.ten)}"><figcaption>Ảnh: ${esc(ANH_CHUA[c.id])}, Wikimedia Commons</figcaption></figure>`:""}
+  <p class="t-nho">${esc(c.noi)}</p>
+  <div class="tm-ds">${d("Năm lập",x.lap||"Đang cập nhật")}${d("Khai sơn",x.khai||"Đang cập nhật")}${d("Trụ trì hiện nay",x.tru||"Đang cập nhật")}</div>
+  ${x.ghi?`<p class="t-than">${esc(x.ghi)}</p>`:""}
+  ${x.nguon?`<p class="t-nho">Nguồn: ${x.nguon.map(([n,u])=>`<a class="tm-lk" href="${u}" target="_blank" rel="noopener">${esc(n)}</a>`).join(", ")}</p>`:""}
+  <div class="tm-sheet__day"><button class="tm-btn tm-btn--chinh tm-btn--rong" data-act="hh-vao" data-v="${c.id}">Vào chùa</button></div>`,"Thông tin chùa")};
 ACT["hh-vao"]=t=>{const id=t.dataset.v;dongSheet(true);vaoChua(id);di("/chua/chanh-dien")};
 function vaoChua(id){TU.chua=id;if(!TU.an[id]){TU.an[id]=iso(homNay);themCD(10);setTimeout(()=>bao(`Nhận ấn ${chuaById(id).ten}: +10 công đức`),500)}luuTU()}
 ACT["cd-hanh-huong"]=()=>di("/chua/hanh-huong");
@@ -3419,7 +3451,7 @@ function apFull(){const t=DATA.toi;t.ten="Tài khoản thử nghiệm";t.goi="b�
   DATA.giaTien.forEach(g=>{const k=moKey(g);NCS[k]=NCS[k]||{kieu:"nguyen-ban",them:[]};NCS[k].co=NC.map(x=>x.id)});luuNC()}
 if(luu.get("tm3-full",false))apFull();
 
-const VER="1793705718";try{fetch("ver.txt?"+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{v=(v||"").trim();if(v&&v!==VER){let ok=true;try{ok=!sessionStorage.getItem("tm-rl"+v);sessionStorage.setItem("tm-rl"+v,"1")}catch(e){}if(ok)location.reload()}}).catch(()=>{})}catch(e){}
+const VER="1793712058";try{fetch("ver.txt?"+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{v=(v||"").trim();if(v&&v!==VER){let ok=true;try{ok=!sessionStorage.getItem("tm-rl"+v);sessionStorage.setItem("tm-rl"+v,"1")}catch(e){}if(ok)location.reload()}}).catch(()=>{})}catch(e){}
 apTheme();ghiNgan();ve();
 if(matchMedia)matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>{});</script>
 
