@@ -1139,6 +1139,7 @@ a.cay__nut:active{background:var(--dong-nhat)}
 .cd-dem.nen-nhang small{grid-column:1/-1;position:static;white-space:normal;font-size:12px;line-height:16px}
 .cd-dem.nen-nhang>.nn{flex-direction:row;align-items:flex-end}.cd-dem.nen-nhang .nn__que{flex:none;display:block}
 .cd,.cd canvas{touch-action:none}.cd .cd-duoi,.cd .vm-bang{touch-action:pan-x pan-y}
+.nc-tab{position:sticky;top:calc(56px + env(safe-area-inset-top,0px) + min(38vh,320px));z-index:4;background:var(--nen);box-shadow:0 6px 0 var(--nen)}
 </style>
 </head>
 <body>
@@ -3334,10 +3335,10 @@ function dungMo(canvas,g,opt={}){let vung=null,heSo=1,nghieng=0,nghiengDich=0,ga
   canvas.style.touchAction="none";
   canvas.onpointerdown=e=>{if(vao<1){vao=1;return}ptr.set(e.pointerId,[e.clientX,e.clientY]);try{canvas.setPointerCapture(e.pointerId)}catch(_){}keo=[e.clientX,e.clientY];chum=null};
   canvas.onpointermove=e=>{if(!ptr.has(e.pointerId))return;ptr.set(e.pointerId,[e.clientX,e.clientY]);
-    if(ptr.size>=2){const [a,b]=[...ptr.values()],d=Math.hypot(a[0]-b[0],a[1]-b[1]);if(chum)ganDich=Math.max(.55,Math.min(2.4,ganDich*chum/d));chum=d;keo=null;return}
+    if(ptr.size>=2){const [a,b]=[...ptr.values()],d=Math.hypot(a[0]-b[0],a[1]-b[1]);if(chum)ganDich=Math.max(.7,Math.min(2.4,ganDich*chum/d));chum=d;keo=null;return}
     if(keo){yawDich-=(e.clientX-keo[0])*.008;nghiengDich=Math.max(-.2,Math.min(1,nghiengDich+(e.clientY-keo[1])*.004));keo=[e.clientX,e.clientY]}};
   const het=e=>{ptr.delete(e.pointerId);if(ptr.size<2)chum=null;if(!ptr.size)keo=null;else keo=[...ptr.values()][0]};canvas.onpointerup=het;canvas.onpointercancel=het;
-  canvas.onwheel=e=>{e.preventDefault();ganDich=Math.max(.55,Math.min(2.4,ganDich*(e.deltaY>0?1.1:.91)))};
+  canvas.onwheel=e=>{e.preventDefault();ganDich=Math.max(.7,Math.min(2.4,ganDich*(e.deltaY>0?1.1:.91)))};
   ["gesturestart","gesturechange"].forEach(k=>canvas.addEventListener(k,e=>e.preventDefault()));
   let cui=0;function vai(){cui=1}
   let chay=true,id=0,t0=performance.now();
@@ -3385,7 +3386,7 @@ function dungMo(canvas,g,opt={}){let vung=null,heSo=1,nghieng=0,nghiengDich=0,ga
     if(ds.has("cau"))mirror(sg=>cay(sg*(W2+1.15),-1.3,1,o=>{add(new T.CylinderGeometry(.06,.09,2.6,10),M("#a9a294",.8),0,1.3,0,{g:o});for(let i=0;i<8;i++){const a=i/8*Math.PI*2,l=add(B(.9,.02,.16),laSang,Math.cos(a)*.4,2.55,Math.sin(a)*.4,{g:o,ry:-a});l.rotation.z=-.35*Math.cos(0);l.rotateZ(-.3)}}));
     if(ds.has("su"))cay(-(W2+1.25),.55,1,o=>{const t=add(new T.CylinderGeometry(.05,.08,1.1,8),thanNC,0,.55,0,{g:o,rz:.15});[[0,1.2,0,.38],[.3,1.05,.15,.28],[-.28,1.1,-.1,.3]].forEach(([x,y,z,rr])=>{add(new T.SphereGeometry(rr,12,8),laNC,x,y,z,{g:o});for(let i=0;i<7;i++)add(new T.SphereGeometry(.04,6,4),M("#fbf6ea",.6),x+(Math.random()-.5)*rr*1.4,y+rr*.6+Math.random()*.1,z+(Math.random()-.5)*rr*1.4,{g:o})})});
     if(ds.has("mai"))cay(W2+1.0,.7,1,o=>{add(new T.CylinderGeometry(.22,.17,.24,14),M("#3e5f72",.4,.1),0,.12,0,{g:o});add(new T.CylinderGeometry(.03,.05,.5,6),thanNC,0,.48,0,{g:o,rz:.4});[[-.12,.72,0],[.12,.62,.05],[0,.82,-.05]].forEach(([x,y,z])=>{add(new T.SphereGeometry(.14,10,8),laSang,x,y,z,{g:o});for(let i=0;i<5;i++)add(new T.SphereGeometry(.03,6,4),M("#fbfbf6",.6),x+(Math.random()-.5)*.2,y+.08,z+(Math.random()-.5)*.2,{g:o})})});
-    if(ds.has("co"))add(new T.PlaneGeometry(2.6*RX+3.2,6.2),coNhung,0,.006,-.2,{rx:-Math.PI/2});
+    if(ds.has("co")){coNhung.polygonOffset=true;coNhung.polygonOffsetFactor=-2;coNhung.polygonOffsetUnits=-2;add(new T.PlaneGeometry(2.6*RX+3.2,6.2),coNhung,0,.02,-.2,{rx:-Math.PI/2})}
     if(ds.has("rao")){add(B(2.6*RX+1.8,.36,.3),laNC,0,.18,-2.4);mirror(sg=>add(B(.3,.36,3.6),laNC,sg*(W2+.9),.18,-.6))}
     if(ds.has("ban-tron")){const o=cay(W2+1.45,2.3,1,()=>{});add(new T.CylinderGeometry(.06,.1,.45,12),daNC,0,.22,0,{g:o});add(new T.CylinderGeometry(.42,.42,.06,24),daNC,0,.47,0,{g:o});for(let i=0;i<4;i++){const a=i/4*Math.PI*2+.4;add(new T.CylinderGeometry(.13,.15,.3,14),daNC,Math.cos(a)*.62,.15,Math.sin(a)*.62,{g:o})}}
     if(ds.has("ghe-dai")){const o=cay(-(W2+1.45),2.2,1,()=>{});o.rotation.y=Math.PI/2;add(B(1.2,.07,.34),daNC,0,.36,0,{g:o});[-.45,.45].forEach(x=>add(B(.1,.33,.3),daNC,x,.16,0,{g:o}))}
@@ -3759,7 +3760,7 @@ function cayToc(t){const tim2=id=>t.doi.flatMap(d=>d.mo).find(m=>m.id===id);
   return `<div class="cay-khung"><div class="cay cay--toc"><svg class="cay__net" aria-hidden="true"></svg>${t.doi.map(d=>`<div class="cay__doi"><span class="cay__nhan">${d.doi}</span><div class="cay__hang">${d.mo.filter(m=>!d.mo.some(x=>x.voChong===m.id)).map(nut).join("")}</div></div>`).join("")}</div></div>
   <p class="t-nho">Gia phả theo các ngôi trong khu. Viền vàng là gia tiên đã khai trong app, chạm để xem. Kéo ngang nếu cây rộng hơn màn hình.</p>`}
 
-const VER="1793721482";try{fetch("ver.txt?"+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{v=(v||"").trim();if(v&&v!==VER){let ok=true;try{ok=!sessionStorage.getItem("tm-rl"+v);sessionStorage.setItem("tm-rl"+v,"1")}catch(e){}if(ok)location.reload()}}).catch(()=>{})}catch(e){}
+const VER="1793723290";try{fetch("ver.txt?"+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{v=(v||"").trim();if(v&&v!==VER){let ok=true;try{ok=!sessionStorage.getItem("tm-rl"+v);sessionStorage.setItem("tm-rl"+v,"1")}catch(e){}if(ok)location.reload()}}).catch(()=>{})}catch(e){}
 apTheme();ghiNgan();ve();
 if(matchMedia)matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>{});</script>
 
