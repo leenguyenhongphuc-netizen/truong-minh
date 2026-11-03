@@ -1259,21 +1259,26 @@ ACT["dong-sheet"]=()=>dongSheet();
 const AM=Object.assign({bat:luu.get("tm3-am",true)},{nen:true,cham:true,to:.8},luu.get("tm3-am2",{}));
 const luuAM=()=>{luu.set("tm3-am",AM.bat);luu.set("tm3-am2",{nen:AM.nen,cham:AM.cham,to:AM.to})};
 let AC=null,_ra=null;
-function ac(){if(!AC){const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;AC=new C();_ra=AC.createGain();_ra.gain.value=AM.to;const nen=AC.createDynamicsCompressor();nen.threshold.value=-10;nen.knee.value=8;nen.ratio.value=6;nen.attack.value=.002;nen.release.value=.2;_ra.connect(nen).connect(AC.destination)}if(AC.state==="suspended")AC.resume();return AC}
+function ac(){if(!AC){const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;AC=new C();_ra=AC.createGain();_ra.gain.value=AM.to;const nen=AC.createDynamicsCompressor();nen.threshold.value=-10;nen.knee.value=8;nen.ratio.value=6;nen.attack.value=.002;nen.release.value=.2;_ra.connect(nen).connect(AC.destination)}if(AC.state!=="running"&&AC.state!=="closed"){try{AC.resume()}catch(e){}}return AC}
 const raAm=()=>{ac();return _ra};
 function datAmLuong(v){AM.to=v;if(_ra)_ra.gain.value=v;luuAM()}
 /* iPhone: nút gạt im lặng tắt WebAudio; chuyển phiên âm thanh sang "phát" khi người dùng chạm lần đầu */
-/* iPhone gạt im lặng thì tắt WebAudio. Cách mở: phát một đoạn âm câm lặp lại bằng thẻ audio (chuyển phiên âm thanh sang "phát nhạc"),
-   rồi mới bật WebAudio, làm lại ở mỗi lần chạm nếu bị dừng. */
-let _cam=null;
-function amCam(){if(_cam)return _cam;const sr=8000,n=sr/2,b=new ArrayBuffer(44+n),v=new DataView(b),w=(o,s)=>[...s].forEach((c,i)=>v.setUint8(o+i,c.charCodeAt(0)));
+/* Mở khoá âm thanh trên iPhone: chỉ phát đoạn câm MỘT lần ở lần chạm đầu (để iOS cho WebAudio phát),
+   không phát lặp, vì thẻ audio chạy song song sẽ làm WebAudio bị "interrupted" và mất tiếng.
+   Mỗi lần chạm sau đó chỉ cần đánh thức lại AudioContext nếu nó đang ngủ hoặc bị ngắt. */
+let _moKhoa=false;
+function amCam(){const sr=8000,n=800,b=new ArrayBuffer(44+n),v=new DataView(b),w=(o,s)=>[...s].forEach((c,i)=>v.setUint8(o+i,c.charCodeAt(0)));
   w(0,"RIFF");v.setUint32(4,36+n,true);w(8,"WAVEfmt ");v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);v.setUint32(24,sr,true);v.setUint32(28,sr,true);v.setUint16(32,1,true);v.setUint16(34,8,true);w(36,"data");v.setUint32(40,n,true);for(let i=0;i<n;i++)v.setUint8(44+i,128);
-  _cam=new Audio(URL.createObjectURL(new Blob([b],{type:"audio/wav"})));_cam.loop=true;_cam.setAttribute("playsinline","");_cam.preload="auto";return _cam}
-function moKhoaAm(){if(!AM.bat)return;try{if(navigator.audioSession)navigator.audioSession.type="playback"}catch(e){}
-  try{const a=amCam();if(a.paused){const p=a.play();if(p&&p.catch)p.catch(()=>{})}}catch(e){}const c=ac();if(c&&c.state!=="running")c.resume().catch(()=>{})}
+  return new Audio(URL.createObjectURL(new Blob([b],{type:"audio/wav"})))}
+function danhThucAm(){if(!AC)return;if(AC.state!=="running"){try{AC.resume()}catch(e){}}}
+function moKhoaAm(){if(!AM.bat)return;
+  if(!_moKhoa){_moKhoa=true;try{if(navigator.audioSession&&navigator.audioSession.type!=="playback")navigator.audioSession.type="playback"}catch(e){}
+    try{const a=amCam();a.setAttribute("playsinline","");const p=a.play();if(p&&p.then)p.then(()=>setTimeout(()=>{a.pause();a.src=""},200)).catch(()=>{})}catch(e){}}
+  ac();danhThucAm()}
 document.addEventListener("pointerdown",moKhoaAm,{capture:true});
+document.addEventListener("touchend",moKhoaAm,{capture:true});
 document.addEventListener("keydown",moKhoaAm,{capture:true});
-document.addEventListener("visibilitychange",()=>{if(document.hidden&&_cam)_cam.pause()});
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)danhThucAm()});
 
 /* khối dựng âm */
 function amTone(f,{luc=0,dai=.3,to=.2,kieu="sine",len=.005,tu=null,den=null}={}){if(!AM.bat)return;const a=ac();if(!a)return;const t=a.currentTime+luc,o=a.createOscillator(),g=a.createGain();o.type=kieu;
@@ -3586,7 +3591,7 @@ function cayToc(t){const tim2=id=>t.doi.flatMap(d=>d.mo).find(m=>m.id===id);
   return `<div class="cay-khung"><div class="cay cay--toc"><svg class="cay__net" aria-hidden="true"></svg>${t.doi.map(d=>`<div class="cay__doi"><span class="cay__nhan">${d.doi}</span><div class="cay__hang">${d.mo.filter(m=>!d.mo.some(x=>x.voChong===m.id)).map(nut).join("")}</div></div>`).join("")}</div></div>
   <p class="t-nho">Gia phả theo các ngôi trong khu. Viền vàng là gia tiên đã khai trong app, chạm để xem. Kéo ngang nếu cây rộng hơn màn hình.</p>`}
 
-const VER="1793717919";try{fetch("ver.txt?"+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{v=(v||"").trim();if(v&&v!==VER){let ok=true;try{ok=!sessionStorage.getItem("tm-rl"+v);sessionStorage.setItem("tm-rl"+v,"1")}catch(e){}if(ok)location.reload()}}).catch(()=>{})}catch(e){}
+const VER="1793718125";try{fetch("ver.txt?"+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{v=(v||"").trim();if(v&&v!==VER){let ok=true;try{ok=!sessionStorage.getItem("tm-rl"+v);sessionStorage.setItem("tm-rl"+v,"1")}catch(e){}if(ok)location.reload()}}).catch(()=>{})}catch(e){}
 apTheme();ghiNgan();ve();
 if(matchMedia)matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>{});</script>
 
