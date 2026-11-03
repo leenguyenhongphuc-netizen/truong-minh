@@ -1016,6 +1016,14 @@ button.nh-nguoi:active{transform:scale(.98)}
 .le-ck{display:flex;flex-direction:column;gap:10px}
 .le-ck__qr{width:132px;height:132px;align-self:center;display:grid;place-items:center;align-content:center;gap:4px;border:1px dashed var(--vien);border-radius:var(--radius-sm);background:var(--be-mat);color:var(--muc-phu);font:500 12px/16px var(--font-sans)}.le-ck__qr svg{width:56px;height:56px;color:var(--muc)}
 .tm-tien-do__thanh.n4{grid-template-columns:repeat(4,1fr)}
+
+.tm-chao__loi{margin:0;font:700 28px/36px var(--font-serif);color:var(--kim-1);text-wrap:balance}
+.tm-chao__giua{gap:10px}
+.mk{display:flex;flex-direction:column;gap:20px;padding-top:12px}
+.mk-o{grid-template-columns:repeat(4,1fr);max-width:280px;margin:0 auto 14px}
+.mk-o input{min-height:64px;font-size:28px}
+#f-mk{display:flex;flex-direction:column;gap:4px}
+.mk-co{display:flex;flex-direction:column;gap:8px}
 </style>
 </head>
 <body>
@@ -1454,7 +1462,7 @@ DATA.daDang=DATA.daDang.filter(d=>quaById(d.qua));
 route("/chao",()=>({tran:true,body:`<section class="tm-chao">
   <div class="tm-chao__nen" aria-hidden="true">${Array.from({length:14},(_,i)=>`<i style="--x:${(i*37+11)%100}%;--d:${7+(i*13)%7}s;--t:${-(i*1.7)%9}s;--s:${2+(i%3)}px"></i>`).join("")}</div>
   <div class="tm-chao__khung"><span class="tm-chao__hao" aria-hidden="true"></span><img class="tm-chao__logo" src="logo/truong-minh-dung-ep-kim-trong.svg" alt="Trường Minh, ngọn đèn không bao giờ tắt"><span class="tm-chao__loe" aria-hidden="true"></span></div>
-  <div class="tm-chao__giua"><p class="t-than">Người giữ đèn ra mộ ở Đà Nẵng, Quảng Nam vào mùng 1, ngày rằm và ngày giỗ. Mỗi lần thăm có ảnh trước và sau, ghi giờ, gửi về cho cả nhà.</p></div>
+  <div class="tm-chao__giua"><h1 class="tm-chao__loi">Ở xa, vẫn thắp được nén nhang</h1><p class="t-than">Mùng 1, ngày rằm, ngày giỗ, người giữ đèn ra mộ thay con cháu. Ảnh gửi về cho cả nhà.</p></div>
   <div class="tm-chao__nut">
     <a class="tm-btn tm-btn--kim tm-btn--rong" href="#/dang-nhap">Đăng nhập bằng số điện thoại</a>
     <p class="t-nho" style="color:var(--muc-tren-gu)">Chưa có tài khoản? Đăng nhập lần đầu sẽ tự tạo.</p>
@@ -3380,20 +3388,26 @@ route("/mo-toc/:id",({id})=>{const t=moToc(id);if(!t)return null;const so=t.doi.
 
 /* ---------- tài khoản thử nghiệm đầy đủ: 0999999999 / 1908 (đã giả định xác thực OTP) ---------- */
 route("/mat-khau",()=>{if(chuanSdt(S.sdt||"")!=="0999999999")return di("/dang-nhap",true);
-  return {tieuDe:"Tài khoản thử nghiệm",lui:"/dang-nhap",nav:false,phai:"",body:`
-  <div class="tm-dn-dau"><h2 class="t-tieu-de">Nhập mật khẩu</h2><p class="t-nho">Số <b class="so">0999 999 999</b> là tài khoản thử nghiệm, đã xác thực, nên không gửi mã.</p></div>
-  <form class="tm-muc" id="f-mk" novalidate><div class="tm-truong"><label for="mk">Mật khẩu</label>
-   <input class="tm-o so" id="mk" type="password" inputmode="numeric" autocomplete="current-password" maxlength="12" ${S.loiMk?'aria-invalid="true" aria-describedby="loi-mk"':""}>
-   ${S.loiMk?`<p class="tm-loi" id="loi-mk">${ic("canh-bao")}${esc(S.loiMk)}</p>`:`<p class="goi-y">Vào là có đủ kim cương, bậc đèn cao nhất, mọi món đã mở để thử.</p>`}</div>
-   <button class="tm-btn tm-btn--chinh tm-btn--rong" type="submit">Đăng nhập</button></form>`,
-  sau(){const o=$("#mk");o&&o.focus();$("#f-mk").addEventListener("submit",e=>{e.preventDefault();if($("#mk").value!=="1908"){S.loiMk="Mật khẩu chưa đúng.";ve(true);return}
-    luu.set("tm3-full",true);apFull();S.daDangNhap=true;luu.set("tm3-dn",true);bao("Đã vào tài khoản thử nghiệm đầy đủ.");di("/",true)})}}});
+  return {tieuDe:"Tài khoản thử nghiệm",lui:"/dang-nhap",nav:false,phai:"",body:`<div class="mk">
+  <div class="tm-dn-dau"><img src="logo/bieu-tuong-dong.svg" alt=""><h2 class="t-tieu-de">Nhập mã 4 số</h2><p class="t-nho">Số <b class="so">0999 999 999</b> đã xác thực, nên dùng mã riêng thay cho tin nhắn.</p></div>
+  <form id="f-mk" novalidate><div class="tm-otp mk-o" role="group" aria-label="Mã 4 số">${[0,1,2,3].map(i=>`<input class="tm-o so" id="mk${i}" type="password" inputmode="numeric" maxlength="1" autocomplete="${i?"off":"current-password"}" aria-label="Số thứ ${i+1}" ${S.loiMk?'aria-invalid="true"':""}>`).join("")}</div>
+   ${S.loiMk?`<p class="tm-loi" id="loi-mk">${ic("canh-bao")}${esc(S.loiMk)}</p>`:""}
+   <button class="tm-btn tm-btn--chinh tm-btn--rong" type="submit" id="nut-mk" aria-disabled="true">Vào app</button></form>
+  <section class="mk-co"><h3 class="t-tieu-muc">Tài khoản này có sẵn</h3><div class="tm-ds">${[["kim-cuong","999.999 kim cương","Đặt lễ, dâng quà, nâng cấp hoa viên thoải mái"],["den","Đèn bậc cao nhất","Hạng Trường Minh, đủ mọi phần đèn ở Làng nghề"],["nha-mo","Mọi món hoa viên đã mua","Thử bày cho cả ba phần mộ"],["dang-xuat","Đăng xuất là trả lại như cũ","Số dư và đồ thử nghiệm được xoá"]].map(([i,a,b])=>`<div class="tm-dong tm-dong--tinh"><span class="tm-dong__ic">${ic(i)}</span><span class="tm-dong__giua"><span class="tm-dong__ten">${a}</span><span class="tm-dong__phu">${b}</span></span></div>`).join("")}</div></section></div>`,
+  sau(){const os=[...document.querySelectorAll(".mk-o input")];os[0].focus();
+    const vao=()=>{const v=os.map(o=>o.value).join("");if(v!=="1908"){S.loiMk="Mã chưa đúng. Nhập lại 4 số.";ve(true);return}
+      luu.set("tm3-full",true);apFull();S.loiMk="";S.daDangNhap=true;luu.set("tm3-dn",true);bao("Đã vào tài khoản thử nghiệm.");di("/",true)};
+    const kt=()=>{const v=os.map(o=>o.value).join(""),n=$("#nut-mk");v.length===4?n.removeAttribute("aria-disabled"):n.setAttribute("aria-disabled","true");return v};
+    os.forEach((o,i)=>{o.addEventListener("input",()=>{o.value=o.value.replace(/\D/g,"").slice(-1);if(o.value&&os[i+1])os[i+1].focus();if(kt().length===4)vao()});
+      o.addEventListener("keydown",e=>{if(e.key==="Backspace"&&!o.value&&os[i-1])os[i-1].focus()})});
+    $("#f-mk").addEventListener("submit",e=>{e.preventDefault();if(kt().length===4)vao()})}}});
 function apFull(){const t=DATA.toi;t.ten="Tài khoản thử nghiệm";t.goi="bạn";t.sdt="0999 999 999";t.hang="Trường Minh";t.diem=99999;t.giam=15;
   if(VI.so<100000){VI.so=999999;VI.ls.unshift({loai:"nap",kc:999999,vnd:0,ly:"Kim cương thử nghiệm",ngay:iso(homNay)});luuVI()}
   if(TU.cd<210000)TU.cd=210000;TU.sen=Math.max(TU.sen,99999);TU.co=[...new Set([...TU.co,...DO.map(d=>d.id)])];Object.keys(TU.kho).forEach(k=>TU.kho[k]=Math.max(TU.kho[k],99));luuTU();
   DATA.giaTien.forEach(g=>{const k=moKey(g);NCS[k]=NCS[k]||{kieu:"nguyen-ban",them:[]};NCS[k].co=NC.map(x=>x.id)});luuNC()}
 if(luu.get("tm3-full",false))apFull();
 
+const VER="1793705460";try{fetch("ver.txt?"+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{v=(v||"").trim();if(v&&v!==VER){let ok=true;try{ok=!sessionStorage.getItem("tm-rl"+v);sessionStorage.setItem("tm-rl"+v,"1")}catch(e){}if(ok)location.reload()}}).catch(()=>{})}catch(e){}
 apTheme();ghiNgan();ve();
 if(matchMedia)matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>{});</script>
 
