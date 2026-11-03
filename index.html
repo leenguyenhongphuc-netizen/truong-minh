@@ -67,7 +67,7 @@ img{display:block;max-width:100%}
 .t-gia{font:700 18px/24px var(--font-serif);color:var(--dong-dam);font-variant-numeric:lining-nums tabular-nums}
 .t-than{font:400 16px/24px var(--font-sans)}
 .t-nho{font:400 14px/20px var(--font-sans);color:var(--muc-phu)}
-.t-nhan{font:600 12px/16px var(--font-sans);letter-spacing:.08em;text-transform:uppercase;color:var(--dong-dam)}
+.t-nhan{font:600 13px/18px var(--font-sans);color:var(--dong-dam)}
 .t-phu{color:var(--muc-phu)}
 
 /* ---------- thanh trên ---------- */
@@ -111,7 +111,7 @@ img{display:block;max-width:100%}
 .tm-ba-nut .tm-btn{padding:0 var(--space-2);flex-direction:column;gap:2px;min-height:64px;font-size:13px;line-height:16px}
 
 /* ---------- nhãn ---------- */
-.tm-badge{font:600 12px/16px var(--font-sans);letter-spacing:.06em;text-transform:uppercase;padding:4px var(--space-2);border-radius:var(--radius-sm);display:inline-flex;align-items:center;gap:var(--space-1);white-space:nowrap}
+.tm-badge{font:600 12px/16px var(--font-sans);padding:4px var(--space-2);border-radius:var(--radius-sm);display:inline-flex;align-items:center;gap:var(--space-1);white-space:nowrap}
 .tm-badge svg{width:14px;height:14px}
 .tm-badge--reu{background:var(--reu-nhat);color:var(--reu)}
 .tm-badge--dong{background:var(--dong-nhat);color:var(--dong-dam)}
@@ -159,7 +159,7 @@ img{display:block;max-width:100%}
 .tm-bc__anh{display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--vien)}
 .tm-bc__khung{aspect-ratio:4/3;position:relative;background:var(--be-mat-2);overflow:hidden}
 .tm-bc__khung img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.tm-bc__nhan{position:absolute;left:var(--space-2);top:var(--space-2);font:600 11px/14px var(--font-sans);letter-spacing:.08em;text-transform:uppercase;color:var(--kim-1);background:var(--nau-gu);padding:3px 6px;border-radius:4px}
+.tm-bc__nhan{position:absolute;left:var(--space-2);top:var(--space-2);font:600 12px/16px var(--font-sans);color:var(--kim-1);background:var(--nau-gu);padding:3px 6px;border-radius:4px}
 .tm-bc__than{padding:var(--space-3);display:grid;gap:var(--space-2)}
 .tm-bc__dau{display:flex;justify-content:space-between;align-items:center;gap:var(--space-2)}
 .tm-buoc{list-style:none;margin:0;padding:0;display:grid;border-top:1px solid var(--vien)}
@@ -185,7 +185,7 @@ img{display:block;max-width:100%}
 .tm-hang__dau{display:grid;grid-template-columns:44px 1fr auto;gap:var(--space-3);align-items:center}
 .tm-hang__huy{width:44px;height:44px;border-radius:var(--radius-full);display:grid;place-items:center;background:var(--ep-kim);color:var(--nau-gu)}
 .tm-hang__huy svg{width:22px;height:22px}
-.tm-hang__nho{font:600 12px/16px var(--font-sans);letter-spacing:.08em;text-transform:uppercase;color:var(--vang-kim)}
+.tm-hang__nho{font:600 13px/18px var(--font-sans);color:var(--vang-kim)}
 .tm-hang__ten{font:700 20px/26px var(--font-serif);background:var(--ep-kim);-webkit-background-clip:text;background-clip:text;color:transparent}
 .tm-hang__diem{font:700 20px/26px var(--font-serif);color:var(--kim-1);text-align:right;font-variant-numeric:lining-nums tabular-nums}
 .tm-hang__diem small{display:block;font:400 12px/16px var(--font-sans);color:var(--vang-kim)}
@@ -1009,6 +1009,13 @@ button.nh-nguoi:active{transform:scale(.98)}
 .hh-ghim circle:nth-child(2){fill:var(--bd2-dat)!important;stroke:var(--bd2-dat)!important}
 .hh-ten{fill:var(--bd2-vien);stroke:var(--bd2-dat);font:700 17px var(--font-sans);text-anchor:middle;paint-order:stroke;stroke-width:5px}
 .hh-hao{fill:var(--kim-2);opacity:.18}
+
+/* lễ ở chùa */
+.tm-tom{margin:0;font:500 14px/20px var(--font-sans);color:var(--muc-phu)}
+.tm-chips--deu{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.tm-chips--deu .tm-chip{justify-content:center;min-height:48px}
+.le-ck{display:flex;flex-direction:column;gap:10px}
+.le-ck__qr{width:132px;height:132px;align-self:center;display:grid;place-items:center;align-content:center;gap:4px;border:1px dashed var(--vien);border-radius:var(--radius-sm);background:var(--be-mat);color:var(--muc-phu);font:500 12px/16px var(--font-sans)}.le-ck__qr svg{width:56px;height:56px;color:var(--muc)}
+.tm-tien-do__thanh.n4{grid-template-columns:repeat(4,1fr)}
 </style>
 </head>
 <body>
@@ -1377,12 +1384,12 @@ const DATA={
   ],
   chua:{
     le:[
-      {id:"cau-an",ten:"Gửi tên cầu an",gia:100000,chua:80000,phi:20000,moTa:"Tên người thân được đọc trong lễ cầu an mùng 1 và rằm tại chùa. Có video lúc đọc tên.",cho:"song"},
-      {id:"cau-sieu",ten:"Gửi tên cầu siêu",gia:150000,chua:120000,phi:30000,moTa:"Tên gia tiên được đọc trong lễ cầu siêu. Có video lúc đọc tên.",cho:"gia-tien"},
-      {id:"cung-duong",ten:"Cúng dường",gia:200000,chua:180000,phi:20000,moTa:"Gửi tịnh tài hoặc lễ vật cúng dường chùa. Nhận thư xác nhận của chùa.",cho:"song"},
-      {id:"tung-49",ten:"Tụng kinh 49 ngày",gia:3500000,chua:3000000,phi:500000,moTa:"Chùa tụng kinh cầu siêu trong 49 ngày sau khi người thân mất; có ảnh mỗi tuần.",cho:"gia-tien"},
-      {id:"vu-lan",ten:"Lễ Vu Lan",gia:300000,chua:250000,phi:50000,moTa:"Ghi tên báo hiếu cha mẹ trong lễ Vu Lan rằm tháng Bảy; cài hoa hồng thay bạn.",cho:"song"},
-      {id:"ram-gieng",ten:"Lễ rằm tháng Giêng",gia:200000,chua:160000,phi:40000,moTa:"Dâng sao giải hạn, cầu an đầu năm cho cả nhà.",cho:"song"}
+      {id:"cau-an",ten:"Gửi tên cầu an",phi:30,goiY:[100000,200000,500000],moTa:"Người giữ đèn đến chùa, ghi tên người thân vào sổ cầu an, đặt tiền cúng và lễ trên bàn Phật. Chùa đọc tên trong khoá lễ cầu an gần nhất.",cho:"song"},
+      {id:"cau-sieu",ten:"Gửi tên cầu siêu",phi:30,goiY:[100000,200000,500000],moTa:"Người giữ đèn ghi tên gia tiên vào sổ cầu siêu của chùa, đặt tiền cúng và lễ. Chùa đọc tên trong khoá lễ cầu siêu gần nhất.",cho:"gia-tien"},
+      {id:"cung-duong",ten:"Cúng dường",phi:30,goiY:[200000,500000,1000000],moTa:"Người giữ đèn mang tiền cúng đến văn phòng chùa hoặc hòm công đức, thắp hương thay bạn và xin giấy ghi công đức.",cho:"song"},
+      {id:"tung-49",ten:"Tụng kinh 49 ngày",phi:300,goiY:[2000000,3000000,5000000],moTa:"Người giữ đèn đến chùa đăng ký tụng kinh 49 ngày theo lệ của chùa, mỗi tuần quay lại thắp hương và gửi ảnh. Phí tính cho 7 lần đi.",cho:"gia-tien"},
+      {id:"vu-lan",ten:"Lễ Vu Lan",phi:50,goiY:[100000,200000,500000],moTa:"Ghi tên báo hiếu cha mẹ trong lễ Vu Lan rằm tháng Bảy, cài hoa hồng thay bạn.",cho:"song"},
+      {id:"ram-gieng",ten:"Lễ rằm tháng Giêng",phi:40,goiY:[100000,200000,500000],moTa:"Dâng sao giải hạn, cầu an đầu năm cho cả nhà theo lệ của chùa.",cho:"song"}
     ]
   },
   vanKhan:[
@@ -1447,9 +1454,8 @@ DATA.daDang=DATA.daDang.filter(d=>quaById(d.qua));
 route("/chao",()=>({tran:true,body:`<section class="tm-chao">
   <div class="tm-chao__nen" aria-hidden="true">${Array.from({length:14},(_,i)=>`<i style="--x:${(i*37+11)%100}%;--d:${7+(i*13)%7}s;--t:${-(i*1.7)%9}s;--s:${2+(i%3)}px"></i>`).join("")}</div>
   <div class="tm-chao__khung"><span class="tm-chao__hao" aria-hidden="true"></span><img class="tm-chao__logo" src="logo/truong-minh-dung-ep-kim-trong.svg" alt="Trường Minh, ngọn đèn không bao giờ tắt"><span class="tm-chao__loe" aria-hidden="true"></span></div>
-  <div class="tm-chao__giua"><p class="t-than">Người giữ đèn chăm mộ thật ở Đà Nẵng, Quảng Nam. Gia đình ở xa theo dõi từng lần thăm và đặt lễ ngay trong app.</p></div>
+  <div class="tm-chao__giua"><p class="t-than">Người giữ đèn ra mộ ở Đà Nẵng, Quảng Nam vào mùng 1, ngày rằm và ngày giỗ. Mỗi lần thăm có ảnh trước và sau, ghi giờ, gửi về cho cả nhà.</p></div>
   <div class="tm-chao__nut">
-    <div class="tm-chao__hua"><div>${ic("da-xac-minh")}Làm thật</div><div>${ic("anh-tai-mo")}Có ảnh</div><div>${ic("den")}Tâm an</div></div>
     <a class="tm-btn tm-btn--kim tm-btn--rong" href="#/dang-nhap">Đăng nhập bằng số điện thoại</a>
     <p class="t-nho" style="color:var(--muc-tren-gu)">Chưa có tài khoản? Đăng nhập lần đầu sẽ tự tạo.</p>
   </div></section>`}));
@@ -2094,9 +2100,9 @@ function chua(){const ram=tim(x=>x.ad===15,cong(homNay,1)),mot=tim(x=>x.ad===1,c
    <img class="cd-vao__nen" src="${anh("chua-viet")}" alt=""><span class="cd-vao__hao" aria-hidden="true"></span><span class="cd-vao__nhan">ảnh minh hoạ</span>
    <span class="cd-vao__chu"><span class="t-nhan">Chánh điện Trường Minh</span><b class="chu-kim">Gõ mõ, tụng kinh, hồi hướng cho gia tiên</b><span class="t-nho">Niệm Phật · Bát Nhã Tâm Kinh · Chú Vãng Sanh</span></span>
    <span class="tm-btn tm-btn--kim tm-btn--rong">Vào chánh điện</span></a>
-  <div class="tm-thong-bao dong">${ic("thong-tin")}<span>Trường Minh đang làm việc với các chùa ở Đà Nẵng. Bạn giữ chỗ trước, không trả tiền bây giờ; khi chùa đầu tiên nhận lễ, app báo và bạn xác nhận.</span></div>
-  <section class="tm-muc"><div class="tm-muc__dau"><h2>Lễ ở chùa</h2><span class="t-nho">Ghi rõ phần chuyển chùa</span></div>
-  <div class="tm-ds">${DATA.chua.le.map(l=>`<a class="tm-dong" href="#/chua/le/${l.id}"><span class="tm-dong__ic">${ic(l.id==="cung-duong"?"le-vat":l.id==="tung-49"?"nhang":"hoa-sen")}</span><span class="tm-dong__giua"><span class="tm-dong__ten">${esc(l.ten)}${S.dangKyChua.includes(l.id)?` <span class="tm-badge tm-badge--reu">Đã giữ chỗ</span>`:""}</span><span class="tm-dong__phu so">Chuyển chùa ${tien(l.chua)} · phí ${tien(l.phi)}</span></span><span class="tm-dong__phai"><b class="t-gia c16">${tien(l.gia)}</b>${ic("toi")}</span></a>`).join("")}</div></section>
+  ${DON_CHUA.length?`<section class="tm-muc"><h2 class="t-tieu-muc">Lễ đã gửi chùa</h2><div class="tm-ds">${DON_CHUA.slice(0,3).map(d=>`<a class="tm-dong" href="#/chua/don/${d.ma}"><span class="tm-dong__ic">${ic("chua")}</span><span class="tm-dong__giua"><span class="tm-dong__ten">${esc(lcById(d.le).ten)} · ${esc(chuaById(d.chua).ten)}</span><span class="tm-dong__phu">${d.buoc>=3?"Đã có ảnh và giấy ghi công đức":`Đi chùa ${dmy(tuIso(d.ngay))}`}</span></span>${ic("toi","tm-gt__mui")}</a>`).join("")}</div></section>`:""}
+  <section class="tm-muc"><div class="tm-muc__dau"><h2>Lễ ở chùa</h2><span class="t-nho">Người giữ đèn đi thay bạn</span></div>
+  <div class="tm-ds">${DATA.chua.le.map(l=>`<a class="tm-dong" href="#/chua/le/${l.id}"><span class="tm-dong__ic">${ic(l.id==="cung-duong"?"le-vat":l.id==="tung-49"?"nhang":"hoa-sen")}</span><span class="tm-dong__giua"><span class="tm-dong__ten">${esc(l.ten)}</span><span class="tm-dong__phu">Tiền cúng tuỳ tâm · phí đi lễ ${kcHtml(l.phi)}</span></span>${ic("toi","tm-gt__mui")}</a>`).join("")}</div></section>
   <section class="tm-muc"><h2 class="t-tieu-muc">Lịch lễ sắp tới</h2><div class="tm-ds">
    ${[[mot,"Mùng 1","mung-1"],[ram,"Rằm","ram"],[vl,"Lễ Vu Lan, rằm tháng Bảy","ram"]].sort((a,b)=>a[0]-b[0]).map(([d,t,vk])=>`<a class="tm-dong" href="#/chua/van-khan/${vk}"><span class="tm-nhac__ngay w52"><b class="so c20">${dmy(d)}</b><span>${THU_NGAN[d.getDay()]}</span></span><span class="tm-dong__giua"><span class="tm-dong__ten">${t}</span><span class="tm-dong__phu">${amStr(info(d))} âm · còn ${conNgay(d)} ngày · đọc văn khấn</span></span>${ic("toi","tm-gt__mui")}</a>`).join("")}</div></section>
   <section class="tm-muc"><h2 class="t-tieu-muc">Văn khấn</h2><div class="tm-ds">${DATA.vanKhan.map(v=>`<a class="tm-dong" href="#/chua/van-khan/${v.id}"><span class="tm-dong__ic">${ic("nhang")}</span><span class="tm-dong__giua"><span class="tm-dong__ten">${esc(v.ten)}</span><span class="tm-dong__phu">${esc(v.dip)}</span></span>${ic("toi","tm-gt__mui")}</a>`).join("")}</div></section>
@@ -2104,20 +2110,56 @@ function chua(){const ram=tim(x=>x.ad===15,cong(homNay,1)),mot=tim(x=>x.ad===1,c
 }
 chua.tai="Chùa";
 route("/chua",chua);
-route("/chua/le/:id",({id})=>{const l=DATA.chua.le.find(x=>x.id===id);if(!l)return null;const da=S.dangKyChua.includes(id);
-  const f=S.fChua&&S.fChua.id===id?S.fChua:(S.fChua={id,ai:l.cho==="gia-tien"?["ba"]:["Minh"]});
-  const lua=l.cho==="gia-tien"?DATA.giaTien.map(g=>[g.id,`${g.xung} · ${g.ten}`]):DATA.thanhVien.map(m=>[m.goi,m.ten]);
-  return {tieuDe:l.ten,lui:"/chua",tab:"/chua",body:`
-  <p class="t-than">${esc(l.moTa)}</p>
-  <div class="tm-the tm-tien" aria-label="Tiền lễ"><div><span>Chuyển cho chùa</span><span>${tien(l.chua)}</span></div><div><span>Phí dịch vụ Trường Minh</span><span>${tien(l.phi)}</span></div><div class="tong"><span>Tổng</span><span>${tien(l.gia)}</span></div>
-   <p class="t-nho">Phí dịch vụ trả cho việc ghi tên, đi lại, quay video và gửi biên nhận của chùa về app.</p></div>
-  <section class="tm-muc"><h3 class="t-tieu-muc">${l.cho==="gia-tien"?"Cầu siêu cho":"Gửi tên"}</h3><div class="tm-ds-chon" role="group">${lua.map(([v,t])=>`<button class="tm-chon" aria-pressed="${f.ai.includes(v)}" data-act="chua-ai" data-v="${v}"><span class="tm-chon__o" style="border-radius:6px">${f.ai.includes(v)?ic("xong"):""}</span><span class="tm-dong__ten">${esc(t)}</span><span></span></button>`).join("")}</div></section>
-  <section class="tm-muc"><h3 class="t-tieu-muc">Cách hoạt động</h3><ol class="tm-ds ds-ol">${[["Giữ chỗ","Không trả tiền bây giờ"],["Chùa đối tác nhận lễ","App báo, bạn xác nhận và thanh toán"],["Đọc tên trong lễ","Có video lúc đọc tên và biên nhận của chùa"]].map((b,i)=>`<li class="tm-dong tm-dong--tinh"><span class="tm-dong__ic so">${i+1}</span><span class="tm-dong__giua"><span class="tm-dong__ten">${b[0]}</span><span class="tm-dong__phu">${b[1]}</span></span></li>`).join("")}</ol></section>
-  ${da?`<div class="tm-thong-bao reu">${ic("xong")}<span>Đã giữ chỗ. Khi có chùa đối tác, app báo để bạn xác nhận và thanh toán.</span></div>`:""}`,
-  day:da?`<a class="tm-btn tm-btn--phu tm-btn--rong" href="#/chua">Về Chùa</a>`:`<button class="tm-btn tm-btn--chinh tm-btn--rong" data-act="giu-cho-chua" data-v="${id}" ${f.ai.length?"":'aria-disabled="true"'}>${f.ai.length?`Giữ chỗ cho ${f.ai.length} người · chưa trả tiền`:"Chọn ít nhất một người"}</button>`};
-});
-ACT["chua-ai"]=t=>{const a=S.fChua.ai,k=a.indexOf(t.dataset.v);k>=0?a.splice(k,1):a.push(t.dataset.v);ve(true)};
-ACT["giu-cho-chua"]=t=>{S.dangKyChua.push(t.dataset.v);luu.set("tm3-chua",S.dangKyChua);ve(true);bao("Đã giữ chỗ. Trường Minh sẽ báo khi có chùa nhận lễ.")};
+/* ---------- lễ ở chùa: chọn chùa → người → tiền cúng → trả → theo dõi ----------
+   Tiền cúng là tiền thật, Trường Minh thu hộ và mang nguyên đến chùa; kim cương chỉ trả phí đi lễ. */
+const lcById=id=>DATA.chua.le.find(x=>x.id===id);
+const DON_CHUA=luu.get("tm3-don-chua",[]);const luuDC=()=>luu.set("tm3-don-chua",DON_CHUA);
+function fLe(id){const l=lcById(id);if(!S.fLe||S.fLe.le!==id)S.fLe={le:id,chua:null,ai:l.cho==="gia-tien"?["ba"]:["Minh"],tien:l.goiY[0],khac:""};return S.fLe}
+const ngayLe=()=>tim(x=>x.ad===1||x.ad===15,cong(homNay,2));
+function khungLe(l,buoc,body,day){const t=["Chọn chùa","Gửi cho ai","Tiền cúng","Thanh toán"];
+  return {tieuDe:l.ten,lui:buoc?`/chua/le/${l.id}${["","","/ai","/tien"][buoc]}`:"/chua",tab:"/chua",nav:false,body:`<div class="tm-tien-do"><div class="tm-giua-ngang"><span class="t-nhan">Bước ${buoc+1}/4</span><span class="t-nho">${t[buoc]}</span></div><div class="tm-tien-do__thanh n4" aria-hidden="true">${t.map((_,i)=>`<i class="${i<=buoc?"xong":""}"></i>`).join("")}</div></div>${body}`,day}}
+route("/chua/le/:id",({id})=>{const l=lcById(id);if(!l)return null;const f=fLe(id);
+  return khungLe(l,0,`<p class="t-than">${esc(l.moTa)}</p>
+  <h2 class="t-tieu-muc">Chọn chùa</h2>
+  <div class="tm-ds-chon" role="radiogroup" aria-label="Chùa">${CHUA.map(c=>`<button class="tm-chon" role="radio" aria-checked="${f.chua===c.id}" data-act="le-chua" data-v="${c.id}"><span class="tm-chon__o"></span><span class="mw0"><span class="tm-dong__ten serif khoi">${esc(c.ten)}</span><span class="tm-dong__phu">${esc(c.noi)}</span></span><span></span></button>`).join("")}</div>
+  <p class="t-nho">Danh sách chùa lấy theo thông tin công khai. Trường Minh không đại diện cho chùa; người giữ đèn đi lễ thay bạn như một Phật tử.</p>`,
+  `<a class="tm-btn tm-btn--chinh tm-btn--rong" href="#/chua/le/${id}/ai" ${f.chua?"":'aria-disabled="true"'}>${f.chua?`Tiếp: gửi cho ai`:"Chọn một chùa để tiếp tục"}</a>`)});
+ACT["le-chua"]=t=>{S.fLe.chua=t.dataset.v;ve(true)};
+route("/chua/le/:id/ai",({id})=>{const l=lcById(id),f=fLe(id);if(!f.chua){di(`/chua/le/${id}`,true);return null}
+  const lua=l.cho==="gia-tien"?DATA.giaTien.map(g=>[g.id,`${g.xung} · ${g.ten}`]):DATA.thanhVien.map(m=>[m.goi,m.ten]),nd=ngayLe();
+  return khungLe(l,1,`<p class="tm-tom">${esc(chuaById(f.chua).ten)} · ${tenNgayAm(info(nd))} ${dmy(nd)}</p>
+  <h2 class="t-tieu-muc">${l.cho==="gia-tien"?"Cầu siêu cho":"Ghi tên"}</h2>
+  <div class="tm-ds-chon" role="group">${lua.map(([v,t])=>`<button class="tm-chon" aria-pressed="${f.ai.includes(v)}" data-act="le-ai" data-v="${v}"><span class="tm-chon__o" style="border-radius:6px">${f.ai.includes(v)?ic("xong"):""}</span><span class="tm-dong__ten">${esc(t)}</span><span></span></button>`).join("")}</div>`,
+  `<a class="tm-btn tm-btn--chinh tm-btn--rong" href="#/chua/le/${id}/tien" ${f.ai.length?"":'aria-disabled="true"'}>${f.ai.length?"Tiếp: tiền cúng":"Chọn ít nhất một người"}</a>`)});
+ACT["le-ai"]=t=>{const a=S.fLe.ai,k=a.indexOf(t.dataset.v);k>=0?a.splice(k,1):a.push(t.dataset.v);ve(true)};
+route("/chua/le/:id/tien",({id})=>{const l=lcById(id),f=fLe(id);if(!f.chua||!f.ai.length){di(`/chua/le/${id}`,true);return null}
+  return khungLe(l,2,`<p class="tm-tom">${esc(chuaById(f.chua).ten)} · ${f.ai.length} người</p>
+  <h2 class="t-tieu-muc">Tiền cúng chùa</h2><p class="t-nho">Chùa không niêm yết giá, tuỳ tâm gia đình. Khoản này là tiền thật, chuyển khoản, người giữ đèn mang nguyên đến chùa.</p>
+  <div class="tm-chips tm-chips--deu" role="radiogroup" aria-label="Tiền cúng">${l.goiY.map(v=>`<button class="tm-chip" role="radio" aria-checked="${!f.khac&&f.tien===v}" data-act="le-tien" data-v="${v}">${vnd(v)}</button>`).join("")}</div>
+  <div class="tm-truong"><label for="le-khac">Số khác</label><input class="tm-o so" id="le-khac" inputmode="numeric" placeholder="Ví dụ 300.000" value="${esc(f.khac)}" data-nhap="le-khac"></div>
+  <div class="tm-the tm-tien"><div><span>Tiền cúng chùa · chuyển khoản</span><span class="so">${vnd(f.tien)}</span></div><div><span>Phí đi lễ · trả bằng kim cương</span><span>${kcHtml(l.phi)}</span></div>
+   <p class="t-nho">Phí đi lễ trả cho việc đi lại, ghi tên, chụp ảnh và gửi giấy ghi công đức về app.</p></div>`,
+  `<a class="tm-btn tm-btn--chinh tm-btn--rong" href="#/chua/le/${id}/tra" ${f.tien>=10000?"":'aria-disabled="true"'}>${f.tien>=10000?"Tiếp: thanh toán":"Tiền cúng tối thiểu 10.000đ"}</a>`)});
+ACT["le-tien"]=t=>{S.fLe.tien=+t.dataset.v;S.fLe.khac="";ve(true)};
+ACT["le-khac"]=t=>{const n=+t.value.replace(/\D/g,"");S.fLe.khac=t.value;S.fLe.tien=n;const a=document.querySelector(".tm-day .tm-btn");if(a){a.textContent=n>=10000?"Tiếp: thanh toán":"Tiền cúng tối thiểu 10.000đ";n>=10000?a.removeAttribute("aria-disabled"):a.setAttribute("aria-disabled","true")}const s2=document.querySelector(".tm-tien .so");if(s2)s2.textContent=vnd(n);document.querySelectorAll('[data-act="le-tien"]').forEach(b=>b.setAttribute("aria-checked","false"))};
+route("/chua/le/:id/tra",({id})=>{const l=lcById(id),f=fLe(id);if(!f.chua||!f.ai.length||f.tien<10000){di(`/chua/le/${id}`,true);return null}const ma="TMC"+String(Date.now()).slice(-6);f.ma=f.ma||ma;
+  return khungLe(l,3,`<p class="tm-tom">${esc(l.ten)} · ${esc(chuaById(f.chua).ten)} · ${f.ai.length} người</p>
+  <section class="le-ck"><h2 class="t-tieu-muc">1. Chuyển tiền cúng ${vnd(f.tien)}</h2>
+   <div class="le-ck__qr" aria-label="Mã VietQR mẫu">${ic("qr")}<span>VietQR mẫu</span></div>
+   <div class="tm-ds"><div class="tm-dong tm-dong--tinh"><span class="tm-dong__giua"><span class="tm-dong__phu">Tài khoản thu hộ</span><span class="tm-dong__ten">Công ty Trường Minh · số mẫu</span></span></div>
+   <div class="tm-dong tm-dong--tinh"><span class="tm-dong__giua"><span class="tm-dong__phu">Nội dung chuyển khoản</span><span class="tm-dong__ten so">${f.ma} CUNG CHUA</span></span></div></div>
+   <p class="t-nho">Tài khoản này chỉ giữ tiền cúng, tách riêng tiền phí. Ngân hàng báo về là app tự xác nhận.</p></section>
+  <section class="le-ck"><h2 class="t-tieu-muc">2. Trả phí đi lễ ${l.phi} kim cương</h2>${oVi(l.phi*1000,`/chua/le/${id}/tra`)}</section>`,
+  nutTra(l.phi*1000,"le-tra",`Đã chuyển khoản · trả ${l.phi} kim cương`,`data-v="${id}"`))});
+ACT["le-tra"]=t=>{if(t.getAttribute("aria-disabled")==="true")return;const l=lcById(t.dataset.v),f=S.fLe;if(!tieuKC(l.phi*1000,`Phí đi lễ ${l.ten} · ${chuaById(f.chua).ten}`)){bao("Chưa đủ kim cương.");return}
+  const d={ma:f.ma,le:l.id,chua:f.chua,ai:[...f.ai],tien:f.tien,phi:l.phi,ngay:iso(ngayLe()),buoc:1};DON_CHUA.unshift(d);luuDC();if(l.cho==="gia-tien")f.ai.forEach(g=>gtById(g)&&ghiNha(g,"dat",`${l.ten} ở ${chuaById(f.chua).ten}`));AMT.thanhCong();S.fLe=null;di(`/chua/don/${d.ma}`,true)};
+route("/chua/don/:ma",({ma})=>{const d=DON_CHUA.find(x=>x.ma===ma);if(!d)return null;const l=lcById(d.le),c=chuaById(d.chua),nd=tuIso(d.ngay);
+  const B=[["Đã nhận tiền cúng và phí",`Tiền cúng ${vnd(d.tien)} nằm trong tài khoản thu hộ, chưa dùng vào việc khác`],["Người giữ đèn đi chùa",`${THU[nd.getDay()]} ${dmy(nd)} · ${esc(c.ten)}`],["Ghi tên, đặt tiền cúng, thắp hương","Chụp ảnh lúc ghi sổ và lúc đặt lễ"],["Gửi ảnh và giấy ghi công đức","Ảnh giấy chùa ghi nhận số tiền, gửi về đây"]];
+  return {tieuDe:"Lễ ở chùa",lui:"/chua",tab:"/chua",body:`<h1 class="t-tieu-de">${esc(l.ten)}</h1><p class="tm-tom">${esc(c.ten)} · ${d.ai.map(a=>esc(gtById(a)?.xung||a)).join(", ")} · mã ${d.ma}</p>
+  <ol class="tm-ds ds-ol">${B.map((b,i)=>`<li class="tm-dong tm-dong--tinh"><span class="tm-dong__ic ${i<d.buoc?"reu":""}">${i<d.buoc?ic("xong"):`<span class="so">${i+1}</span>`}</span><span class="tm-dong__giua"><span class="tm-dong__ten">${b[0]}</span><span class="tm-dong__phu">${b[1]}</span></span></li>`).join("")}</ol>
+  <div class="tm-the tm-tien"><div><span>Tiền cúng chùa</span><span class="so">${vnd(d.tien)}</span></div><div><span>Phí đi lễ</span><span>${kcHtml(d.phi)}</span></div>
+   <p class="t-nho">Nếu chùa không nhận được trong ngày đã hẹn, người giữ đèn đi lại lần sau hoặc hoàn tiền cúng về tài khoản của bạn.</p></div>`,
+  day:`<a class="tm-btn tm-btn--phu tm-btn--rong" href="#/chua">Về Chùa</a>`}});
 route("/chua/van-khan/:id",({id})=>{const v=DATA.vanKhan.find(x=>x.id===id);if(!v)return null;
   return {tieuDe:v.ten,lui:"/chua",tab:"/chua",body:`<p class="t-nho">${esc(v.dip)} · bản phổ thông, gia đình đọc theo phong tục nhà mình. Chỗ “…” điền ngày, tên người khấn và địa chỉ.</p>
   <article class="tm-the"><p class="tm-van-khan">${esc(v.noi)}</p></article>`,
