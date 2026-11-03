@@ -1089,6 +1089,12 @@ a.cay__nut:active{background:var(--dong-nhat)}
 .vm-gio__mon button{width:44px;height:40px;border:0;background:none;color:var(--muc-phu);display:grid;place-items:center}.vm-gio__mon svg{width:16px;height:16px}
 .vm-goi-y{margin:0}
 .qua-chum{display:flex;justify-content:center}.qua-chum img{width:88px;height:88px;border-radius:50%;object-fit:cover;border:2px solid var(--vang-kim);margin-left:-18px}.qua-chum img:first-child{margin-left:0}
+
+.qua-them{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.qua-them__mon{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 4px;border:1px solid var(--vien);border-radius:var(--radius-sm);background:var(--be-mat);color:var(--muc);text-decoration:none;text-align:center}
+.qua-them__mon img{width:48px;height:48px;border-radius:50%;object-fit:cover}
+.qua-them__mon span{font:500 12px/16px var(--font-sans)}.qua-them__mon b{font:600 12px/16px var(--font-sans)}
+.qua-them__cong{position:absolute;top:4px;right:4px;width:18px;height:18px;color:var(--dong)}
 </style>
 </head>
 <body>
@@ -1924,6 +1930,7 @@ route("/gia-tien/:id/qua/:q",({id,q})=>{const g=gtById(id),ds=dsQua(q);if(!g||!d
   <div class="tm-ds">
    <div class="tm-dong tm-dong--tinh">${avGT(g,48)}<span class="tm-dong__giua"><span class="tm-dong__ten">Dâng ${esc(g.xung)}</span><span class="tm-dong__phu">${esc(g.ten)}</span></span></div>
    <div class="tm-dong tm-dong--tinh"><span class="tm-dong__ic">${ic("tai-khoan")}</span><span class="tm-dong__giua"><span class="tm-dong__ten">Người dâng: ${esc(DATA.toi.ten)}</span><span class="tm-dong__phu">Cả nhà thấy trong Sổ nhà của ${esc(g.xung)}</span></span></div></div>
+  <section class="tm-muc"><h3 class="t-tieu-muc">Dâng thêm cùng lúc</h3><div class="qua-them">${DATA.qua.filter(x=>!ds.some(o=>o.x.id===x.id)).slice(0,4).map(x=>`<a class="qua-them__mon" href="#/gia-tien/${id}/qua/${encodeURIComponent(decodeURIComponent(q)+","+x.id)}"><img src="${anh(x.anh)}" alt=""><span>${esc(x.ten)}</span><b>${tien(x.gia)}</b>${ic("cong","qua-them__cong")}</a>`).join("")}</div></section>
   ${oVi(tong,`/gia-tien/${id}/qua/${q}`)}
   ${coThat?`<p class="tm-thong-bao dong">${ic("anh-tai-mo")}<span>${esc(ng.ten[0].toUpperCase()+ng.ten.slice(1))} mang lễ ra mộ lần thăm tới${toi?` (${tenNgayAm(info(toi)).toLowerCase()} ${dmy(toi)})`:""} và chụp ảnh lúc dâng.</span></p>`:""}`,
   day:`<div class="tm-day__tong"><span class="t-nho">Tổng ${ds.reduce((s,o)=>s+o.sl,0)} món</span><span class="t-gia">${tien(tong)}</span></div>${nutTra(tong,"dang-qua","Dâng quà",`data-gt="${id}" data-q="${esc(q)}"`)}`};
@@ -3608,7 +3615,7 @@ function cayToc(t){const tim2=id=>t.doi.flatMap(d=>d.mo).find(m=>m.id===id);
   return `<div class="cay-khung"><div class="cay cay--toc"><svg class="cay__net" aria-hidden="true"></svg>${t.doi.map(d=>`<div class="cay__doi"><span class="cay__nhan">${d.doi}</span><div class="cay__hang">${d.mo.filter(m=>!d.mo.some(x=>x.voChong===m.id)).map(nut).join("")}</div></div>`).join("")}</div></div>
   <p class="t-nho">Gia phả theo các ngôi trong khu. Viền vàng là gia tiên đã khai trong app, chạm để xem. Kéo ngang nếu cây rộng hơn màn hình.</p>`}
 
-const VER="1793718807";try{fetch("ver.txt?"+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{v=(v||"").trim();if(v&&v!==VER){let ok=true;try{ok=!sessionStorage.getItem("tm-rl"+v);sessionStorage.setItem("tm-rl"+v,"1")}catch(e){}if(ok)location.reload()}}).catch(()=>{})}catch(e){}
+const VER="1793719062";try{fetch("ver.txt?"+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{v=(v||"").trim();if(v&&v!==VER){let ok=true;try{ok=!sessionStorage.getItem("tm-rl"+v);sessionStorage.setItem("tm-rl"+v,"1")}catch(e){}if(ok)location.reload()}}).catch(()=>{})}catch(e){}
 apTheme();ghiNgan();ve();
 if(matchMedia)matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>{});</script>
 
