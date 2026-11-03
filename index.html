@@ -1203,7 +1203,7 @@ ACT["dong-sheet"]=()=>dongSheet();
 const AM=Object.assign({bat:luu.get("tm3-am",true)},{nen:true,cham:true,to:.8},luu.get("tm3-am2",{}));
 const luuAM=()=>{luu.set("tm3-am",AM.bat);luu.set("tm3-am2",{nen:AM.nen,cham:AM.cham,to:AM.to})};
 let AC=null,_ra=null;
-function ac(){if(!AC){const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;AC=new C();_ra=AC.createGain();_ra.gain.value=AM.to;_ra.connect(AC.destination)}if(AC.state==="suspended")AC.resume();return AC}
+function ac(){if(!AC){const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;AC=new C();_ra=AC.createGain();_ra.gain.value=AM.to;const nen=AC.createDynamicsCompressor();nen.threshold.value=-10;nen.knee.value=8;nen.ratio.value=6;nen.attack.value=.002;nen.release.value=.2;_ra.connect(nen).connect(AC.destination)}if(AC.state==="suspended")AC.resume();return AC}
 const raAm=()=>{ac();return _ra};
 function datAmLuong(v){AM.to=v;if(_ra)_ra.gain.value=v;luuAM()}
 /* iPhone: nút gạt im lặng tắt WebAudio; chuyển phiên âm thanh sang "phát" khi người dùng chạm lần đầu */
@@ -1235,7 +1235,9 @@ const AMT={
   loi(){amTone(220,{dai:.09,to:.14,kieu:"triangle"});amTone(196,{luc:.12,dai:.12,to:.12,kieu:"triangle"})},
   bay(){amNhieu({dai:1.4,to:.07,tan:300,tanDen:2400,q:.8});amChuongNho(1175,.6,.08,2.6)},
   vai(){amChuongNho(196,0,.22,3.5);amNhieu({dai:.4,to:.03,loc:"lowpass",tan:500})},
-  khan(){amTone(1480,{dai:.03,to:.03,kieu:"triangle"})},
+  khan(){amMo("nho")},
+  bat(){amNhieu({dai:.03,to:.06,tan:2400,q:3});amTone(1200,{luc:.02,dai:.05,to:.03,kieu:"triangle"})},
+  dong(){amNhieu({dai:.18,to:.035,tan:2200,tanDen:900,q:.7})},
   moSheet(){AMT.giay()},
   vaoChua(){amChuong(.5)},
   nhangCay(){amNhieu({dai:.35,to:.05,tan:5000,q:.6});amTone(0,{tu:300,den:900,dai:.25,to:.03})},
@@ -1252,8 +1254,10 @@ function batNenChua(){if(_nenChua||!AM.bat||!AM.nen)return;const a=ac();if(!a)re
 function tatNenChua(){if(!_nenChua)return;const {g,os,xa,de}=_nenChua;clearInterval(xa);clearInterval(de);try{const a=ac();g.gain.cancelScheduledValues(a.currentTime);g.gain.setValueAtTime(g.gain.value,a.currentTime);g.gain.linearRampToValueAtTime(0,a.currentTime+.6);setTimeout(()=>os.flat().forEach(o=>{try{o.stop()}catch(e){}}),700)}catch(e){}_nenChua=null}
 
 /* tiếng chạm nút trên toàn app */
-document.addEventListener("pointerdown",e=>{const el=e.target.closest("button,a,[role=tab],[role=radio],input[type=checkbox]");if(!el||el.closest(".cd-mo,.vm-khan-nut,.vm-vai"))return;
-  if(el.matches("[role=tab]"))AMT.tab();else AMT.cham()},{capture:true});
+document.addEventListener("pointerdown",e=>{const el=e.target.closest("button,a,label,[role=tab],[role=radio],[role=checkbox],[role=button],[data-act],[data-doi],input[type=checkbox],select");if(!el||el.closest(".cd-mo,.vm-khan-nut,.vm-vai,.mk-o,.tm-otp"))return;
+  if(el.matches(".tm-sw,label")||el.querySelector?.(".tm-sw"))AMT.bat();else if(el.matches("[role=tab],.tm-nav a,.tm-phan a,.tm-phan button"))AMT.tab();else if(el.matches('[data-act="dong-sheet"]'))AMT.dong();else AMT.cham()},{capture:true});
+/* gõ phím trong ô nhập: tiếng chạm nhẹ, ô mã có tiếng riêng */
+document.addEventListener("input",e=>{if(!AM.cham)return;const t=e.target;if(t.matches(".tm-otp input,.mk-o input")&&t.value)amTone(880,{dai:.05,to:.03,kieu:"triangle"})},{capture:true});
 /* gắn âm theo nội dung thông báo ngắn */
 const _baoGoc=bao;
 bao=function(msg){const m=String(msg);
@@ -2438,15 +2442,23 @@ const kinhCD=()=>KINH.find(k=>k.id===CD.kinh);
 const tuCua=s=>s.split(" ");
 
 /* ---------- âm thanh (tổng hợp bằng WebAudio, không tải file) ---------- */
-function amMo(){if(!AM.bat)return;const a=ac();if(!a)return;const t=a.currentTime;
-  const o=a.createOscillator(),g=a.createGain();o.type="sine";o.frequency.setValueAtTime(560,t);o.frequency.exponentialRampToValueAtTime(330,t+.09);
-  g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.55,t+.004);g.gain.exponentialRampToValueAtTime(.0001,t+.2);o.connect(g).connect(raAm());o.start(t);o.stop(t+.22);
-  const b=a.createBuffer(1,Math.floor(a.sampleRate*.035),a.sampleRate),d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/d.length,3);
-  const n=a.createBufferSource(),f=a.createBiquadFilter(),gn=a.createGain();n.buffer=b;f.type="bandpass";f.frequency.value=1400;f.Q.value=1.6;gn.gain.value=.4;n.connect(f).connect(gn).connect(raAm());n.start(t)}
-function amChuong(to=1){if(!AM.bat)return;const a=ac();if(!a)return;const t=a.currentTime,goc=146.8;
-  [[1,.5,7],[2.0,.22,5],[2.76,.28,5.5],[5.4,.12,3.5],[8.93,.06,2.2]].forEach(([k,v,dai])=>{const o=a.createOscillator(),g=a.createGain();o.type="sine";o.frequency.value=goc*k*(1+(Math.random()-.5)*.002);
-    g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(v*.6*to,t+.01);g.gain.exponentialRampToValueAtTime(.0001,t+dai);o.connect(g).connect(raAm());o.start(t);o.stop(t+dai+.1)})}
-
+/* Mõ gỗ: tiếng "cốc" của khối gỗ rỗng. Gồm tiếng dùi chạm (vài mili giây, nhiễu cao)
+   và thân gỗ rung ở vài tần số lệch nhau, tắt nhanh; mõ lớn chánh điện trầm, mõ nhỏ cầm tay cao hơn. */
+function amMo(co="lon",luc=1){if(!AM.bat)return;const a=ac();if(!a)return;const t=a.currentTime,lon=co==="lon",f0=(lon?265:540)*(1+(Math.random()-.5)*.03),v=(lon?.62:.42)*luc;
+  [[1,1,lon?.32:.17],[1.62,.42,lon?.16:.09],[2.71,.2,lon?.08:.05],[4.3,.07,.035]].forEach(([k,g0,dai])=>{const o=a.createOscillator(),g=a.createGain();o.type="sine";
+    o.frequency.setValueAtTime(f0*k*1.025,t);o.frequency.exponentialRampToValueAtTime(f0*k,t+.035);
+    g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(v*g0,t+.0025);g.gain.exponentialRampToValueAtTime(.0001,t+dai);o.connect(g).connect(raAm());o.start(t);o.stop(t+dai+.02)});
+  const n=Math.floor(a.sampleRate*.012),b=a.createBuffer(1,n,a.sampleRate),d=b.getChannelData(0);for(let i=0;i<n;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/n,4);
+  const s2=a.createBufferSource(),hp=a.createBiquadFilter(),lp=a.createBiquadFilter(),g2=a.createGain();s2.buffer=b;hp.type="highpass";hp.frequency.value=lon?900:1500;lp.type="lowpass";lp.frequency.value=lon?4000:6500;g2.gain.value=v*.5;
+  s2.connect(hp).connect(lp).connect(g2).connect(raAm());s2.start(t);
+  if(lon){const o=a.createOscillator(),g=a.createGain();o.frequency.setValueAtTime(140,t);o.frequency.exponentialRampToValueAtTime(90,t+.06);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(v*.35,t+.003);g.gain.exponentialRampToValueAtTime(.0001,t+.07);o.connect(g).connect(raAm());o.start(t);o.stop(t+.09)}}
+/* Chuông chùa: theo đo đạc chuông chùa Nhật (mode 4-0 ≈ 138 Hz, 8-0 ≈ 2,75 lần), có "nhịp ngân" ≈ 1,6 Hz
+   do hai mode cơ bản lệch nhau; thêm tiếng chày gỗ chạm lúc đầu. */
+function amChuong(to=1){if(!AM.bat)return;const a=ac();if(!a)return;const t=a.currentTime,goc=138;
+  [[1,.42,9],[1+1.6/138,.36,9],[2.23,.2,6],[2.75,.26,6.5],[4.1,.1,3.5],[5.4,.06,2.4]].forEach(([k,v,dai])=>{const o=a.createOscillator(),g=a.createGain();o.type="sine";o.frequency.value=goc*k;
+    g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(v*.6*to,t+.012);g.gain.exponentialRampToValueAtTime(.0001,t+dai);o.connect(g).connect(raAm());o.start(t);o.stop(t+dai+.1)});
+  const n=Math.floor(a.sampleRate*.09),b=a.createBuffer(1,n,a.sampleRate),d=b.getChannelData(0);for(let i=0;i<n;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/n,3);
+  const s2=a.createBufferSource(),lp=a.createBiquadFilter(),g2=a.createGain();s2.buffer=b;lp.type="lowpass";lp.frequency.value=380;g2.gain.value=.5*to;s2.connect(lp).connect(g2).connect(raAm());s2.start(t)}
 /* ---------- cảnh 3D ---------- */
 let _three=null;
 function taiThree(){if(window.THREE)return Promise.resolve(window.THREE);if(_three)return _three;
@@ -3234,7 +3246,7 @@ const icChe=()=>VM.rieng?`${ic("khoa")}<span>Chỉ mình tôi</span>`:`${ic("mat
 ACT["vm-khan"]=()=>{ac();batAmNen();AMT.khan();khanTiep()};
 ACT["vm-khan-lai"]=()=>{dongSheet(true);VM.khan={dong:0,tu:0};VM.tab="khan";veBang()};
 ACT["vm-sang-qua"]=()=>{dongSheet(true);VM.tab="qua";veBang()};
-ACT["vm-tu-doc"]=t=>{VM.tuDoc=t.checked;clearInterval(_vmDoc);if(VM.tuDoc){ac();batAmNen();_vmDoc=setInterval(khanTiep,520)}};
+ACT["vm-tu-doc"]=t=>{VM.tuDoc=t.checked;clearInterval(_vmDoc);if(VM.tuDoc){ac();batAmNen();_vmDoc=setInterval(()=>{AMT.khan();khanTiep()},560)}};
 ACT["vm-vai"]=()=>{ac();batAmNen();MO&&MO.vai();AMT.vai();VM.vai=Math.min(3,VM.vai+1);if(VM.vai===3){amChuong(.4);themCD(5);bao("Đã vái ba vái: +5 công đức")}veBang();if(VM.vai>=3)setTimeout(()=>{VM.vai=0},4000)};
 ACT["vm-chon"]=t=>{VM.chon=t.dataset.v;MO&&MO.xem(MO_HINH[VM.chon]);veBang();const b=document.querySelector(`.vm-mon[data-v="${VM.chon}"]`);if(b){b.focus();b.scrollIntoView({block:"nearest",inline:"center"})}};
 ACT["vm-dang"]=()=>{if(!VM.chon)return;S.veVieng=VM.gt;di(`/gia-tien/${VM.gt}/qua/${VM.chon}`)};
@@ -3407,7 +3419,7 @@ function apFull(){const t=DATA.toi;t.ten="Tài khoản thử nghiệm";t.goi="b�
   DATA.giaTien.forEach(g=>{const k=moKey(g);NCS[k]=NCS[k]||{kieu:"nguyen-ban",them:[]};NCS[k].co=NC.map(x=>x.id)});luuNC()}
 if(luu.get("tm3-full",false))apFull();
 
-const VER="1793705460";try{fetch("ver.txt?"+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{v=(v||"").trim();if(v&&v!==VER){let ok=true;try{ok=!sessionStorage.getItem("tm-rl"+v);sessionStorage.setItem("tm-rl"+v,"1")}catch(e){}if(ok)location.reload()}}).catch(()=>{})}catch(e){}
+const VER="1793705718";try{fetch("ver.txt?"+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{v=(v||"").trim();if(v&&v!==VER){let ok=true;try{ok=!sessionStorage.getItem("tm-rl"+v);sessionStorage.setItem("tm-rl"+v,"1")}catch(e){}if(ok)location.reload()}}).catch(()=>{})}catch(e){}
 apTheme();ghiNgan();ve();
 if(matchMedia)matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>{});</script>
 
