@@ -1403,6 +1403,25 @@ ACT["am-thu"]=async()=>{if(!AM.bat){bao("Âm thanh đang tắt. Bật công tắ
   setTimeout(()=>{bao(a.state==="running"?"Đang phát: hai tiếng mõ, một tiếng chuông.":"Máy chưa cho phát âm thanh. Kiểm tra nút gạt im lặng và âm lượng rồi chạm lại.")},300)};
 const _moSheetGoc=moSheet;moSheet=function(h,n){if(!$("#sheet"))AMT.moSheet();return _moSheetGoc(h,n)};
 
+/* Màn hình khoá / trung tâm điều khiển: iPhone hiện thẻ "đang phát" khi app phát âm.
+   Đặt tên, lời và biểu tượng Trường Minh cho thẻ đó, và cho phép tạm dừng từ màn hình khoá. */
+function tieuDeMedia(){const p=(location.hash||"").replace(/^#/,"").split("?")[0];let m;
+  if(p==="/chua/chanh-dien"){const g=typeof gtById==="function"&&gtById(CD.hoiHuong);return [g?`Thời kinh cho ${g.xung}`:"Thời kinh ở chánh điện",typeof chuaById==="function"?chuaById(TU.chua).ten:"Chánh điện"]}
+  if((m=p.match(/^\/gia-tien\/([^/]+)\/vieng$/))){const g=gtById(m[1]);return [g?`Viếng ${tenMo(g)}`:"Viếng mộ",g?g.nghiaTrang:""]}
+  if(p.startsWith("/chua"))return ["Chùa","Hồi hướng cho gia tiên"];
+  return ["Trường Minh","Ngọn đèn không bao giờ tắt"]}
+function capNhatMedia(){if(!("mediaSession" in navigator)||typeof MediaMetadata==="undefined")return;const [a,b]=tieuDeMedia();
+  try{navigator.mediaSession.metadata=new MediaMetadata({title:a,artist:b,album:"Trường Minh",artwork:[{src:"icon-512.png",sizes:"512x512",type:"image/png"},{src:"icon-180.png",sizes:"180x180",type:"image/png"}]});
+    navigator.mediaSession.playbackState=AC&&AC.state==="running"?"playing":"paused"}catch(e){}}
+if("mediaSession" in navigator){try{
+  navigator.mediaSession.setActionHandler("pause",()=>{try{tatNenChua();tatAmNen&&tatAmNen()}catch(e){}if(AC)AC.suspend().catch(()=>{});navigator.mediaSession.playbackState="paused"});
+  navigator.mediaSession.setActionHandler("play",()=>{if(AC)AC.resume().catch(()=>{});navigator.mediaSession.playbackState="playing";if(location.hash.includes("/chua/chanh-dien"))batNenChua()});
+  ["seekbackward","seekforward","previoustrack","nexttrack"].forEach(k=>{try{navigator.mediaSession.setActionHandler(k,null)}catch(e){}})}catch(e){}}
+addEventListener("hashchange",()=>setTimeout(capNhatMedia,50));
+document.addEventListener("pointerdown",()=>setTimeout(capNhatMedia,60),{capture:true});
+/* rời app thì dừng hẳn âm nền để thẻ trên màn hình khoá không treo mãi */
+document.addEventListener("visibilitychange",()=>{if(document.hidden){try{tatNenChua()}catch(e){}if(AC&&AC.state==="running")AC.suspend().catch(()=>{});if("mediaSession" in navigator)navigator.mediaSession.playbackState="paused"}else capNhatMedia()});
+
 /* ================= DỮ LIỆU MẪU (tách riêng để sau này nối hệ thống) =================
    Tên, giá, số điện thoại là ví dụ. Ngày tính tương đối so với hôm nay để bản mẫu luôn "mới". */
 const PHOTO_ALIAS={"mam-ngu-qua": "mam-ngu-qua-viet", "tao-mo": "nghia-trang-viet", "quet-mo": "don-co"};const PHOTO_CO=["banh-chung", "banh-keo", "bat-huong", "ca-phe", "cay-tuong-niem", "chua-chuc-thanh", "chua-hai-tang", "chua-linh-ung-ba-na", "chua-linh-ung-bai-but", "chua-linh-ung-non-nuoc", "chua-long-tuyen", "chua-pho-da", "chua-phuoc-lam", "chua-tam-thai", "chua-viet", "den-long", "den-nang-luong", "don-co", "hoa-cuc-trang", "hoa-cuc-vang", "hoa-dang", "hoa-sen", "mam-ngu-qua", "mam-ngu-qua-viet", "nen-den", "nghia-trang-viet", "nhang-mo", "nhang-tram", "sach-anh", "son-bia", "tao-mo", "trai-cay", "trau-cau", "vang-ma", "video-call", "xoi-ga"];const PHOTO_THIEU=["ban-tho", "tay-nguoi-giu"]; /* build.py điền: khoá -> tên file thật có trong thư mục photos */
@@ -3724,7 +3743,7 @@ function cayToc(t){const tim2=id=>t.doi.flatMap(d=>d.mo).find(m=>m.id===id);
   return `<div class="cay-khung"><div class="cay cay--toc"><svg class="cay__net" aria-hidden="true"></svg>${t.doi.map(d=>`<div class="cay__doi"><span class="cay__nhan">${d.doi}</span><div class="cay__hang">${d.mo.filter(m=>!d.mo.some(x=>x.voChong===m.id)).map(nut).join("")}</div></div>`).join("")}</div></div>
   <p class="t-nho">Gia phả theo các ngôi trong khu. Viền vàng là gia tiên đã khai trong app, chạm để xem. Kéo ngang nếu cây rộng hơn màn hình.</p>`}
 
-const VER="1793719838";try{fetch("ver.txt?"+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{v=(v||"").trim();if(v&&v!==VER){let ok=true;try{ok=!sessionStorage.getItem("tm-rl"+v);sessionStorage.setItem("tm-rl"+v,"1")}catch(e){}if(ok)location.reload()}}).catch(()=>{})}catch(e){}
+const VER="1793720143";try{fetch("ver.txt?"+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{v=(v||"").trim();if(v&&v!==VER){let ok=true;try{ok=!sessionStorage.getItem("tm-rl"+v);sessionStorage.setItem("tm-rl"+v,"1")}catch(e){}if(ok)location.reload()}}).catch(()=>{})}catch(e){}
 apTheme();ghiNgan();ve();
 if(matchMedia)matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>{});</script>
 
