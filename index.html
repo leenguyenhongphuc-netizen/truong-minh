@@ -1476,7 +1476,7 @@ DATA.daDang=DATA.daDang.filter(d=>quaById(d.qua));
 route("/chao",()=>({tran:true,body:`<section class="tm-chao">
   <div class="tm-chao__nen" aria-hidden="true">${Array.from({length:14},(_,i)=>`<i style="--x:${(i*37+11)%100}%;--d:${7+(i*13)%7}s;--t:${-(i*1.7)%9}s;--s:${2+(i%3)}px"></i>`).join("")}</div>
   <div class="tm-chao__khung"><span class="tm-chao__hao" aria-hidden="true"></span><img class="tm-chao__logo" src="logo/truong-minh-dung-ep-kim-trong.svg" alt="Trường Minh, ngọn đèn không bao giờ tắt"><span class="tm-chao__loe" aria-hidden="true"></span></div>
-  <div class="tm-chao__giua"><h1 class="tm-chao__loi">Ở xa, vẫn thắp được nén nhang</h1><p class="t-than">Mùng 1, ngày rằm, ngày giỗ, người giữ đèn ra mộ thay con cháu. Ảnh gửi về cho cả nhà.</p></div>
+  <div class="tm-chao__giua"><h1 class="tm-chao__loi">Xa quê, vẫn yên lòng</h1><p class="t-than">Mùng 1, ngày rằm, ngày giỗ, có người ra mộ ông bà thay bạn. Ảnh gửi về cho cả nhà.</p></div>
   <div class="tm-chao__nut">
     <a class="tm-btn tm-btn--kim tm-btn--rong" href="#/dang-nhap">Đăng nhập bằng số điện thoại</a>
     <p class="t-nho" style="color:var(--muc-tren-gu)">Chưa có tài khoản? Đăng nhập lần đầu sẽ tự tạo.</p>
@@ -3451,7 +3451,7 @@ function apFull(){const t=DATA.toi;t.ten="Tài khoản thử nghiệm";t.goi="b�
   DATA.giaTien.forEach(g=>{const k=moKey(g);NCS[k]=NCS[k]||{kieu:"nguyen-ban",them:[]};NCS[k].co=NC.map(x=>x.id)});luuNC()}
 if(luu.get("tm3-full",false))apFull();
 
-const VER="1793712058";try{fetch("ver.txt?"+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{v=(v||"").trim();if(v&&v!==VER){let ok=true;try{ok=!sessionStorage.getItem("tm-rl"+v);sessionStorage.setItem("tm-rl"+v,"1")}catch(e){}if(ok)location.reload()}}).catch(()=>{})}catch(e){}
+const VER="1793716263";try{fetch("ver.txt?"+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{v=(v||"").trim();if(v&&v!==VER){let ok=true;try{ok=!sessionStorage.getItem("tm-rl"+v);sessionStorage.setItem("tm-rl"+v,"1")}catch(e){}if(ok)location.reload()}}).catch(()=>{})}catch(e){}
 apTheme();ghiNgan();ve();
 if(matchMedia)matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>{});</script>
 
