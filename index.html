@@ -1162,6 +1162,9 @@ button.cay__nut{font:inherit;cursor:pointer}
 .don-nhac{display:flex;align-items:center;gap:12px;padding:10px 14px;border:1px solid var(--dong);border-radius:var(--radius-sm);background:var(--dong-nhat);color:var(--muc);text-decoration:none;min-height:60px}
 .don-nhac__anh{display:flex;flex:none}.don-nhac__anh img{width:36px;height:36px;border-radius:50%;object-fit:cover;border:2px solid var(--be-mat);margin-left:-10px}.don-nhac__anh img:first-child{margin-left:0}
 .don-nhac .mw0{display:flex;flex-direction:column;flex:1}.don-nhac b{font:700 15px/20px var(--font-sans)}.don-nhac .mw0>span{font:400 13px/18px var(--font-sans);color:var(--muc-phu)}.don-nhac>svg{width:20px;height:20px;color:var(--dong)}
+.ls-ngay{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+.ls__so{flex:none;font:600 14px/20px var(--font-sans);color:var(--muc);white-space:nowrap}.ls__so.cong{color:var(--reu)}.ls__so.nhe{font-weight:500;font-size:12px;color:var(--muc-phu)}
+.don-lk{display:flex;align-items:center;gap:10px;min-height:48px;padding:8px 14px;border:1px solid var(--vien);border-radius:var(--radius-sm);background:var(--be-mat);color:var(--muc);text-decoration:none;font:500 14px/20px var(--font-sans)}.don-lk span{flex:1}.don-lk b{color:var(--dong-dam)}.don-lk svg{width:20px;height:20px;color:var(--dong);flex:none}
 </style>
 </head>
 <body>
@@ -2164,6 +2167,7 @@ function cuaHang(p,q){
   return {tieuDe:"Cửa hàng",body:`
   ${g||q.ngay?`<div class="tm-thong-bao dong">${ic("thong-tin")}<span>Đang chọn lễ ${g?`cho <b>${esc(g.xung)}</b>`:""}${q.ngay?` ngày <b>${dmy(tuIso(q.ngay))}</b>`:""}. Lựa chọn này được giữ khi đặt.</span></div>`:""}
   ${gb&&!g?`<a class="tm-gu" href="#/cua-hang?tab=sp&gt=${gb.id}&ngay=${iso(gbd)}" style="flex-direction:row;align-items:center;gap:12px;padding:12px 16px"><span class="tm-hang__huy">${ic("den")}</span><span class="gian"><span class="t-nhan">Giỗ ${esc(gb.xung)} · còn ${conNgay(gbd)} ngày</span><span class="t-tieu-muc khoi vang">Chuẩn bị lễ vật ngày giỗ</span></span>${ic("toi")}</a>`:""}
+  <a class="don-lk" href="#/don-hang">${ic("le-vat")}<span>Đơn & lịch sử mua${soDonDang()?` · <b>${soDonDang()} đang làm</b>`:""}</span>${ic("toi")}</a>
   <div class="tm-phan" role="tablist" aria-label="Nhóm hàng"><a role="tab" aria-selected="${tab==="dv"}" href="${lk({tab:"dv",loai:""})}" class="tm-phan__a">Dịch vụ</a><a role="tab" aria-selected="${tab==="sp"}" href="${lk({tab:"sp",loai:""})}" class="tm-phan__a">Sản phẩm</a></div>
   <div class="tm-chips tm-chips--cuon" role="group" aria-label="Lọc">${["",...cacLoai].map(l=>`<a class="tm-chip" href="${lk({loai:l})}" aria-pressed="${loai===l}">${l||"Tất cả"}</a>`).join("")}</div>
   ${tab==="dv"&&!loai?`<a class="nc-vao" href="#/nang-cap"><img class="nc-vao__anh" src="${anh("nc-toan")}" alt=""><span class="gian mw0"><b>Nâng cấp hoa viên</b><span>Kiểu mộ, cây xanh, bàn ghế đá trong cảnh viếng · trả bằng kim cương</span></span>${ic("toi")}</a><a class="tm-dong nc-toc-lk" href="${lk({loai:"Mộ đôi, mộ tộc"})}"><span class="tm-dong__ic">${ic("ho-toc")}</span><span class="tm-dong__giua"><span class="tm-dong__ten">Mộ đôi, khu mộ tộc</span><span class="tm-dong__phu">Gói riêng, tính theo số bia và công</span></span>${ic("toi","tm-dong__mui")}</a>`:""}
@@ -2388,7 +2392,7 @@ function taiKhoan(){const t=DATA.toi;
   return {tieuDe:"Tài khoản",body:`
   <div class="tm-the hang-the"><span class="tm-gt__anh" style="display:grid;place-items:center;font:700 22px/1 var(--font-serif);color:var(--dong-dam);background:var(--dong-nhat)">${t.ten.split(" ").pop()[0]}</span><div style="min-width:0;flex:1"><h2 class="t-tieu-muc">${esc(t.ten)}</h2><p class="t-nho so">${t.sdt} · tuổi ${canChiNam(t.namSinh)}</p></div></div>
   <a href="#/hang">${theHang()}</a>
-  <div class="tm-ds">${m("/don-hang","le-vat","Đơn của tôi",rong()?"Chưa có đơn":`${soDonDang()} đơn đang làm · xem lại mọi đơn đã mua`)}${m("/goi","goi","Gói đang dùng",rong()?"Chưa có gói":`${DATA.giaTien.filter(g=>g.goi==="giu-den-nam").length} gói Giữ đèn năm`)}${m("/vi","kim-cuong","Ví kim cương",`Số dư ${VI.so.toLocaleString("vi-VN")} kim cương · nạp, lịch sử`)}${rong()?"":m("/gia-tien/ba/thanh-vien","nguoi-them","Thành viên gia đình",`${DATA.thanhVien.length} người, góp gói`)}</div>
+  <div class="tm-ds">${m("/don-hang","le-vat","Đơn & lịch sử mua",rong()?"Chưa có đơn":`${soDonDang()} đơn đang làm · mọi lần mua, dâng, nạp`)}${m("/goi","goi","Gói đang dùng",rong()?"Chưa có gói":`${DATA.giaTien.filter(g=>g.goi==="giu-den-nam").length} gói Giữ đèn năm`)}${m("/vi","kim-cuong","Ví kim cương",`Số dư ${VI.so.toLocaleString("vi-VN")} kim cương · nạp, lịch sử`)}${rong()?"":m("/gia-tien/ba/thanh-vien","nguoi-them","Thành viên gia đình",`${DATA.thanhVien.length} người, góp gói`)}</div>
   <div class="tm-ds">${m("/cai-dat","cai-dat","Cài đặt","Giao diện, cỡ chữ, thông báo")}${m("/nhac","lich-am","Nhắc lịch","Giỗ, mùng 1, rằm")}${m("/ho-tro","ho-tro","Hỗ trợ","Gọi, nhắn điều phối, câu hỏi thường gặp")}</div>
   <button class="tm-btn tm-btn--nhe" data-act="dang-xuat" style="color:var(--son)">${ic("dang-xuat")}Đăng xuất</button>`};
 }
@@ -2523,7 +2527,7 @@ const VI=luu.get("tm3-vi",null)||{so:360,ls:[
 const luuVI=()=>luu.set("tm3-vi",VI);
 const kcHtml=n=>`<span class="kc">${ic("kim-cuong","kc__ic")}<span class="so">${(+n||0).toLocaleString("vi-VN").replace(/,/g,".")}</span></span>`;
 const thieuKC=g=>Math.max(0,kcSo(g)-VI.so);
-function tieuKC(g,ly){const n=kcSo(g);if(VI.so<n)return false;VI.so-=n;VI.ls.unshift({loai:"tieu",kc:-n,ly,ngay:iso(homNay)});luuVI();return true}
+function tieuKC(g,ly){const n=kcSo(g);if(VI.so<n)return false;VI.so-=n;VI.ls.unshift({loai:"tieu",kc:-n,ly,luc:Date.now(),ngay:iso(homNay),luc:Date.now()});luuVI();return true}
 /* khối trả bằng ví, dùng ở mọi màn thanh toán */
 function oVi(g,ve){const can=kcSo(g),th=Math.max(0,can-VI.so);
   return `<section class="vi-tra ${th?"thieu":""}" aria-label="Trả bằng kim cương"><div class="vi-tra__dau">${ic("kim-cuong")}<b>Trả bằng kim cương</b><a class="tm-lk" href="#/vi">Ví</a></div>
@@ -2540,7 +2544,7 @@ route("/vi",()=>{const nap=VI.ls.filter(x=>x.loai==="nap").reduce((s,x)=>s+x.kc,
    <a class="tm-btn tm-btn--kim tm-btn--rong" href="#/vi/nap">${ic("cong")}Nạp kim cương</a></section>
   <div class="vi-hai"><div><span class="t-nho">Đã nạp</span>${kcHtml(nap)}</div><div><span class="t-nho">Đã dùng</span>${kcHtml(tieu)}</div></div>
   <section class="tm-muc"><h2 class="t-tieu-muc">Dùng kim cương cho</h2><div class="vi-dung">${[["/cua-hang","le-vat","Lễ vật, dịch vụ"],["/gia-tien","qua","Dâng quà gia tiên"],["/goi","goi","Gia hạn gói"],["/chua","chua","Lễ chùa, chánh điện"]].map(([h,i,t])=>`<a href="#${h}"><span>${ic(i)}</span>${t}</a>`).join("")}</div></section>
-  <section class="tm-muc"><div class="tm-muc__dau"><h2>Lịch sử</h2><span class="t-nho">${VI.ls.length} giao dịch</span></div><div class="tm-ds">${VI.ls.slice(0,12).map(x=>`<div class="tm-dong tm-dong--tinh"><span class="tm-dong__ic ${x.kc>0?"reu":""}">${ic(x.kc>0?"cong":"le-vat")}</span><span class="tm-dong__giua"><span class="tm-dong__ten">${esc(x.ly)}</span><span class="tm-dong__phu">${khi(tuIso(x.ngay))}${x.vnd?` · ${vnd(x.vnd)}`:""}</span></span><span class="tm-dong__phai vi-ls ${x.kc>0?"cong":""}">${x.kc>0?"+":"−"}${kcHtml(Math.abs(x.kc))}</span></div>`).join("")}</div></section>
+  <section class="tm-muc"><div class="tm-muc__dau"><h2>Lịch sử</h2><a class="tm-lk" href="#/don-hang?tab=ls">Xem tất cả ${VI.ls.length} ${ic("toi")}</a></div><div class="tm-ds">${VI.ls.slice(0,12).map(x=>`<div class="tm-dong tm-dong--tinh"><span class="tm-dong__ic ${x.kc>0?"reu":""}">${ic(x.kc>0?"cong":"le-vat")}</span><span class="tm-dong__giua"><span class="tm-dong__ten">${esc(x.ly)}</span><span class="tm-dong__phu">${khi(tuIso(x.ngay))}${x.vnd?` · ${vnd(x.vnd)}`:""}</span></span><span class="tm-dong__phai vi-ls ${x.kc>0?"cong":""}">${x.kc>0?"+":"−"}${kcHtml(Math.abs(x.kc))}</span></div>`).join("")}</div></section>
   <a class="tm-dong tm-ds" href="#/thanh-toan-tk"><span class="tm-dong__ic">${ic("the")}</span><span class="tm-dong__giua"><span class="tm-dong__ten">Ví và thẻ đã lưu để nạp</span><span class="tm-dong__phu">${esc(DATA.thanhToan.find(x=>x.macDinh).ten)} là mặc định</span></span>${ic("toi","tm-gt__mui")}</a>
   <p class="tm-thong-bao dong">${ic("thong-tin")}<span>1 kim cương = 1.000đ. Kim cương không hết hạn, dùng dần cho mọi lễ vật, dịch vụ, quà và gói trong app.</span></p>`}});
 
@@ -2571,7 +2575,7 @@ route("/vi/nap/cach",()=>{const n=S.nap;if(!n||!n.vnd){di("/vi/nap",true);return
 ACT["nap-cach"]=t=>{S.nap.cach=t.dataset.v;S.nap.loiTT=false;ve(true)};
 ACT["nap-tra"]=t=>{t.innerHTML=`<span class="tm-btn__spin"></span>Đang xác nhận`;t.setAttribute("aria-disabled","true");
   setTimeout(()=>{const n=S.nap;if(S.thu==="loi"){n.loiTT=true;ve(true);return}const g=GOI_NAP.find(x=>x.vnd===n.vnd),kc=g?napKC(g):n.vnd/1000,c=CACH_NAP.find(x=>x.id===n.cach);
-    VI.so+=kc;VI.ls.unshift({loai:"nap",kc,vnd:n.vnd,ly:`Nạp qua ${c.ten}${g&&g.them?` (tặng ${g.them})`:""}`,ngay:iso(homNay)});luuVI();n.xong=kc;AMT.kimCuong();di("/vi/nap/xong",true)},900)};
+    VI.so+=kc;VI.ls.unshift({loai:"nap",kc,vnd:n.vnd,ly:`Nạp qua ${c.ten}${g&&g.them?` (tặng ${g.them})`:""}`,ngay:iso(homNay),luc:Date.now()});luuVI();n.xong=kc;AMT.kimCuong();di("/vi/nap/xong",true)},900)};
 
 /* ---------- Nạp xong ---------- */
 route("/vi/nap/xong",()=>{const n=S.nap;if(!n||!n.xong){di("/vi",true);return null}
@@ -3006,13 +3010,15 @@ function moCuaHang(tab="le"){const c=capTu();let b="";
   else b=`<p class="t-nho">Mỗi món lấy cảm hứng từ một làng nghề Quảng Nam. Ghép thân, chao, đế thành đèn của riêng nhà mình.</p><div class="lng-luoi">${DO.filter(d=>d.loai===tab).map(d=>{const co=TU.co.includes(d.id),khoa=d.cap&&c.cap<d.cap,dung=TU.mac[d.loai]===d.id;
     return `<article class="lng-the ${dung?"dung":""}"><button class="lng-anh" data-act="tu-xem" data-v="${d.id}" aria-label="Xem thử ${esc(d.ten)} trên đèn">${anhDo(d)}<span>${ic("xem-thu")}Xem thử</span></button><div class="lng-chu"><span class="tu-lang">${esc(d.lang)}</span><b>${esc(d.ten)}</b><span class="t-nho">${esc(d.phu)}</span>${khoa?`<span class="tu-khoa">${ic("khoa")}Mở ở bậc ${d.cap}</span>`:""}</div>
     <div class="lng-nut">${co?`<button class="tu-gia ${dung?"tu-gia--dung":"tu-gia--sen"}" data-act="tu-mac-ch" data-v="${d.id}" ${dung?`aria-disabled="true"`:""}>${dung?"Đang dùng":"Dùng"}</button>`:(!d.sen&&!d.ngoc?`<button class="tu-gia tu-gia--sen" data-act="tu-mac-ch" data-v="${d.id}">Nhận</button>`:giaNut(d,d.sen,d.ngoc,"tu-mua-do",d.id,khoa))}</div></article>`}).join("")}</div>`;
-  moSheet(`<div class="tm-sheet__dau"><h2 class="t-tieu-de">Làng nghề</h2><button class="tm-icbtn" data-act="dong-sheet" aria-label="Đóng">${ic("dong")}</button></div>
+  moSheet(`<div class="tm-sheet__dau"><h2 class="t-tieu-de">Làng nghề</h2><button class="tm-icbtn" data-act="dong-sheet" aria-label="Đóng">${ic("dong")}</button></div><a class="don-lk" href="#/don-hang?tab=ls" data-act="dong-sheet-di" data-toi="/don-hang?tab=ls">${ic("le-vat")}<span>Lịch sử mua và đảnh lễ</span>${ic("toi")}</a>
   <div class="tu-tabs" role="tablist">${TAB_CH.map(([v,t])=>`<button class="tu-tab" role="tab" aria-selected="${v===tab}" data-act="tu-cua-hang" data-v="${v}">${v==="nap"?ic("kim-cuong"):""}${t}</button>`).join("")}</div><div class="tu-vi"><span class="t-nho">Bạn đang có</span>${tienTu()}</div>${b}`,"Làng nghề");
   const tb=$(".tu-tab[aria-selected=true]");if(tb)tb.scrollIntoView({block:"nearest",inline:"center"})}
 ACT["tu-cua-hang"]=t=>moCuaHang(t.dataset.v||"le");
-function tra(t,sen,ngoc){if(t.dataset.tra==="ngoc"){if(VI.so<ngoc){bao("Chưa đủ kim cương. Nạp thêm trong Ví.");moCuaHang("nap");return false}VI.so-=ngoc;VI.ls.unshift({loai:"tieu",kc:-ngoc,ly:"Làng nghề: "+((t.closest(".lng-the,.tu-sp")?.querySelector("b")?.firstChild?.textContent||"đồ trang trí").trim()),ngay:iso(homNay)});luuVI()}else{if(TU.sen<sen){bao("Chưa đủ giọt dầu. Gõ mõ, khấn, viếng gia tiên để tích thêm.");return false}TU.sen-=sen}return true}
-ACT["tu-mua-le"]=t=>{const l=LE_AO.find(x=>x.id===t.dataset.v);if(!tra(t,l.sen,l.ngoc))return;TU.kho[l.id]++;luuTU();veHud();bao(`Đã thỉnh ${l.ten}.`);moCuaHang("le")};
-ACT["tu-mua-do"]=t=>{const d=doById(t.dataset.v);if(d.cap&&capTu().cap<d.cap){bao(`Đèn cần bậc ${d.cap} để dùng ${d.ten}.`);return}if(!tra(t,d.sen,d.ngoc))return;TU.co.push(d.id);TU.mac[d.loai]=d.id;luuTU();CANH&&CANH.doiMac&&CANH.doiMac();veHud();bao(`Đã đổi ${d.ten}, đèn đang dùng.`);moCuaHang(d.loai)};
+function tra(t,sen,ngoc,ten){const ly=ten||((t.closest(".lng-the,.tu-sp")?.querySelector("b")?.firstChild?.textContent||"đồ trang trí").trim());
+  if(t.dataset.tra==="ngoc"){if(VI.so<ngoc){bao("Chưa đủ kim cương. Nạp thêm trong Ví.");moCuaHang("nap");return false}VI.so-=ngoc;VI.ls.unshift({loai:"tieu",kc:-ngoc,ly:"Chánh điện: "+ly,ngay:iso(homNay),luc:Date.now()});luuVI()}
+  else{if(TU.sen<sen){bao("Chưa đủ giọt dầu. Gõ mõ, khấn, viếng gia tiên để tích thêm.");return false}TU.sen-=sen;ghiLS({loai:"sen",sen,ly:"Chánh điện: "+ly})}return true}
+ACT["tu-mua-le"]=t=>{const l=LE_AO.find(x=>x.id===t.dataset.v);if(!tra(t,l.sen,l.ngoc,l.ten))return;TU.kho[l.id]++;luuTU();veHud();bao(`Đã thỉnh ${l.ten}.`);moCuaHang("le")};
+ACT["tu-mua-do"]=t=>{const d=doById(t.dataset.v);if(d.cap&&capTu().cap<d.cap){bao(`Đèn cần bậc ${d.cap} để dùng ${d.ten}.`);return}if(!tra(t,d.sen,d.ngoc,d.ten))return;TU.co.push(d.id);TU.mac[d.loai]=d.id;luuTU();CANH&&CANH.doiMac&&CANH.doiMac();veHud();bao(`Đã đổi ${d.ten}, đèn đang dùng.`);moCuaHang(d.loai)};
 ACT["tu-mac-ch"]=t=>{const d=doById(t.dataset.v);if(!TU.co.includes(d.id))TU.co.push(d.id);TU.mac[d.loai]=d.id;luuTU();CANH&&CANH.doiMac&&CANH.doiMac();veHud();moCuaHang(d.loai)};
 ACT["tu-xem"]=t=>{const d=doById(t.dataset.v),mac={...TU.mac,[d.loai]:d.id};
   moSheet(`<div class="tm-sheet__dau"><h2 class="t-tieu-de">${esc(d.ten)}</h2><button class="tm-icbtn" data-act="tu-cua-hang" data-v="${d.loai}" aria-label="Quay lại làng nghề">${ic("dong")}</button></div>
@@ -3024,8 +3030,8 @@ function moDangLe(){moSheet(`<div class="tm-sheet__dau"><h2 class="t-tieu-de">D�
   <div class="tu-ds">${LE_AO.map(l=>`<div class="tu-sp"><span class="tu-anh tu-anh--ic">${ic(l.ic)}</span><span class="gian mw0"><b>${esc(l.ten)} <span class="t-nho">(còn ${TU.kho[l.id]})</span></b><span class="t-nho">${esc(l.phu)}</span></span><span class="tu-sp__nut">${TU.kho[l.id]?`<button class="tu-gia tu-gia--dang" data-act="tu-dang" data-v="${l.id}">Dâng</button>`:giaNut(l,l.sen,l.ngoc,"tu-mua-le-dang",l.id)}</span></div>`).join("")}</div>
   <p class="t-nho">Lễ vật ở đây là lễ trong chánh điện của app. Muốn gửi lễ thật ra mộ hay lên chùa, xem mục Gửi lễ ở chùa.</p>`,"Dâng lễ")}
 ACT["cd-dang-le"]=()=>moDangLe();
-ACT["tu-mua-le-dang"]=t=>{const l=LE_AO.find(x=>x.id===t.dataset.v);if(!tra(t,l.sen,l.ngoc))return;TU.kho[l.id]++;luuTU();veHud();moDangLe()};
-ACT["tu-dang"]=t=>{const l=LE_AO.find(x=>x.id===t.dataset.v);if(!TU.kho[l.id])return;TU.kho[l.id]--;dongSheet(true);amChuong(.35);
+ACT["tu-mua-le-dang"]=t=>{const l=LE_AO.find(x=>x.id===t.dataset.v);if(!tra(t,l.sen,l.ngoc,l.ten))return;TU.kho[l.id]++;luuTU();veHud();moDangLe()};
+ACT["tu-dang"]=t=>{const l=LE_AO.find(x=>x.id===t.dataset.v);if(!TU.kho[l.id])return;TU.kho[l.id]--;ghiLS({loai:"dang",ly:`Dâng ${l.ten.toLowerCase()} ở ${chuaById(TU.chua).ten}`});dongSheet(true);amChuong(.35);
   if(l.id==="huong"){AMT.nhangCay();CANH&&CANH.dangHuong();CD.homNay.huong+=3;luuCD()}if(l.id==="nen"){AMT.nen();CANH&&CANH.nenSang()}if(l.id==="hoa"){AMT.hoa();CANH&&CANH.dangHoa()}if(l.id==="den"){AMT.bay();CANH&&CANH.thaDen()}
   themCD(l.cd);bao(`Đã dâng ${l.ten.toLowerCase()}: +${l.cd} công đức`)};
 
@@ -3880,6 +3886,9 @@ function cayToc(t){const tim2=id=>t.doi.flatMap(d=>d.mo).find(m=>m.id===id);
   <p class="t-nho">Gia phả theo các ngôi trong khu. Viền vàng là gia tiên đã khai trong app, chạm để xem. Kéo ngang nếu cây rộng hơn màn hình.</p>`}
 
 /* ================= ĐƠN CỦA TÔI: mọi thứ đã mua, theo dõi ở một chỗ ================= */
+/* nhật ký những việc không trả bằng kim cương: mua bằng giọt dầu, dâng lễ ở chánh điện */
+const LS_KHAC=luu.get("tm3-ls-khac",[]);
+function ghiLS(o){LS_KHAC.unshift({...o,ngay:iso(homNay),luc:Date.now()});if(LS_KHAC.length>300)LS_KHAC.length=300;luu.set("tm3-ls-khac",LS_KHAC)}
 const DON_QUA=luu.get("tm3-don-qua",[]),DON_NC=luu.get("tm3-don-nc",[]);
 const luuDQ=()=>{luu.set("tm3-don-qua",DON_QUA);luu.set("tm3-don-nc",DON_NC)};
 /* gom mọi loại đơn về một dạng chung */
@@ -3893,10 +3902,15 @@ const LOAI_DON={le:"Đặt lễ",qua:"Dâng quà",chua:"Lễ ở chùa",nc:"Hoa 
 const soDonDang=()=>tatCaDon().filter(d=>!d.xong).length;
 function hangDon(d){return `<a class="don" href="#${d.lk}"><img class="don__anh" src="${d.anh}" alt=""><span class="mw0 don__giua"><span class="don__loai">${LOAI_DON[d.loai]}${d.cho?` · ${esc(d.cho)}`:""}</span><b class="mot-dong">${esc(d.ten)}</b>
   <span class="don__trang ${d.xong?"xong":""}">${d.xong?ic("xong"):ic("dong-ho")}${esc(d.trang)}</span>${d.tong>1&&!d.xong?`<span class="don__thanh" aria-hidden="true">${Array.from({length:d.tong},(_,k)=>`<i class="${k<d.buoc?"co":""}"></i>`).join("")}</span>`:""}</span>${ic("toi","tm-gt__mui")}</a>`}
-function donHang2(p,q){const tab=q.tab==="xong"?"xong":"dang",loc=q.loai||"",ds=tatCaDon().filter(d=>(tab==="xong")===d.xong&&(!loc||d.loai===loc)),dem=tatCaDon();
+function lichSuMua(){const ds=[...VI.ls.map(x=>({...x,nguon:"vi"})),...LS_KHAC.map(x=>({...x,nguon:"khac"}))].map((x,i)=>({...x,k:x.luc||(tuIso(x.ngay).getTime()+86399000-i)})).sort((a,b)=>b.k-a.k);
+  const nhom={};ds.forEach(x=>{(nhom[x.ngay]=nhom[x.ngay]||[]).push(x)});
+  const ic2=x=>x.loai==="nap"?"kim-cuong":x.loai==="sen"?"dau":x.loai==="dang"?"nhang":/^Chánh điện/.test(x.ly)?"chua":/^Dâng/.test(x.ly)?"qua":/hoa viên/i.test(x.ly)?"nha-mo":/chùa|Phí đi lễ/i.test(x.ly)?"chua":"le-vat";
+  const so=x=>x.loai==="nap"?`<b class="ls__so cong">+${kcHtml(x.kc)}</b>`:x.loai==="sen"?`<b class="ls__so">−${x.sen} giọt dầu</b>`:x.loai==="dang"?`<b class="ls__so nhe">Dùng đồ trong kho</b>`:`<b class="ls__so">−${kcHtml(-x.kc)}</b>`;
+  return Object.entries(nhom).map(([ng,xs])=>`<section class="ls-ngay"><h3 class="t-nhan">${conNgay(tuIso(ng))===0?"Hôm nay":conNgay(tuIso(ng))===-1?"Hôm qua":dmyy(tuIso(ng))}</h3><div class="tm-ds">${xs.map(x=>`<div class="tm-dong tm-dong--tinh"><span class="tm-dong__ic">${ic(ic2(x))}</span><span class="tm-dong__giua"><span class="tm-dong__ten">${esc(x.ly)}</span><span class="tm-dong__phu">${x.loai==="nap"?"Nạp vào ví":x.loai==="sen"?"Trả bằng giọt dầu":x.loai==="dang"?"Đảnh lễ ở chánh điện":"Trả bằng kim cương"}${x.luc?` · ${pad(new Date(x.luc).getHours())}:${pad(new Date(x.luc).getMinutes())}`:""}</span></span>${so(x)}</div>`).join("")}</div></section>`).join("")||`<div class="tm-trong">${ic("le-vat")}<h2>Chưa có giao dịch</h2><p>Mọi lần mua, dâng, nạp đều ghi lại ở đây.</p></div>`}
+function donHang2(p,q){if(q.tab==="ls")return {tieuDe:"Đơn & lịch sử",lui:"/tai-khoan",tab:"/tai-khoan",body:`${tabDon("ls",q)}${lichSuMua()}`};const tab=q.tab==="xong"?"xong":"dang",loc=q.loai||"",ds=tatCaDon().filter(d=>(tab==="xong")===d.xong&&(!loc||d.loai===loc)),dem=tatCaDon();
   const lk=o=>"#/don-hang?"+new URLSearchParams(Object.entries({tab,loai:loc,...o}).filter(([,v])=>v)).toString();
-  return {tieuDe:"Đơn của tôi",lui:"/tai-khoan",tab:"/tai-khoan",body:`
-  <div class="tm-phan" role="tablist"><a role="tab" class="tm-phan__a" aria-selected="${tab==="dang"}" href="${lk({tab:"dang"})}">Đang làm · ${dem.filter(d=>!d.xong).length}</a><a role="tab" class="tm-phan__a" aria-selected="${tab==="xong"}" href="${lk({tab:"xong"})}">Đã xong · ${dem.filter(d=>d.xong).length}</a></div>
+  return {tieuDe:"Đơn & lịch sử",lui:"/tai-khoan",tab:"/tai-khoan",body:`
+  ${tabDon(tab,q)}
   <div class="tm-chips tm-chips--cuon">${[["","Tất cả"],...Object.entries(LOAI_DON)].map(([v,t])=>`<a class="tm-chip" href="${lk({loai:v})}" aria-pressed="${loc===v}">${t}</a>`).join("")}</div>
   ${ds.length?`<div class="don-ds">${ds.map(hangDon).join("")}</div>`:`<div class="tm-trong">${ic("le-vat")}<h2>${tab==="dang"?"Không có đơn đang làm":"Chưa có đơn đã xong"}</h2><p>Đặt lễ, dâng quà mang ra mộ, gửi lễ chùa và nâng cấp hoa viên đều hiện ở đây.</p><a class="tm-btn tm-btn--chinh" href="#/cua-hang">Vào Cửa hàng</a></div>`}
   <p class="t-nho">Chạm vào từng đơn để xem từng bước, ảnh người giữ đèn gửi về và giấy ghi công đức.</p>
@@ -3913,7 +3927,10 @@ route("/don-qua/:ma",({ma})=>{const o=DON_QUA.find(x=>x.ma===ma);if(!o)return nu
 function theDonDang(){const ds=tatCaDon().filter(d=>!d.xong);if(!ds.length)return "";
   return `<a class="don-nhac" href="#/don-hang"><span class="don-nhac__anh">${ds.slice(0,3).map(d=>`<img src="${d.anh}" alt="">`).join("")}</span><span class="mw0"><b>${ds.length} đơn đang làm</b><span class="mot-dong">${esc(ds[0].trang)} · ${esc(ds[0].ten)}</span></span>${ic("toi")}</a>`}
 
-const VER="1793760198";try{fetch("ver.txt?"+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{v=(v||"").trim();if(v&&v!==VER){let ok=true;try{ok=!sessionStorage.getItem("tm-rl"+v);sessionStorage.setItem("tm-rl"+v,"1")}catch(e){}if(ok)location.reload()}}).catch(()=>{})}catch(e){}
+function tabDon(tab,q){const dem=tatCaDon();return `<div class="tm-phan" role="tablist"><a role="tab" class="tm-phan__a" aria-selected="${tab==="dang"}" href="#/don-hang?tab=dang">Đang làm · ${dem.filter(d=>!d.xong).length}</a><a role="tab" class="tm-phan__a" aria-selected="${tab==="xong"}" href="#/don-hang?tab=xong">Đã xong · ${dem.filter(d=>d.xong).length}</a><a role="tab" class="tm-phan__a" aria-selected="${tab==="ls"}" href="#/don-hang?tab=ls">Lịch sử mua</a></div>
+  ${tab==="ls"?`<p class="t-nho">Mọi lần trả kim cương, giọt dầu và đảnh lễ ở chánh điện, mới nhất ở trên. Số dư ví: ${kcHtml(VI.so)}.</p>`:""}`}
+
+const VER="1793760580";try{fetch("ver.txt?"+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{v=(v||"").trim();if(v&&v!==VER){let ok=true;try{ok=!sessionStorage.getItem("tm-rl"+v);sessionStorage.setItem("tm-rl"+v,"1")}catch(e){}if(ok)location.reload()}}).catch(()=>{})}catch(e){}
 apTheme();ghiNgan();ve();
 if(matchMedia)matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>{});</script>
 
