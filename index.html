@@ -3286,7 +3286,7 @@ function dungMo(canvas,g,opt={}){let camOver=null,vung=null,heSo=1,nghieng=0,ngh
   const R=new T.WebGLRenderer({canvas,antialias:true,preserveDrawingBuffer:!!opt.chup});R.setPixelRatio(Math.min(devicePixelRatio,2));R.setSize(W,H,false);R.outputEncoding=T.sRGBEncoding;R.toneMapping=T.ACESFilmicToneMapping;R.toneMappingExposure=dem?.95:.82;
   const yeu=MAY_YEU();R.shadowMap.enabled=true;R.shadowMap.type=T.PCFSoftShadowMap;
   const sc=new T.Scene();sc.fog=new T.Fog(new T.Color(tr.suong),14,46);
-  const cam=new T.PerspectiveCamera(48,W/H,.1,120);const DICH=opt.xa?new T.Vector3(0,.85,.35):new T.Vector3(0,1.0,.45);let yaw=0,yawDich=0,cao=0;
+  const cam=new T.PerspectiveCamera(48,W/H,.3,120);const DICH=opt.xa?new T.Vector3(0,.85,.35):new T.Vector3(0,1.0,.45);let yaw=0,yawDich=0,cao=0;
   function khung(w,h){cam.aspect=w/h;cam.fov=Math.min(70,Math.max(42,2*Math.atan((1.9/5.2)/(w/h))*180/Math.PI));cam.setViewOffset(w,h,0,vung?Math.round(h/2-(vung[0]+vung[1])/2):h*(opt.xa?.21:.11),w,h);cam.updateProjectionMatrix();R.setSize(w,h,false)}
   let vao=(giam||opt.xa||VM.daVao===g.id)?1:0;if(!opt.xa)VM.daVao=g.id;const vaoTu=performance.now();const nhin0=new T.Vector3(0,1.4,4),tmp=new T.Vector3(),tmp2=new T.Vector3();
   const doiMo=moDoi(g);const datCam=()=>{const r=(opt.xa?(doiMo?7.4:6.3):doiMo?5.0:4.2)*heSo*gan,nh=nghieng,cuoi=new T.Vector3(Math.sin(yaw)*r*(1-nh*.35),(opt.xa?3.2:doiMo?2.3:1.8)+nh*r*.9-cao,Math.cos(yaw)*r+.4);
@@ -3321,7 +3321,7 @@ function dungMo(canvas,g,opt={}){let camOver=null,vung=null,heSo=1,nghieng=0,ngh
   const da=M("#c2bbae",.75);da.map=VAN_DA(T).da;[[-5.5,-6],[-3,-8.5],[3.8,-7.5],[6.5,-5],[-8,-2.5],[8.5,1.5],[0.5,-12],[-6.5,-11]].forEach(([x,z])=>{const b=new T.Mesh(new T.BoxGeometry(1.1,.35,1.6),da);b.position.set(x,.17,z);sc.add(b);const bi=new T.Mesh(new T.BoxGeometry(.6,.7,.12),M("#8f8a80",.8));bi.position.set(x,.5,z-.75);sc.add(bi)});
   /* ===== nơi an nghỉ ===== */
   const VAN=VAN_DA(T),da2=M("#d8d2c6",.62),daToi=M("#262423",.16,.15),ngoi=new T.MeshStandardMaterial({map:VAN.ngoi,roughness:.7}),vang=M(kim2,.3,.85,[kim2,.05]);da2.map=VAN.da;da2.roughnessMap=VAN.nham;daToi.map=VAN.daDen;daToi.envMapIntensity=1.3;
-  {const ao=new T.Mesh(new T.PlaneGeometry(4.6*(doiMo?1.5:1),5.4),new T.MeshBasicMaterial({map:VAN.bong,transparent:true,depthWrite:false}));ao.rotation.x=-Math.PI/2;ao.position.y=.006;sc.add(ao)}
+  {const ao=new T.Mesh(new T.PlaneGeometry(4.6*(doiMo?1.5:1),5.4),new T.MeshBasicMaterial({map:VAN.bong,transparent:true,depthWrite:false}));ao.rotation.x=-Math.PI/2;ao.position.y=.045;ao.renderOrder=1;sc.add(ao)}
   const nguoiMo=doiMo?[g,doiMo].sort((a,b)=>(a.ben==="trai"?0:1)-(b.ben==="trai"?0:1)):[g],RX=doiMo?1.62:1;
   const be=new T.Mesh(new T.BoxGeometry(2.6*RX,.14,3.4),(()=>{const m=M("#cbc4b6",.7);m.map=VAN.da;m.roughnessMap=VAN.nham;return m})());be.position.set(0,.07,0);sc.add(be);
   [[0,.24,1.66,2.6*RX,.22,.08],[0,.24,-1.66,2.6*RX,.22,.08],[1.27*RX,.24,0,.08,.22,3.4],[-1.27*RX,.24,0,.08,.22,3.4]].forEach(([x,y,z,a,b,c])=>{const m=new T.Mesh(new T.BoxGeometry(a,b,c),da2);m.position.set(x,y,z);sc.add(m)});
@@ -3497,7 +3497,7 @@ function dungMo(canvas,g,opt={}){let camOver=null,vung=null,heSo=1,nghieng=0,ngh
     if(ds.has("cau"))mirror(sg=>cay(sg*(W2+1.15),-1.3,1,o=>{add(new T.CylinderGeometry(.06,.09,2.6,10),M("#a9a294",.8),0,1.3,0,{g:o});for(let i=0;i<8;i++){const a=i/8*Math.PI*2,l=add(B(.9,.02,.16),laSang,Math.cos(a)*.4,2.55,Math.sin(a)*.4,{g:o,ry:-a});l.rotation.z=-.35*Math.cos(0);l.rotateZ(-.3)}}));
     if(ds.has("su")&&!MOI.has("su"))cay(-(W2+1.25),.55,1,o=>{const t=add(new T.CylinderGeometry(.05,.08,1.1,8),thanNC,0,.55,0,{g:o,rz:.15});[[0,1.2,0,.38],[.3,1.05,.15,.28],[-.28,1.1,-.1,.3]].forEach(([x,y,z,rr])=>{add(new T.SphereGeometry(rr,12,8),laNC,x,y,z,{g:o});for(let i=0;i<7;i++)add(new T.SphereGeometry(.04,6,4),M("#fbf6ea",.6),x+(Math.random()-.5)*rr*1.4,y+rr*.6+Math.random()*.1,z+(Math.random()-.5)*rr*1.4,{g:o})})});
     if(ds.has("mai")&&!MOI.has("mai"))cay(W2+1.0,.7,1,o=>{add(new T.CylinderGeometry(.22,.17,.24,14),M("#3e5f72",.4,.1),0,.12,0,{g:o});add(new T.CylinderGeometry(.03,.05,.5,6),thanNC,0,.48,0,{g:o,rz:.4});[[-.12,.72,0],[.12,.62,.05],[0,.82,-.05]].forEach(([x,y,z])=>{add(new T.SphereGeometry(.14,10,8),laSang,x,y,z,{g:o});for(let i=0;i<5;i++)add(new T.SphereGeometry(.03,6,4),M("#fbfbf6",.6),x+(Math.random()-.5)*.2,y+.08,z+(Math.random()-.5)*.2,{g:o})})});
-    if(ds.has("co")){coNhung.polygonOffset=true;coNhung.polygonOffsetFactor=-2;coNhung.polygonOffsetUnits=-2;add(new T.PlaneGeometry(2.6*RX+3.2,6.2),coNhung,0,.02,-.2,{rx:-Math.PI/2})}
+    if(ds.has("co")){const vv=M("#ffffff",.95);vv.map=texVe(128,128,(x,w,h)=>{x.fillStyle="#4f8a34";x.fillRect(0,0,w,h);for(let i=0;i<4000;i++){x.fillStyle=["#457a2c","#5d9a3e","#3f6f28"][i%3];x.fillRect(Math.random()*w,Math.random()*h,1.2,2.5)}});vv.map.wrapS=vv.map.wrapT=T.RepeatWrapping;vv.map.repeat.set(6,8);const t2=add(new T.BoxGeometry(2.6*RX+3.2,.04,6.2),vv,0,.02,-.2);t2.receiveShadow=true}
     if(ds.has("rao")){add(B(2.6*RX+1.8,.36,.3),laNC,0,.18,-2.4);mirror(sg=>add(B(.3,.36,3.6),laNC,sg*(W2+.9),.18,-.6))}
     if(ds.has("ban-tron")&&!MOI.has("ban-tron")){const o=cay(W2+1.45,2.3,1,()=>{});add(new T.CylinderGeometry(.06,.1,.45,12),daNC,0,.22,0,{g:o});add(new T.CylinderGeometry(.42,.42,.06,24),daNC,0,.47,0,{g:o});for(let i=0;i<4;i++){const a=i/4*Math.PI*2+.4;add(new T.CylinderGeometry(.13,.15,.3,14),daNC,Math.cos(a)*.62,.15,Math.sin(a)*.62,{g:o})}}
     if(ds.has("ghe-dai")&&!MOI.has("ghe-dai")){const o=cay(-(W2+1.45),2.2,1,()=>{});o.rotation.y=Math.PI/2;add(B(1.2,.07,.34),daNC,0,.36,0,{g:o});[-.45,.45].forEach(x=>add(B(.1,.33,.3),daNC,x,.16,0,{g:o}))}
@@ -3911,7 +3911,7 @@ route("/don-qua/:ma",({ma})=>{const o=DON_QUA.find(x=>x.ma===ma);if(!o)return nu
 function theDonDang(){const ds=tatCaDon().filter(d=>!d.xong);if(!ds.length)return "";
   return `<a class="don-nhac" href="#/don-hang"><span class="don-nhac__anh">${ds.slice(0,3).map(d=>`<img src="${d.anh}" alt="">`).join("")}</span><span class="mw0"><b>${ds.length} đơn đang làm</b><span class="mot-dong">${esc(ds[0].trang)} · ${esc(ds[0].ten)}</span></span>${ic("toi")}</a>`}
 
-const VER="1793741742";try{fetch("ver.txt?"+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{v=(v||"").trim();if(v&&v!==VER){let ok=true;try{ok=!sessionStorage.getItem("tm-rl"+v);sessionStorage.setItem("tm-rl"+v,"1")}catch(e){}if(ok)location.reload()}}).catch(()=>{})}catch(e){}
+const VER="1793759867";try{fetch("ver.txt?"+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{v=(v||"").trim();if(v&&v!==VER){let ok=true;try{ok=!sessionStorage.getItem("tm-rl"+v);sessionStorage.setItem("tm-rl"+v,"1")}catch(e){}if(ok)location.reload()}}).catch(()=>{})}catch(e){}
 apTheme();ghiNgan();ve();
 if(matchMedia)matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>{});</script>
 
