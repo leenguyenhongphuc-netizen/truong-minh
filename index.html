@@ -1203,6 +1203,13 @@ button.cay__nut{font:inherit;cursor:pointer}
 .ch-mo__den.t{left:calc(50% - min(78vw,360px)/2 - 24px)}.ch-mo__den.p{left:calc(50% + min(78vw,360px)/2 + 22px);animation-delay:-.9s}
 .ch-mo__den i{position:absolute;top:66px;left:-17px;width:36px;height:44px;border-radius:45%;background:radial-gradient(circle at 45% 40%,#ff8a5a,#c8301e 60%,#8a1c10);box-shadow:0 0 22px rgba(255,110,60,.55),inset 0 4px 0 -1px #c9a04a,inset 0 -4px 0 -1px #c9a04a}
 @keyframes ch-dua{from{transform:rotate(-5deg)}to{transform:rotate(5deg)}}
+
+.vm-bay{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
+.vm-bay__mon{flex:none;display:flex;align-items:center;gap:8px;padding:4px 12px 4px 4px;border-radius:24px;background:var(--dong-nhat);border:1px solid var(--vien)}
+.vm-bay__mon img{width:36px;height:36px;border-radius:50%;object-fit:cover}
+.vm-bay__mon span{display:flex;flex-direction:column;line-height:1.2}
+.vm-bay__mon b{font:600 13px/1.25 var(--font-sans);color:var(--muc)}
+.vm-bay__mon small{font:500 12px/1.3 var(--font-sans);color:var(--dong-dam);font-variant-numeric:tabular-nums}
 </style>
 </head>
 <body>
@@ -1493,7 +1500,7 @@ addEventListener("pagehide",dungHetAm);addEventListener("freeze",dungHetAm);
 
 /* ================= DỮ LIỆU MẪU (tách riêng để sau này nối hệ thống) =================
    Tên, giá, số điện thoại là ví dụ. Ngày tính tương đối so với hôm nay để bản mẫu luôn "mới". */
-const PHOTO_ALIAS={"mam-ngu-qua": "mam-ngu-qua-viet", "tao-mo": "nghia-trang-viet", "quet-mo": "don-co"};const PHOTO_CO=["banh-chung", "banh-keo", "bat-huong", "ca-phe", "cay-tuong-niem", "chua-chuc-thanh", "chua-hai-tang", "chua-linh-ung-ba-na", "chua-linh-ung-bai-but", "chua-linh-ung-non-nuoc", "chua-long-tuyen", "chua-pho-da", "chua-phuoc-lam", "chua-tam-thai", "chua-viet", "den-long", "den-nang-luong", "don-co", "hoa-cuc-trang", "hoa-cuc-vang", "hoa-dang", "hoa-sen", "mam-ngu-qua", "mam-ngu-qua-viet", "nc-ban-tron", "nc-cau", "nc-chu-tieu", "nc-co", "nc-cun-muc", "nc-cun-vang", "nc-cuon-thu", "nc-da-trang", "nc-da-xanh", "nc-den-da", "nc-den-long", "nc-ghe-dai", "nc-hac", "nc-ho-sen", "nc-hoa-cuong", "nc-hoa-giay", "nc-lan-can", "nc-lan-da", "nc-lu-huong", "nc-mai", "nc-mai-dinh", "nc-nguyen-ban", "nc-rao", "nc-rua", "nc-su", "nc-toan", "nc-tung", "nen-den", "nghia-trang-viet", "nhang-mo", "nhang-tram", "sach-anh", "son-bia", "tao-mo", "trai-cay", "trau-cau", "vang-ma", "video-call", "xoi-ga"];const PHOTO_THIEU=["ban-tho", "tay-nguoi-giu"]; /* build.py điền: khoá -> tên file thật có trong thư mục photos */
+const PHOTO_ALIAS={"mam-ngu-qua": "mam-ngu-qua-viet", "tao-mo": "nghia-trang-viet", "quet-mo": "don-co"};const PHOTO_CO=["banh-chung", "banh-keo", "bat-huong", "ca-phe", "cay-tuong-niem", "chua-chuc-thanh", "chua-hai-tang", "chua-linh-ung-ba-na", "chua-linh-ung-bai-but", "chua-linh-ung-non-nuoc", "chua-long-tuyen", "chua-pho-da", "chua-phuoc-lam", "chua-tam-thai", "chua-viet", "den-long", "den-nang-luong", "don-co", "hoa-cuc-trang", "hoa-cuc-vang", "hoa-dang", "hoa-sen", "mam-ngu-qua", "mam-ngu-qua-viet", "nc-am-tra", "nc-ban-co", "nc-ban-tron", "nc-cau", "nc-chim", "nc-chu-tieu", "nc-chum", "nc-chuong-gio", "nc-co", "nc-cuc-chau", "nc-cun-muc", "nc-cun-vang", "nc-cuon-thu", "nc-da-trang", "nc-da-xanh", "nc-den-da", "nc-den-long", "nc-don-su", "nc-ghe-dai", "nc-hac", "nc-ho-sen", "nc-hoa-cuong", "nc-hoa-giay", "nc-lan-can", "nc-lan-da", "nc-lu-huong", "nc-mai", "nc-mai-dinh", "nc-mai-vang", "nc-meo", "nc-mieu-tho", "nc-nguyen-ban", "nc-rao", "nc-rua", "nc-su", "nc-toan", "nc-truc", "nc-tung", "nc-voi", "nen-den", "nghia-trang-viet", "nhang-mo", "nhang-tram", "qv-q-che", "qv-q-chuoi", "qv-q-dang", "qv-q-ga", "qv-q-hong", "qv-q-hue", "qv-q-keo", "qv-q-long", "qv-q-nen", "qv-q-nhang", "qv-q-nuoc", "qv-q-ruou", "qv-q-sen", "qv-q-tra", "qv-q-trau", "qv-q-xoi", "sach-anh", "son-bia", "tao-mo", "trai-cay", "trau-cau", "vang-ma", "video-call", "xoi-ga"];const PHOTO_THIEU=["ban-tho", "tay-nguoi-giu"]; /* build.py điền: khoá -> tên file thật có trong thư mục photos */
 const N=n=>cong(homNay,n);
 const truocNgay=(ad,tu=-1)=>{for(let i=-tu;i<60;i++){const d=cong(homNay,-i);if(info(d).ad===ad)return d}return cong(homNay,-10)};
 const GIO_BA=gioToi({gio:[5,10]});
@@ -1581,6 +1588,16 @@ const DATA={
     {id:"q-dang",ten:"Hoa đăng",gia:20000,anh:"hoa-dang",ao:true},
     {id:"q-long",ten:"Đèn lồng",gia:30000,anh:"den-long",ao:true},
     {id:"q-trau",ten:"Trầu cau",gia:20000,anh:"trau-cau",ao:true},
+    {id:"q-tra",ten:"Chén trà nóng",gia:10000,anh:"trau-cau",ao:true},
+    {id:"q-nuoc",ten:"Ly nước trong",gia:5000,anh:"trau-cau",ao:true},
+    {id:"q-ruou",ten:"Chén rượu",gia:15000,anh:"trau-cau",ao:true},
+    {id:"q-hue",ten:"Bình hoa huệ",gia:40000,anh:"trau-cau",ao:true},
+    {id:"q-hong",ten:"Hoa hồng trắng",gia:30000,anh:"trau-cau",ao:true},
+    {id:"q-chuoi",ten:"Nải chuối",gia:25000,anh:"trau-cau",ao:true},
+    {id:"q-xoi",ten:"Đĩa xôi gấc",gia:30000,anh:"trau-cau",ao:true},
+    {id:"q-che",ten:"Chén chè",gia:20000,anh:"trau-cau",ao:true},
+    {id:"q-keo",ten:"Đĩa bánh kẹo",gia:20000,anh:"trau-cau",ao:true},
+    {id:"q-ga",ten:"Đĩa gà luộc",gia:60000,anh:"trau-cau",ao:true},
     {id:"q-cuc",ten:"Hoa cúc vàng",gia:120000,anh:"hoa-cuc-vang",sp:"hoa-cuc-vang"},
     {id:"q-mam",ten:"Mâm ngũ quả",gia:250000,anh:"mam-ngu-qua",sp:"mam-ngu-qua"},
     {id:"q-cafe",ten:"Cà phê phin",gia:40000,anh:"ca-phe",sp:"ca-phe"},
@@ -1669,6 +1686,7 @@ const moToc=id=>DATA.moToc.find(t=>t.id===id);
 const moDoi=g=>g&&g.mo?DATA.giaTien.find(x=>x!==g&&x.mo===g.mo):null;
 const tenMo=g=>{const d=moDoi(g);if(!d)return g.xung;const [a,b]=[g,d].sort((x,y)=>(benMacDinh(x.xung)==="phai"?0:1)-(benMacDinh(y.xung)==="phai"?0:1));return `${a.xung} & ${b.xung}`};
 const spById=id=>DATA.sanPham.find(p=>p.id===id);
+DATA.qua.forEach(q=>{if(q.ao&&PHOTO_CO.includes("qv-"+q.id))q.anh="qv-"+q.id});
 const quaById=id=>DATA.qua.find(p=>p.id===id);
 const ltById=id=>DATA.lanTham.find(v=>v.id===id);
 const ngGiu=id=>DATA.nguoiGiu[id];
@@ -2053,7 +2071,7 @@ route("/gia-tien/:id/qua/:q",({id,q})=>{const g=gtById(id),ds=dsQua(q);if(!g||!d
   if(S.daDangQua===id+q){
     return {tieuDe:"Đã dâng quà",lui:`/gia-tien/${id}`,tab:"/gia-tien",nav:false,body:`
     <div class="tm-gu cot-giua"><div class="qua-chum">${ds.slice(0,4).map(o=>`<img src="${anh(o.x.anh)}" alt="">`).join("")}</div>
-      <h2 class="t-tieu-de chu-kim">Đã dâng ${esc(g.xung)}</h2><p class="t-than">${esc(tenQua(ds))}</p>
+      <h2 class="t-tieu-de chu-kim">Đã dâng ${esc(g.xung)}</h2><p class="t-than">${esc(tenQua(ds))}</p>${(()=>{const b=dangBay(g).filter(d=>ds.some(o=>o.x.id===d.id));return b.length?`<p class="t-nho">Đang bày trên mộ: ${b.map(d=>`${esc(quaById(d.id).ten)} còn ${conPhut(d.con)}`).join(" · ")}</p>`:""})()}
       <p class="t-nho">${ds.some(o=>o.x.ao)?`Quà tưởng niệm hiện ngay trên mộ, cả nhà cùng thấy. `:""}${coThat?`${esc(ng.ten[0].toUpperCase()+ng.ten.slice(1))} mang lễ ra mộ lần thăm tới${toi?` (${tenNgayAm(info(toi)).toLowerCase()} ${dmy(toi)})`:""} và gửi ảnh về.`:""}</p></div>
     ${coThat?`<section class="tm-muc"><h3 class="t-tieu-muc">Lễ mang ra mộ</h3><ol class="tm-ds ds-ol">${[["Đã nhận đơn","Hôm nay",1],[`${esc(ng.ten[0].toUpperCase()+ng.ten.slice(1))} chuẩn bị lễ`,"Mua tươi trong ngày",0],[`Mang ra mộ${toi?` ${tenNgayAm(info(toi)).toLowerCase()} ${dmy(toi)}`:""}`,"Bày lễ, thắp nhang, chụp ảnh lúc dâng",0],["Ảnh gửi về app","Cả nhà nhận thông báo",0]].map(([a2,b2,x],k)=>`<li class="tm-dong tm-dong--tinh"><span class="tm-dong__ic ${x?"reu":""}">${x?ic("xong"):`<span class="so">${k+1}</span>`}</span><span class="tm-dong__giua"><span class="tm-dong__ten">${a2}</span><span class="tm-dong__phu">${b2}</span></span></li>`).join("")}</ol></section>`:""}
     <section class="tm-muc"><h3 class="t-tieu-muc">Trong Sổ nhà của ${esc(g.xung)}</h3><div class="tm-ds"><div class="tm-dong tm-dong--tinh">${avNguoi("minh",40)}<span class="tm-dong__giua"><span class="tm-dong__ten">Bạn dâng ${esc(tenQua(ds))}</span><span class="tm-dong__phu">Vừa xong · +${Math.max(1,Math.round(tong/10000))} điểm hạng ${esc(DATA.toi.hang)}</span></span></div>
@@ -2070,7 +2088,7 @@ route("/gia-tien/:id/qua/:q",({id,q})=>{const g=gtById(id),ds=dsQua(q);if(!g||!d
   day:`<div class="tm-day__tong"><span class="t-nho">Tổng ${ds.reduce((s,o)=>s+o.sl,0)} món</span><span class="t-gia">${tien(tong)}</span></div>${nutTra(tong,"dang-qua","Dâng quà",`data-gt="${id}" data-q="${esc(q)}"`)}`};
 });
 ACT["dang-qua"]=t=>{const ds=dsQua(t.dataset.q),tong=tongQua(ds),gt=t.dataset.gt;if(thieuKC(tong)){bao("Chưa đủ kim cương. Nạp thêm để dâng.");return}t.innerHTML=`<span class="tm-btn__spin"></span>Đang thanh toán`;t.setAttribute("aria-disabled","true");
-  setTimeout(()=>{AMT.dang();ghiNha(gt,"dang",tenQua(ds));tieuKC(tong,`Dâng ${tenQua(ds)} cho ${gtById(gt).xung}`);ds.forEach(o=>{for(let k=0;k<o.sl;k++)DATA.daDang.unshift({gt,ai:"Minh",qua:o.x.id,luc:homNay})});
+  setTimeout(()=>{AMT.dang();ghiNha(gt,"dang",tenQua(ds));tieuKC(tong,`Dâng ${tenQua(ds)} cho ${gtById(gt).xung}`);ds.forEach(o=>{for(let k=0;k<o.sl;k++)DATA.daDang.unshift({gt,ai:"Minh",qua:o.x.id,luc:homNay});bayTren(gt,o.x.id,o.sl)});
     {const that=ds.filter(o=>!o.x.ao);if(that.length){const toi=lanThamToi(gtById(gt))||cong(homNay,7);DON_QUA.unshift({ma:"TMQ"+String(Date.now()).slice(-6),gt,ten:tenQua(that),ds:that.map(o=>({id:o.x.id,sl:o.sl})),ngay:iso(toi)});luuDQ()}}S.daDangQua=gt+t.dataset.q;DATA.toi.diem+=Math.max(1,Math.round(tong/10000));if(S.veVieng===gt)VM.gio={};ve(true)},800)};
 
 /* ---------- 18. Liên hệ người giữ đèn ---------- */
@@ -3300,9 +3318,18 @@ const VIENG=luu.get("tm3-vieng",{});/* {gt:[iso]} */
 const luuVM=()=>{luu.set("tm3-so-tn",SO_TN);luu.set("tm3-vieng",VIENG)};
 HUY.push({id:"vieng-7",ten:"Bảy ngày viếng gia tiên",dk:()=>Object.values(VIENG).flat().filter((d,i,a)=>a.indexOf(d)===i).length>=7});
 /* món nào hiện thành vật gì trên mộ */
-const MO_HINH={"q-nhang":"nhang","q-sen":"sen","q-nen":"nen","q-dang":"dang","q-long":"long","q-trau":"trau","q-cuc":"cuc","q-mam":"mam","q-cafe":"cafe","q-banh":"banh","q-nhang-that":"nhang",
+const MO_HINH={"q-tra":"tra","q-nuoc":"nuoc","q-ruou":"ruou","q-hue":"hue","q-hong":"hong","q-chuoi":"chuoi","q-xoi":"xoi","q-che":"che","q-keo":"keo","q-ga":"ga","q-nhang":"nhang","q-sen":"sen","q-nen":"nen","q-dang":"dang","q-long":"long","q-trau":"trau","q-cuc":"cuc","q-mam":"mam","q-cafe":"cafe","q-banh":"banh","q-nhang-that":"nhang",
   "hoa-cuc-vang":"cuc","hoa-cuc-trang":"cucTrang","hoa-sen":"sen","mam-ngu-qua":"mam","trai-cay":"mam","nhang-nen":"nhang","banh":"banh","ca-phe":"cafe","mam-com":"com","trau-cau":"trau","vang-ma":"vangMa",
   "den-nlmt":"denNL","son-bia":"sonBia","trong-co":"co","thay-bat-huong":"batMoi","cay":"cay"};
+/* vật dâng bày trên mộ: mỗi món 10 phút, dâng thêm thì cộng dồn */
+const PHUT_BAY=10;
+const HIEN=luu.get("tm3-hien",null)||(()=>{const n=Date.now(),m=60000;return {ba:{"q-nen":{het:n+26*m,sl:3,ai:"Hạnh"},"q-nhang":{het:n+8*m,sl:1,ai:"Minh"}}}})();
+const luuHien=()=>luu.set("tm3-hien",HIEN);
+const khoaMo=g=>g.mo||g.id;
+function bayTren(gt,id,sl,ai="Minh"){const g=gtById(gt);if(!g||!MO_HINH[id])return;const k=khoaMo(g),n=Date.now();HIEN[k]=HIEN[k]||{};const cu=HIEN[k][id],con=cu&&cu.het>n;
+  HIEN[k][id]={het:(con?cu.het:n)+sl*PHUT_BAY*60000,sl:(con?cu.sl:0)+sl,ai};luuHien()}
+function dangBay(g){const k=khoaMo(g),n=Date.now();return Object.entries(HIEN[k]||{}).filter(([,v])=>v.het>n).map(([id,v])=>({id,...v,con:Math.ceil((v.het-n)/60000)})).sort((a,b)=>b.het-a.het)}
+const conPhut=p=>p>=60?`${Math.floor(p/60)} giờ${p%60?` ${p%60} phút`:""}`:`${p} phút`;
 const DV_VM=["tham-le","goi-video","son-bia","trong-co","thay-bat-huong","den-nlmt","cay","tao-mo"];
 [["tham-le-doi","tham-le"],["tao-mo-doi","tao-mo"],["son-bia-doi","son-bia"]].forEach(([a,b])=>{if(MO_HINH[b])MO_HINH[a]=MO_HINH[b]});
 function loiKhan(g){const i=info(homNay),v=lanMoi(g.id),ng=ngGiu(g.chan),hn=v&&conNgay(v.ngay)>=-1;
@@ -3399,7 +3426,8 @@ function dungMo(canvas,g,opt={}){let camOver=null,vung=null,heSo=1,nghieng=0,ngh
   const lo=v&&/cúc vàng/i.test(v.buoc.map(b=>b[0]).join(" "))?"#e5b52a":"#f0ede4";
   (doiMo?[-1.05,1.05]:[-.5,.5]).forEach(x=>{const b=new T.Mesh(new T.CylinderGeometry(.07,.09,.22,16),M("#8a6b3d",.4,.4));b.position.set(x,.57,1.06);sc.add(b);for(let i=0;i<9;i++){const h=new T.Mesh(new T.SphereGeometry(.045,8,6),M(lo,.7));h.position.set(x+(Math.random()-.5)*.14,.74+Math.random()*.12,1.06+(Math.random()-.5)*.12);sc.add(h)}});
   /* ===== vật dâng ===== */
-  const CHO=doiMo?[[-.2,.47,1.36],[.2,.47,1.36],[-1.0,.47,1.32],[1.0,.47,1.32],[-1.45,.16,1.5],[1.45,.16,1.5],[-1.45,.16,-1.2],[1.45,.16,-1.2]]:[[-.42,.47,1.32],[.42,.47,1.32],[-.18,.47,1.36],[.18,.47,1.36],[-.95,.16,1.5],[.95,.16,1.5],[-.95,.16,-1.2],[.95,.16,-1.2]];
+  const CHO=doiMo?[[-.2,.47,1.36],[.2,.47,1.36],[-1.0,.47,1.32],[1.0,.47,1.32],[-.6,.47,1.4],[.6,.47,1.4],[-1.45,.16,1.5],[1.45,.16,1.5],[-.45,0,2.0],[.45,0,2.0],[-1.1,0,2.05],[1.1,0,2.05],[-.2,0,2.45],[.2,0,2.45],[-.75,0,2.5],[.75,0,2.5]]
+    :[[-.42,.47,1.32],[.42,.47,1.32],[-.18,.47,1.36],[.18,.47,1.36],[-.95,.16,1.5],[.95,.16,1.5],[-.35,0,2.0],[.35,0,2.0],[-.8,0,2.05],[.8,0,2.05],[-.15,0,2.4],[.15,0,2.4],[-.6,0,2.45],[.6,0,2.45],[-.95,.16,-1.2],[.95,.16,-1.2]];
   function hinh(k){const o=new T.Group();
     if(k==="nhang"){const h=new T.Mesh(new T.CylinderGeometry(.05,.06,.06,12),M("#a07a4a",.6));o.add(h);for(let i=0;i<3;i++){const q=new T.Mesh(new T.CylinderGeometry(.004,.004,.3,4),M("#7a2e1d"));q.position.set((i-1)*.02,.15,0);o.add(q);const d=sprite("#ff7a2e",.05);d.position.set((i-1)*.02,.3,0);o.add(d)}}
     else if(k==="sen"){for(let i=0;i<8;i++){const p=new T.Mesh(new T.SphereGeometry(.06,10,8),M("#ec9fb0",.6,0,["#a3485a",.15]));p.scale.set(.5,1,.25);const a=i/8*Math.PI*2;p.position.set(Math.cos(a)*.04,.06,Math.sin(a)*.04);p.rotation.set(Math.sin(a)*.5,0,-Math.cos(a)*.5);o.add(p)}const l=new T.Mesh(new T.CylinderGeometry(.1,.1,.01,16),M("#4f7a3a"));o.add(l)}
@@ -3409,7 +3437,26 @@ function dungMo(canvas,g,opt={}){let camOver=null,vung=null,heSo=1,nghieng=0,ngh
     else if(k==="trau"){const l=new T.Mesh(new T.SphereGeometry(.08,12,8),M("#3f7a32",.6));l.scale.set(1,.15,.7);l.position.y=.02;o.add(l);[-.03,.03].forEach(x=>{const c=new T.Mesh(new T.SphereGeometry(.025,10,8),M("#7aa33f",.6));c.position.set(x,.05,0);o.add(c)})}
     else if(k==="cuc"||k==="cucTrang"){const b=new T.Mesh(new T.CylinderGeometry(.05,.065,.14,14),M("#8a6b3d",.4,.4));b.position.y=.07;o.add(b);for(let i=0;i<14;i++){const h=new T.Mesh(new T.SphereGeometry(.035,8,6),M(k==="cuc"?"#e5b52a":"#f0ede4",.7));h.position.set((Math.random()-.5)*.14,.2+Math.random()*.1,(Math.random()-.5)*.12);o.add(h)}}
     else if(k==="mam"||k==="com"){const m=new T.Mesh(new T.CylinderGeometry(.16,.13,.03,24),vang);m.position.y=.015;o.add(m);(k==="mam"?[["#e5c23a",.05],["#e3802a",.045],["#5f9a3a",.045],["#c2402a",.04],["#d9c04a",.045]]:[["#f2eee6",.05],["#d9a04a",.05],["#6a8a3a",.045]]).forEach(([c,r],i)=>{const f=new T.Mesh(new T.SphereGeometry(r,12,10),M(c,.55));const a=i/5*Math.PI*2;f.position.set(Math.cos(a)*.07,.06,Math.sin(a)*.07);o.add(f)});const top=new T.Mesh(new T.SphereGeometry(.05,12,10),M(k==="mam"?"#e8d24a":"#c99a4a",.55));top.position.y=.12;o.add(top)}
-    else if(k==="cafe"){const c=new T.Mesh(new T.CylinderGeometry(.04,.032,.08,14),M("#f2eee6",.4));c.position.y=.04;o.add(c);const p=new T.Mesh(new T.CylinderGeometry(.035,.03,.05,14),M("#b8b8b8",.3,.8));p.position.y=.1;o.add(p)}
+    else if(k==="cafe"){const dia=new T.Mesh(new T.CylinderGeometry(.06,.055,.008,20),M("#f2eee6",.35));dia.position.y=.004;o.add(dia);const c=new T.Mesh(new T.CylinderGeometry(.038,.03,.075,16,1,true),M("#f2eee6",.35));c.material.side=T.DoubleSide;c.position.y=.045;o.add(c);
+      const cf=new T.Mesh(new T.CircleGeometry(.035,16),M("#3a1e10",.2));cf.rotation.x=-Math.PI/2;cf.position.y=.07;o.add(cf);const ph=new T.Mesh(new T.CylinderGeometry(.034,.028,.05,16),M("#c8c8c8",.25,.85));ph.position.y=.1;o.add(ph);const np=new T.Mesh(new T.CylinderGeometry(.036,.036,.008,16),M("#c8c8c8",.25,.85));np.position.y=.13;o.add(np);
+      const vn=new T.Mesh(new T.CylinderGeometry(.045,.045,.004,16),M("#c8c8c8",.25,.85));vn.position.y=.078;o.add(vn);for(let i=0;i<2;i++){const h=sprite("#ffffff",.06,.25);h.material.blending=T.NormalBlending;h.position.set(0,.18+i*.06,0);o.add(h)}}
+    else if(k==="tra"){const su=M("#f4f1ea",.25);const c=new T.Mesh(new T.LatheGeometry([[0,0],[.025,0],[.04,.04],[.042,.045]].map(p=>new T.Vector2(...p)),18),su);o.add(c);const n=new T.Mesh(new T.CircleGeometry(.038,16),M("#b98a2a",.15));n.rotation.x=-Math.PI/2;n.position.y=.038;o.add(n);
+      const am=new T.Mesh(new T.LatheGeometry([[0,0],[.04,0],[.06,.03],[.06,.06],[.045,.085],[0,.09]].map(p=>new T.Vector2(...p)),18),M("#2c5a8a",.3));am.position.set(.1,0,-.02);o.add(am);const h=sprite("#ffffff",.07,.3);h.material.blending=T.NormalBlending;h.position.y=.1;o.add(h)}
+    else if(k==="nuoc"){const l=new T.Mesh(new T.CylinderGeometry(.035,.03,.1,18),new T.MeshStandardMaterial({color:"#e8f2f4",roughness:.05,transparent:true,opacity:.45}));l.position.y=.05;o.add(l);const n=new T.Mesh(new T.CylinderGeometry(.032,.028,.075,18),new T.MeshStandardMaterial({color:"#bfe0e8",roughness:.05,transparent:true,opacity:.5}));n.position.y=.04;o.add(n)}
+    else if(k==="ruou"){const be=M("#ece6d6",.3);for(let i=0;i<2;i++){const c=new T.Mesh(new T.LatheGeometry([[0,0],[.018,0],[.028,.03],[.03,.033]].map(p=>new T.Vector2(...p)),16),be);c.position.set(i*.07-.03,0,.04);o.add(c)}
+      const b=new T.Mesh(new T.LatheGeometry([[0,0],[.045,0],[.055,.05],[.05,.09],[.02,.13],[.018,.17],[.024,.18]].map(p=>new T.Vector2(...p)),18),M("#7a4a2a",.35,.05));b.position.set(0,0,-.05);o.add(b)}
+    else if(k==="hue"){const b=new T.Mesh(new T.LatheGeometry([[0,0],[.04,0],[.05,.06],[.035,.14],[.04,.17]].map(p=>new T.Vector2(...p)),18),M("#2c5a8a",.25));o.add(b);for(let i=0;i<7;i++){const a=i/7*6.28,cn=new T.Mesh(new T.CylinderGeometry(.004,.004,.3,4),M("#4f7a3a"));cn.position.set(Math.cos(a)*.015,.3,Math.sin(a)*.015);cn.rotation.set(Math.sin(a)*.12,0,-Math.cos(a)*.12);o.add(cn);
+      for(let j=0;j<5;j++){const h=new T.Mesh(new T.ConeGeometry(.012,.035,5),M("#fbf8f0",.5));h.position.set(Math.cos(a)*(.015+j*.006)+(j%2?.01:-.01),.34+j*.035,Math.sin(a)*(.015+j*.006));o.add(h)}}}
+    else if(k==="hong"){const b=new T.Mesh(new T.CylinderGeometry(.035,.03,.12,16),new T.MeshStandardMaterial({color:"#e8f2f4",roughness:.05,transparent:true,opacity:.5}));b.position.y=.06;o.add(b);for(let i=0;i<5;i++){const a=i/5*6.28,x=Math.cos(a)*.04,z=Math.sin(a)*.04;const cn=new T.Mesh(new T.CylinderGeometry(.003,.003,.16,4),M("#4f7a3a"));cn.position.set(x/2,.18,z/2);o.add(cn);
+      const r=new T.Mesh(new T.IcosahedronGeometry(.03,1),M("#f6f2ea",.6));r.position.set(x,.27+(i%2)*.02,z);r.scale.y=.8;o.add(r);const l=new T.Mesh(new T.SphereGeometry(.02,8,6),M("#4f7a3a",.7));l.scale.set(1,.3,.6);l.position.set(x*1.3,.2,z*1.3);o.add(l)}}
+    else if(k==="chuoi"){const dia=new T.Mesh(new T.CylinderGeometry(.11,.09,.015,20),vang);o.add(dia);for(let i=0;i<6;i++){const qu=new T.Mesh(new T.TubeGeometry(new T.CatmullRomCurve3([new T.Vector3(-.08,.02,0),new T.Vector3(-.01,.05,0),new T.Vector3(.07,.09,0)]),10,.016,8),M("#e8c43a",.55));qu.position.set(0,i%2*.02,(i-2.5)*.025);o.add(qu)}
+      const cuong=new T.Mesh(new T.CylinderGeometry(.012,.015,.04,6),M("#5a6a2a"));cuong.position.set(-.09,.03,0);cuong.rotation.z=1.2;o.add(cuong)}
+    else if(k==="xoi"){const dia=new T.Mesh(new T.CylinderGeometry(.09,.07,.012,20),M("#f2eee6",.3));o.add(dia);const x=new T.Mesh(new T.SphereGeometry(.07,18,12,0,6.28,0,Math.PI/2),M("#c8341e",.85));x.scale.y=.7;x.position.y=.006;o.add(x);for(let i=0;i<8;i++){const h=new T.Mesh(new T.SphereGeometry(.01,6,4),M("#f4d070",.7));const a=i/8*6.28;h.position.set(Math.cos(a)*.04,.035,Math.sin(a)*.04);o.add(h)}}
+    else if(k==="che"){const b=new T.Mesh(new T.LatheGeometry([[0,0],[.03,0],[.055,.04],[.058,.045]].map(p=>new T.Vector2(...p)),18),M("#f4f1ea",.3));o.add(b);const c=new T.Mesh(new T.CircleGeometry(.052,18),M("#d9b980",.6));c.rotation.x=-Math.PI/2;c.position.y=.04;o.add(c);for(let i=0;i<9;i++){const h=new T.Mesh(new T.SphereGeometry(.009,6,4),M(i%3?"#3a6a2a":"#6a3a2a",.6));h.position.set((Math.random()-.5)*.06,.043,(Math.random()-.5)*.06);o.add(h)}}
+    else if(k==="keo"){const dia=new T.Mesh(new T.CylinderGeometry(.09,.07,.012,20),M("#c8a24a",.3,.5));o.add(dia);["#c8341e","#2c7a4a","#e8b422","#3a5ab0","#e86a8a","#f2eee6"].forEach((c,i)=>{const a=i/6*6.28;const kk=new T.Mesh(i%2?new T.BoxGeometry(.035,.02,.025):new T.SphereGeometry(.018,10,8),M(c,.4));kk.position.set(Math.cos(a)*.045,.02,Math.sin(a)*.045);kk.rotation.y=a;o.add(kk)});
+      const bm=new T.Mesh(new T.BoxGeometry(.05,.03,.05),M("#d9a050",.7));bm.position.y=.025;o.add(bm)}
+    else if(k==="ga"){const dia=new T.Mesh(new T.CylinderGeometry(.12,.1,.012,22),M("#f2eee6",.3));o.add(dia);const th=new T.Mesh(new T.SphereGeometry(.07,18,12),M("#e8b44a",.55));th.scale.set(1.25,.7,.9);th.position.y=.045;o.add(th);
+      const co2=new T.Mesh(new T.CylinderGeometry(.018,.022,.07,8),M("#e8b44a",.55));co2.position.set(.08,.08,0);co2.rotation.z=-.7;o.add(co2);const mao=new T.Mesh(new T.BoxGeometry(.02,.02,.008),M("#c8341e",.5));mao.position.set(.11,.115,0);o.add(mao);const la=new T.Mesh(new T.SphereGeometry(.03,8,6),M("#4f8a3a",.7));la.scale.set(1,.2,.6);la.position.set(-.08,.02,.05);o.add(la)}
     else if(k==="banh"){const b=new T.Mesh(new T.BoxGeometry(.14,.06,.14),M("#3f6a2c",.7));b.position.y=.03;o.add(b);[[.075,0],[0,.075]].forEach(([a,c])=>{const d=new T.Mesh(new T.BoxGeometry(a?.005:.15,.065,a?.15:.005),M("#d8c8a0"));d.position.y=.03;o.add(d)})}
     else if(k==="vangMa"){for(let i=0;i<5;i++){const p=new T.Mesh(new T.BoxGeometry(.16,.012,.1),M(i%2?"#e2b23a":"#d9533a",.7));p.position.y=.006+i*.013;p.rotation.y=i*.12;o.add(p)}}
     else if(k==="denNL"){const c=new T.Mesh(new T.CylinderGeometry(.012,.012,.55,6),M("#3a3a3a",.4,.6));c.position.y=.27;o.add(c);const d=new T.Mesh(new T.SphereGeometry(.06,14,10),M("#f8f1dc",.3,0,[kim4,dem?1.6:.25]));d.position.y=.58;o.add(d);const p=new T.Mesh(new T.BoxGeometry(.12,.01,.08),M("#1e2a44",.3,.5));p.position.y=.66;o.add(p);if(dem){const f=sprite(kim4,.9,.8);f.position.y=.58;o.add(f);const l=new T.PointLight(new T.Color(kim4),1.2,4,2);l.position.y=.6;o.add(l)}}
@@ -3417,7 +3464,7 @@ function dungMo(canvas,g,opt={}){let camOver=null,vung=null,heSo=1,nghieng=0,ngh
     else if(k==="co"){const r=new T.Mesh(new T.RingGeometry(1.75,2.4,48),M("#4f8a34",.9));r.rotation.x=-Math.PI/2;r.scale.set(1,1.3,1);r.position.y=.012;o.add(r)}
     return o}
   const datDuoc=[];let xemThu=null,xemK=null;const dongNC=[];
-  function dat(ds){datDuoc.forEach(o=>sc.remove(o));datDuoc.length=0;ds.slice(0,CHO.length).forEach((d,i)=>{const o=hinh(d.k);o.position.set(...CHO[i]);o.rotation.y=Math.random()*.6-.3;if(d.ma){o.traverse(m=>{if(m.material&&!m.isSprite){m.material=m.material.clone();m.material.transparent=true;m.material.opacity=.45}})}sc.add(o);datDuoc.push(o)})}
+  function dat(ds){datDuoc.forEach(o=>sc.remove(o));datDuoc.length=0;ds.slice(0,CHO.length).forEach((d,i)=>{const o=hinh(d.k);o.position.set(...CHO[i]);o.scale.setScalar(1.45);o.rotation.y=Math.random()*.6-.3;if(d.ma){o.traverse(m=>{if(m.material&&!m.isSprite){m.material=m.material.clone();m.material.transparent=true;m.material.opacity=.45}})}sc.add(o);datDuoc.push(o)})}
   function xem(k){if(xemThu){sc.remove(xemThu);xemThu=null}if(xemK==="sonBia")mats.forEach(m=>{m.material.map=chuBia(false,m.userData.p);m.material.needsUpdate=true});if(xemK==="batMoi")bat.material.color.set("#c9b48a");xemK=k;if(!k)return;
     if(k==="sonBia"){mats.forEach(m=>{m.material.map=chuBia(true,m.userData.p);m.material.needsUpdate=true});return}
     if(k==="batMoi"){bat.material.color.set("#f2f0ea");return}
@@ -3487,7 +3534,7 @@ function dungMo(canvas,g,opt={}){let camOver=null,vung=null,heSo=1,nghieng=0,ngh
     const cay=(x,z,s,f)=>{const o=new T.Group();o.position.set(x,0,z);o.scale.setScalar(s);ncG.add(o);f(o);return o};
     const mirror=(f)=>[-1,1].forEach(sg=>f(sg));
     /* bộ vật phẩm "thật": đá có vân, lá có chất liệu, đồng ánh kim, có bóng đổ */
-    const MOI=new Set(["tung", "su", "mai", "ban-tron", "ghe-dai", "den-da", "lu-huong", "cun-vang", "cun-muc", "chu-tieu", "hac", "hoa-giay", "ho-sen", "den-long"]);
+    const MOI=new Set(["am-tra","don-su","ban-co","chum","mieu-tho","chuong-gio","truc","mai-vang","cuc-chau","voi","meo","chim","tung", "su", "mai", "ban-tron", "ghe-dai", "den-da", "lu-huong", "cun-vang", "cun-muc", "chu-tieu", "hac", "hoa-giay", "ho-sen", "den-long"]);
     const daV=da2,mGo=M("#5a4130",.9),mGom=M("#2f4f6e",.25,.05),dgV=M("#b08a3e",.3,.85);
     const mLa=c=>{const m=M("#ffffff",.85);m.map=texVe(128,128,(x,w,h)=>{x.fillStyle=c;x.fillRect(0,0,w,h);for(let i=0;i<2500;i++){const v=20+Math.random()*70;x.fillStyle=`rgba(${v},${v},${v},${Math.random()*.5+.2})`;x.fillRect(Math.random()*w,Math.random()*h,Math.random()*3+.5,Math.random()*3+.5)}});return m};
     const LA=mLa("#24421d"),LA2=mLa("#2f5a26"),LA3=mLa("#3c6b2c");
@@ -3524,6 +3571,50 @@ function dungMo(canvas,g,opt={}){let camOver=null,vung=null,heSo=1,nghieng=0,ngh
       dongNC.push(t=>{n.material.color.setHSL(.53,.3,.24+Math.sin(t*1.3)*.015)})};
     const hacDong=(x,z)=>{const o=nhom(x,z);bo(o,new T.CylinderGeometry(.15,.17,.06,20),dgV,0,.03,0);bo(o,new T.CylinderGeometry(.015,.015,.5,8),dgV,0,.3,0);bo(o,new T.SphereGeometry(.1,16,12),dgV,0,.6,0,1,.8,1.6);
       const c=bo(o,new T.CylinderGeometry(.012,.016,.34,8),dgV,0,.8,.12);c.rotation.x=.4;const m=bo(o,new T.ConeGeometry(.012,.12,8),dgV,0,.97,.24);m.rotation.x=1.3};
+    /* nhóm mới: bàn trà, cờ, chum, miếu, chuông gió, trúc, mai, cúc, voi, mèo, chim */
+    const suLam=(()=>{const m=M("#ffffff",.25,.05);m.map=texVe(128,128,(x,w,h)=>{x.fillStyle="#f4f1ea";x.fillRect(0,0,w,h);x.strokeStyle="#2c5a8a";x.lineWidth=5;x.beginPath();x.moveTo(0,h*.22);x.lineTo(w,h*.22);x.moveTo(0,h*.8);x.lineTo(w,h*.8);x.stroke();x.lineWidth=2.5;for(let i=0;i<4;i++){x.beginPath();x.arc(w*(i+.5)/4,h*.5,10,0,6.28);x.stroke();x.beginPath();x.moveTo(w*(i+.5)/4-14,h*.5);x.quadraticCurveTo(w*(i+.5)/4,h*.32,w*(i+.5)/4+14,h*.5);x.stroke()}});return m})();
+    const amTra=(x,z)=>{const o=nhom(x,z);bo(o,new T.BoxGeometry(.72,.06,.48),daV,0,.36,0);[-.28,.28].forEach(dx=>bo(o,new T.BoxGeometry(.08,.33,.4),daV,dx,.165,0));
+      bo(o,new T.CylinderGeometry(.2,.2,.02,28),M("#5a1f14",.35),0,.4,0);
+      const am=new T.Group();am.position.set(-.04,.41,0);o.add(am);bo(am,new T.LatheGeometry([[0,0],[.05,0],[.075,.03],[.08,.06],[.065,.095],[.03,.11],[0,.115]].map(p=>new T.Vector2(...p)),24),suLam,0,0,0);
+      bo(am,ong([[.07,.04,0],[.11,.06,0],[.13,.1,0]],.01),suLam,0,0,0);const q=bo(am,new T.TorusGeometry(.04,.008,6,14,Math.PI),suLam,-.075,.06,0);q.rotation.z=Math.PI/2;bo(am,new T.SphereGeometry(.014,8,6),suLam,0,.125,0);
+      [[.1,.08],[.12,-.06],[-.1,-.1],[.02,-.13]].forEach(([a,b])=>{bo(o,new T.LatheGeometry([[0,0],[.016,0],[.024,.03],[.026,.034]].map(p=>new T.Vector2(...p)),16),suLam,a,.41,b);bo(o,new T.CircleGeometry(.022,14),M("#9a6a20",.2),a,.437,b).rotation.x=-Math.PI/2});
+      const hoi=[0,1,2].map(i=>{const p=sprite("#ffffff",.1,.0);p.position.set(.09,.58,0);o.add(p);return p});dongNC.push(t=>hoi.forEach((p,i)=>{const k=((t*.45+i/3)%1);p.position.set(.09+Math.sin(k*6+i)*.02,.56+k*.3,0);p.scale.setScalar(.06+k*.12);p.material.opacity=Math.sin(k*Math.PI)*.35;p.material.blending=T.NormalBlending}))};
+    const texCo=texVe(256,256,(x,w,h)=>{x.fillStyle="#d8cfba";x.fillRect(0,0,w,h);x.strokeStyle="#5a4a32";x.lineWidth=2;const m=24,cw=(w-2*m)/8,ch=(h-2*m)/9;for(let i=0;i<10;i++){x.beginPath();x.moveTo(m,m+i*ch);x.lineTo(w-m,m+i*ch);x.stroke()}for(let j=0;j<9;j++){x.beginPath();x.moveTo(m+j*cw,m);x.lineTo(m+j*cw,m+4*ch);x.moveTo(m+j*cw,m+5*ch);x.lineTo(m+j*cw,h-m);x.stroke()}
+      [[3,0,5,2],[3,7,5,9]].forEach(([a,b,c,d])=>{x.beginPath();x.moveTo(m+a*cw,m+b*ch);x.lineTo(m+c*cw,m+d*ch);x.moveTo(m+c*cw,m+b*ch);x.lineTo(m+a*cw,m+d*ch);x.stroke()});x.strokeRect(m-6,m-6,w-2*m+12,h-2*m+12)});
+    const banCo=(x,z)=>{const o=nhom(x,z);bo(o,new T.CylinderGeometry(.1,.16,.48,16),daV,0,.24,0);bo(o,new T.BoxGeometry(.66,.06,.66),daV,0,.5,0);const mat=bo(o,new T.PlaneGeometry(.58,.58),new T.MeshStandardMaterial({map:texCo,roughness:.8}),0,.532,0);mat.rotation.x=-Math.PI/2;
+      const quan=[[-.2,-.22,1],[0,-.25,1],[.15,-.12,1],[-.08,-.05,1],[.22,-.24,1],[-.18,.2,0],[.05,.24,0],[.2,.1,0],[-.02,.08,0],[.12,.23,0]];quan.forEach(([a,b,d])=>{bo(o,new T.CylinderGeometry(.028,.028,.018,16),M("#efe2c4",.5),a,.543,b);bo(o,new T.CylinderGeometry(.02,.02,.003,12),M(d?"#b2281e":"#1d1a16",.5),a,.553,b)});
+      [[0,.62],[0,-.62]].forEach(([a,b])=>{bo(o,new T.CylinderGeometry(.15,.17,.36,20),daV,a,.18,b)})};
+    const donSu=(x,z)=>{const o=nhom(x,z);bo(o,new T.LatheGeometry([[0,0],[.13,0],[.16,.06],[.17,.2],[.16,.34],[.13,.4],[0,.4]].map(p=>new T.Vector2(...p)),28),suLam,0,0,0)};
+    const chum=(x,z)=>{const o=nhom(x,z);bo(o,new T.CylinderGeometry(.3,.32,.08,20),daV,0,.04,0);
+      bo(o,new T.LatheGeometry([[0,0],[.16,0],[.26,.12],[.3,.3],[.27,.5],[.18,.62],[.17,.66],[.19,.68]].map(p=>new T.Vector2(...p)),32),M("#5a3a22",.3,.05),0,.08,0);
+      bo(o,new T.CylinderGeometry(.21,.21,.03,24),M("#6b4a2a",.8),0,.78,0);const g2=bo(o,new T.SphereGeometry(.07,14,10,0,6.28,0,Math.PI/2),M("#6a4a2c",.8),.05,.8,.02);g2.rotation.x=Math.PI;bo(o,new T.CylinderGeometry(.008,.008,.3,6),M("#8a6a3a",.7),.05,.82,.17).rotation.x=Math.PI/2};
+    const mieuTho=(x,z)=>{const o=nhom(x,z,-.4),son=M("#8a2a1a",.6),vg=M("#d9b25a",.4,.3);bo(o,new T.BoxGeometry(.7,.24,.6),daV,0,.12,0);bo(o,new T.BoxGeometry(.56,.5,.46),M("#e8dcc0",.85),0,.49,0);
+      bo(o,new T.BoxGeometry(.3,.34,.02),M("#2a1810",.6),0,.46,.235);bo(o,new T.BoxGeometry(.06,.5,.06),son,-.25,.49,.24);bo(o,new T.BoxGeometry(.06,.5,.06),son,.25,.49,.24);
+      bo(o,new T.CylinderGeometry(.04,.035,.05,12),dgV,0,.33,.18);const mai2=bo(o,new T.ConeGeometry(.52,.32,4),M("#7a3424",.7),0,.9,0,1,1,.85);mai2.rotation.y=Math.PI/4;bo(o,new T.BoxGeometry(.2,.04,.04),vg,0,1.06,0);
+      const den2=bo(o,new T.SphereGeometry(.035,10,8),M("#ffd27a",.4,0,["#ffb050",dem?2:.4]),0,.5,.17);if(dem){const l=new T.PointLight("#ffb46a",.6,2.2,2);l.position.set(0,.5,.3);o.add(l)}dongNC.push(t=>{den2.material.emissiveIntensity=(dem?1.8:.35)+Math.sin(t*6)*.15})};
+    const chuongGio=(x,z)=>{const o=nhom(x,z),tre=M("#b39a5a",.7);bo(o,new T.CylinderGeometry(.03,.035,1.7,8),tre,0,.85,0);bo(o,new T.CylinderGeometry(.02,.02,.4,8),tre,.18,1.66,0).rotation.z=Math.PI/2;
+      const ch=new T.Group();ch.position.set(.32,1.64,0);o.add(ch);bo(ch,new T.CylinderGeometry(.005,.005,.12,4),M("#222"),0,-.06,0);bo(ch,new T.CylinderGeometry(.1,.1,.02,18),dgV,0,-.12,0);
+      const ong2=[];for(let i=0;i<5;i++){const a=i/5*6.28,L=.26+i*.05,g3=new T.Group();g3.position.set(Math.cos(a)*.075,-.13,Math.sin(a)*.075);ch.add(g3);bo(g3,new T.CylinderGeometry(.014,.014,L,8),dgV,0,-L/2-.02,0);ong2.push(g3)}
+      dongNC.push(t=>{ch.rotation.z=Math.sin(t*1.3)*.08;ong2.forEach((g3,i)=>{g3.rotation.z=Math.sin(t*2.2+i)*.12;g3.rotation.x=Math.cos(t*1.9+i*1.3)*.1})})};
+    const truc=(x,z)=>{const o=nhom(x,z),th=M("#c9b24a",.55),dot=M("#6a7a2a",.6),gr=[];for(let i=0;i<9;i++){const a=i*2.4,r2=.08+(i%3)*.08,h=1.6+((i*37)%7)*.12,g3=new T.Group();g3.position.set(Math.cos(a)*r2,0,Math.sin(a)*r2);o.add(g3);
+      bo(g3,new T.CylinderGeometry(.022,.026,h,8),th,0,h/2,0);for(let k=1;k<6;k++)bo(g3,new T.CylinderGeometry(.03,.03,.02,8),dot,0,h*k/6,0);for(let k=0;k<6;k++)bo(g3,new T.IcosahedronGeometry(.18,1),LA3,(Math.random()-.5)*.45,h-.4+k*.1,(Math.random()-.5)*.45,1.7,.22,.7);gr.push(g3)}
+      dongNC.push(t=>gr.forEach((g3,i)=>{g3.rotation.z=Math.sin(t*.9+i*.6)*.035;g3.rotation.x=Math.cos(t*.7+i)*.025}))};
+    const maiVang=(x,z)=>{const o=nhom(x,z),hv=M("#f2c22a",.55,0,["#c08a10",.15]);bo(o,ong([[0,0,0],[.06,.5,0],[-.04,.9,.03],[.05,1.25,0]],.055),mGo,0,0,0);
+      [[[.0,.6,0],[.35,.95,.1]],[[-.02,.8,0],[-.38,1.15,-.05]],[[.03,1.0,0],[.2,1.45,-.1]],[[0,1.1,0],[-.15,1.5,.12]]].forEach(([a,b])=>bo(o,ong([a,[(a[0]+b[0])/2,(a[1]+b[1])/2+.05,(a[2]+b[2])/2],b],.022),mGo,0,0,0));
+      for(let i=0;i<110;i++){const u=Math.random()*6.28,r2=.15+Math.random()*.45;bo(o,new T.IcosahedronGeometry(.035,0),hv,Math.cos(u)*r2,1.0+Math.random()*.55,Math.sin(u)*r2*.8)}
+      for(let i=0;i<10;i++){const u=Math.random()*6.28;bo(o,new T.IcosahedronGeometry(.08,1),LA3,Math.cos(u)*.35,1.05+Math.random()*.4,Math.sin(u)*.3,1,.5,1)}};
+    const cucChau=(x,z)=>{const o=nhom(x,z),hv=M("#e8b422",.6);bo(o,new T.LatheGeometry([[0,0],[.13,0],[.17,.05],[.19,.2],[.17,.25]].map(p=>new T.Vector2(...p)),24),M("#6a3f20",.3,.05),0,0,0);
+      bo(o,new T.IcosahedronGeometry(.2,2),LA2,0,.32,0,1,.6,1);for(let i=0;i<40;i++){const u=Math.random()*6.28,v=Math.random()*1.3;bo(o,new T.IcosahedronGeometry(.04,1),hv,Math.cos(u)*Math.sin(v)*.21,.34+Math.cos(v)*.14,Math.sin(u)*Math.sin(v)*.21)}};
+    const voi=(x,z,ry)=>{const o=nhom(x,z,ry),d=M("#a39d90",.85);d.map=VAN_DA(T).da;bo(o,new T.BoxGeometry(.5,.12,.7),d,0,.06,0);bo(o,new T.SphereGeometry(.24,20,14),d,0,.42,0,1,.85,1.35);
+      [[-.13,-.2],[.13,-.2],[-.13,.2],[.13,.2]].forEach(([a,b])=>bo(o,new T.CylinderGeometry(.07,.08,.26,12),d,a,.25,b));const dau=bo(o,new T.SphereGeometry(.15,18,12),d,0,.56,.36);
+      bo(o,ong([[0,.52,.48],[0,.38,.56],[0,.24,.55],[0,.17,.5]],.04),d,0,0,0);[-1,1].forEach(k=>{const tai=bo(o,new T.CircleGeometry(.12,16),d,k*.14,.58,.3);tai.rotation.y=k*1.1;tai.material.side=T.DoubleSide;const nga=bo(o,new T.ConeGeometry(.018,.14,8),M("#efe8d8",.5),k*.06,.42,.5);nga.rotation.x=1.9});
+      bo(o,new T.BoxGeometry(.3,.04,.42),M("#8a2a1a",.7),0,.62,0)};
+    const meo=(x,z,ry)=>{const o=nhom(x,z,ry),m=M("#c88a4a",.85),soc=M("#8a5a2a",.85);bo(o,new T.SphereGeometry(.13,18,12),m,0,.09,0,1.2,.65,1);for(let i=0;i<3;i++)bo(o,new T.TorusGeometry(.1,.012,6,16,Math.PI),soc,0,.1,-.06+i*.06).rotation.y=Math.PI/2;
+      const dau=new T.Group();dau.position.set(.14,.14,.04);o.add(dau);bo(dau,new T.SphereGeometry(.075,16,12),m,0,0,0);[-1,1].forEach(k=>{const t2=bo(dau,new T.ConeGeometry(.025,.05,6),m,0,.065,k*.04);t2.rotation.x=k*.25});[-1,1].forEach(k=>bo(dau,new T.SphereGeometry(.01,6,4),M("#2a2a20",.3),.06,.015,k*.025));
+      const duoi=new T.Group();duoi.position.set(-.14,.06,0);o.add(duoi);bo(duoi,ong([[0,0,0],[-.06,0,.06],[-.04,0,.14],[.04,0,.18]],.018),m,0,0,0);dongNC.push(t=>{duoi.rotation.y=Math.sin(t*1.6)*.35;dau.rotation.y=Math.sin(t*.5)*.3;o.scale.y=1+Math.sin(t*2)*.02})};
+    const chim=(x,z)=>{const ds2=[0,1].map(i=>{const o=nhom(x+i*.35,z+i*.2,i*2),n=M("#7a5a3a",.8);o.scale.setScalar(1.8);bo(o,new T.SphereGeometry(.045,12,8),n,0,.05,0,1,.85,1.4);const dau=new T.Group();dau.position.set(0,.085,.05);o.add(dau);bo(dau,new T.SphereGeometry(.028,10,8),M("#5a3f28",.8),0,0,0);
+      bo(dau,new T.ConeGeometry(.008,.025,6),M("#d9a040",.6),0,-.004,.03).rotation.x=Math.PI/2;bo(o,new T.ConeGeometry(.02,.06,6),n,0,.06,-.07).rotation.x=-1.9;return {o,dau,x0:x+i*.35,z0:z+i*.2}});
+      dongNC.push(t=>ds2.forEach((c,i)=>{const k=(t*.8+i*.5)%3;if(k<1){c.dau.rotation.x=Math.max(0,Math.sin(k*Math.PI*4))*.9;c.o.position.y=0}else{const u=(k-1)/2;c.o.position.y=Math.abs(Math.sin(u*Math.PI*3))*.06;c.o.position.x=c.x0+Math.sin(t*.4+i)*.25;c.o.position.z=c.z0+Math.cos(t*.3+i)*.15;c.o.rotation.y=t*.4+i*2;c.dau.rotation.x=0}}))};
     /* bố trí theo vị trí trong ảnh mẫu đã duyệt */
     if(ds.has("tung"))mirror(sg=>tung(sg*(W2+.65),-1.2));
     if(ds.has("hoa-giay"))mirror(sg=>hoaGiay(sg*(W2+.8),.9));
@@ -3539,6 +3630,18 @@ function dungMo(canvas,g,opt={}){let camOver=null,vung=null,heSo=1,nghieng=0,ngh
     if(ds.has("den-long"))mirror(sg=>denLong(sg*(W2+.4),-2.3,sg>0?"#f0b43a":"#e0552e",sg));
     if(ds.has("ho-sen"))hoSen(-(W2+1.6),1.6);
     if(ds.has("hac"))mirror(sg=>hacDong(sg*(W2-.25),-2.0));
+    if(ds.has("am-tra"))amTra(W2+1.8,1.3);
+    if(ds.has("don-su")){donSu(W2+1.8,.62);donSu(W2+1.8,1.98)}
+    if(ds.has("ban-co"))banCo(-(W2+1.75),4.6);
+    if(ds.has("chum"))chum(-(W2+2.75),2.1);
+    if(ds.has("mieu-tho"))mieuTho(W2+2.4,-2.0);
+    if(ds.has("chuong-gio"))chuongGio(-(W2+2.3),-1.0);
+    if(ds.has("truc"))truc(-(W2+2.6),-2.5);
+    if(ds.has("mai-vang"))maiVang(W2+3.05,.35);
+    if(ds.has("cuc-chau"))mirror(sg=>cucChau(sg*(W2+.75),3.5));
+    if(ds.has("voi"))mirror(sg=>{voi(sg*(W2+.9),5.25,0);ncG.children[ncG.children.length-1].scale.setScalar(.72)});
+    if(ds.has("meo"))meo(W2+1.05,2.05,-.6);
+    if(ds.has("chim"))chim(-.55,3.7);
     if(ds.has("tung")&&!MOI.has("tung"))mirror(sg=>cay(sg*(W2+.45),1.35,1,o=>{add(new T.CylinderGeometry(.04,.06,.9,8),thanNC,0,.45,0,{g:o});[[.26,.35],[.22,.62],[.17,.86],[.11,1.04]].forEach(([rr,y],i)=>{const c=add(new T.SphereGeometry(rr,12,8),laNC,(i%2?.06:-.06),y,0,{g:o});c.scale.y=.55})}));
     if(ds.has("cau"))mirror(sg=>cay(sg*(W2+1.15),-1.3,1,o=>{add(new T.CylinderGeometry(.06,.09,2.6,10),M("#a9a294",.8),0,1.3,0,{g:o});for(let i=0;i<8;i++){const a=i/8*Math.PI*2,l=add(B(.9,.02,.16),laSang,Math.cos(a)*.4,2.55,Math.sin(a)*.4,{g:o,ry:-a});l.rotation.z=-.35*Math.cos(0);l.rotateZ(-.3)}}));
     if(ds.has("su")&&!MOI.has("su"))cay(-(W2+1.25),.55,1,o=>{const t=add(new T.CylinderGeometry(.05,.08,1.1,8),thanNC,0,.55,0,{g:o,rz:.15});[[0,1.2,0,.38],[.3,1.05,.15,.28],[-.28,1.1,-.1,.3]].forEach(([x,y,z,rr])=>{add(new T.SphereGeometry(rr,12,8),laNC,x,y,z,{g:o});for(let i=0;i<7;i++)add(new T.SphereGeometry(.04,6,4),M("#fbf6ea",.6),x+(Math.random()-.5)*rr*1.4,y+rr*.6+Math.random()*.1,z+(Math.random()-.5)*rr*1.4,{g:o})})});
@@ -3588,10 +3691,12 @@ function dungMo(canvas,g,opt={}){let camOver=null,vung=null,heSo=1,nghieng=0,ngh
   function datVung(tren,duoi){if(!(duoi>tren))return;vung=[tren,duoi];const cao=duoi-tren;heSo=Math.max(.95,Math.min(1.7,380/cao));khung(canvas.clientWidth,canvas.clientHeight);datCam()}
   /* chụp ảnh từng món cho danh mục: bày riêng món đó, đặt máy nhìn vừa khung */
   function chupMon(id,laKieu){trangTri(laKieu?{kieu:id,them:[]}:{kieu:"nguyen-ban",them:[id]});const b=new T.Box3();
-    if(id==="__toan")b.set(new T.Vector3(-3.2,0,-2.6),new T.Vector3(3.2,1.6,4.4));else if(laKieu||!ncG.children.length){b.set(new T.Vector3(-1.5*RX,0,-1.9),new T.Vector3(1.5*RX,2.2,2.2))}else b.setFromObject(ncG);
+    if(id==="__toan")b.set(new T.Vector3(-3.2,0,-2.6),new T.Vector3(3.2,1.6,4.4));else if(id==="__rong")b.set(new T.Vector3(-5.2,0,-3.2),new T.Vector3(5.2,1.6,5.2));else if(laKieu||!ncG.children.length){b.set(new T.Vector3(-1.5*RX,0,-1.9),new T.Vector3(1.5*RX,2.2,2.2))}else if(id==="chuong-gio"){const x=-(W2+2.3);b.set(new T.Vector3(x-.1,.95,-1.35),new T.Vector3(x+.6,1.75,-.65))}else b.setFromObject(["cuc-chau","voi","chim","don-su"].includes(id)?ncG.children[0]:ncG);
     const c=b.getCenter(new T.Vector3()),sz=b.getSize(new T.Vector3()),d=Math.max(sz.x,sz.y*1.2,sz.z*.8,.6)*1.55+.6;
     camOver=[new T.Vector3(c.x+d*.45,c.y+d*.42,c.z+d*.85),c];cam.clearViewOffset();cam.fov=38;cam.aspect=canvas.clientWidth/canvas.clientHeight;cam.updateProjectionMatrix()}
-  return {chupMon,toanCanh,datVung,trangTri,dat,xem,thaDen,vai,tg,datDen,datDongTam,dens:()=>dens,huy(){chay=false;cancelAnimationFrame(id);removeEventListener("resize",doi);document.removeEventListener("visibilitychange",an);R.dispose();sc.traverse(o=>{if(o.geometry)o.geometry.dispose()})}}}
+  function chupVat(k){dat([]);if(ncG)ncG.visible=false;const o=hinh(k);o.position.set(0,.47,1.4);o.scale.setScalar(1.45);sc.add(o);datDuoc.push(o);const b=new T.Box3().setFromObject(o),c=b.getCenter(new T.Vector3()),sz=b.getSize(new T.Vector3()),d=Math.max(sz.x,sz.y,sz.z,.1)*1.9+.08;
+    camOver=[new T.Vector3(c.x+d*.3,c.y+d*.38,c.z+d*.88),c];cam.clearViewOffset();cam.fov=34;cam.aspect=canvas.clientWidth/canvas.clientHeight;cam.updateProjectionMatrix()}
+  return {chupVat,chupMon,toanCanh,datVung,trangTri,dat,xem,thaDen,vai,tg,datDen,datDongTam,dens:()=>dens,huy(){chay=false;cancelAnimationFrame(id);removeEventListener("resize",doi);document.removeEventListener("visibilitychange",an);R.dispose();sc.traverse(o=>{if(o.geometry)o.geometry.dispose()})}}}
 
 /* âm thanh nền: gió nhẹ, chim ban ngày, dế ban đêm */
 let _nen=null;
@@ -3604,7 +3709,7 @@ function batAmNen(){if(_nen||!AM.bat||!AM.nen)return;const a=ac();if(!a)return;c
 function tatAmNen(){if(!_nen)return;try{_nen.s.stop()}catch(e){}clearInterval(_nen.iv);_nen=null}
 
 /* ---------- dữ liệu cho cảnh ---------- */
-function vatTren(g){const ds=DATA.daDang.filter(d=>d.gt===g.id&&conNgay(d.luc)>=-7).map(d=>({k:MO_HINH[d.qua],ai:d.ai,luc:d.luc,ten:quaById(d.qua).ten})).filter(d=>d.k);
+function vatTren(g){const ds=[];dangBay(g).forEach(d=>{for(let i=0;i<Math.min(3,d.sl);i++)ds.push({k:MO_HINH[d.id],ten:quaById(d.id).ten,ai:d.ai})});
   const don=DATA.donHang.find(d=>d.gt===g.id&&d.buoc<4);if(don)don.items.forEach(i=>{if(MO_HINH[i.id])ds.push({k:MO_HINH[i.id],ma:true,ten:spById(i.id).ten,don})});return ds}
 function capNhatVat(){const g=gtById(VM.gt);if(MO&&g)MO.dat(vatTren(g))}
 
@@ -3620,9 +3725,11 @@ function veKhan(){const g=gtById(VM.gt),L=loiKhan(g),i=VM.khan.dong,ra=[],xongK=
 function veQuaVM(){const g=gtById(VM.gt),ao=DATA.qua.filter(q=>q.ao),that=DATA.qua.filter(q=>!q.ao&&MO_HINH[q.id]),ng=ngGiu(g.chan),toi=lanThamToi(g);VM.gio=VM.gio||{};
   const ds=Object.entries(VM.gio).filter(([,n])=>n>0).map(([id,sl])=>({x:quaById(id),sl})),tong=ds.reduce((s,o)=>s+o.x.gia*o.sl,0),soMon=ds.reduce((s,o)=>s+o.sl,0);
   const o=q=>{const n=VM.gio[q.id]||0;return `<button class="vm-mon" data-act="vm-chon" data-v="${q.id}" aria-pressed="${n>0}" aria-label="${esc(q.ten)}${n?`, đã chọn ${n}`:""}, chạm để thêm"><img src="${anh(q.anh)}" alt="">${n?`<i class="vm-mon__sl so">${n}</i>`:""}<span>${esc(q.ten)}</span><b class="so">${tien(q.gia)}</b></button>`};
-  return `<div class="vm-hang"><span class="t-nhan">Quà tưởng niệm · hiện ngay trên mộ</span><div class="vm-cuon">${ao.map(o).join("")}</div></div>
+  const bay=dangBay(g);
+  return `${bay.length?`<div class="vm-bay" id="vm-bay"><span class="t-nhan">Đang bày trên mộ</span><div class="vm-cuon">${bay.map(d=>{const q=quaById(d.id);return `<span class="vm-bay__mon"><img src="${anh(q.anh)}" alt=""><span><b>${esc(q.ten)}${d.sl>1?` × ${d.sl}`:""}</b><small>còn ${conPhut(d.con)}</small></span></span>`}).join("")}</div></div>`:""}
+  <div class="vm-hang"><span class="t-nhan">Quà tưởng niệm · bày trên mộ ${PHUT_BAY} phút mỗi món</span><div class="vm-cuon">${ao.map(o).join("")}</div></div>
   <div class="vm-hang"><span class="t-nhan">Mang ra mộ thật · ${esc(ng.ten)}${toi?` · ${dmy(toi)}`:""}</span><div class="vm-cuon">${that.map(o).join("")}</div></div>
-  ${ds.length?`<div class="vm-gio" aria-label="Món đã chọn">${ds.map(o=>`<span class="vm-gio__mon"><button data-act="vm-bot" data-v="${o.x.id}" aria-label="Bớt ${esc(o.x.ten)}">${ic("tru")}</button>${esc(o.x.ten)} × <b class="so">${o.sl}</b><button data-act="vm-chon" data-v="${o.x.id}" aria-label="Thêm ${esc(o.x.ten)}">${ic("cong")}</button></span>`).join("")}</div>`:`<p class="t-nho vm-goi-y">Chạm nhiều món để dâng cùng lúc, chạm lại để thêm số lượng.</p>`}
+  ${ds.length?`<div class="vm-gio" aria-label="Món đã chọn">${ds.map(o=>`<span class="vm-gio__mon"><button data-act="vm-bot" data-v="${o.x.id}" aria-label="Bớt ${esc(o.x.ten)}">${ic("tru")}</button>${esc(o.x.ten)} × <b class="so">${o.sl}</b><button data-act="vm-chon" data-v="${o.x.id}" aria-label="Thêm ${esc(o.x.ten)}">${ic("cong")}</button></span>`).join("")}</div>`:`<p class="t-nho vm-goi-y">Chạm nhiều món để dâng cùng lúc. Mỗi món bày trên mộ ${PHUT_BAY} phút, dâng thêm thì thời gian cộng dồn.</p>`}
   <button class="tm-btn tm-btn--chinh tm-btn--rong" data-act="vm-dang" ${ds.length?"":'aria-disabled="true"'}>${ds.length?`Dâng ${soMon} món · ${tien(tong)}`:"Chọn món để dâng"}</button>`}
 function veNhan(){const g=gtById(VM.gt),ds=SO_TN.filter(m=>m.gt===g.id).slice(0,3);
   return `<div class="vm-so">${ds.length?ds.map(m=>`<div class="vm-thu"><b>${esc(m.ai)}</b><span>${esc(m.chu)}</span><small>${khi(cong(homNay,m.luc))}${m.rieng?" · chỉ mình bạn thấy":""}</small></div>`).join(""):`<p class="t-nho">Chưa có lời nào. Viết lời đầu tiên gửi ${esc(g.xung)}.</p>`}</div>
@@ -3691,7 +3798,8 @@ route("/gia-tien/:id/vieng",({id})=>{const g=gtById(id);if(!g)return null;if(VM.
   const phim=e=>{if((e.code==="Space"||e.key===" ")&&VM.tab==="khan"&&!e.target.closest("input,button,select,textarea")){e.preventDefault();khanTiep()}};addEventListener("keydown",phim);
   const cham=()=>{if(AM.bat){ac();batAmNen()}};document.addEventListener("pointerdown",cham,{once:true});
   let huy=false;taiThree().then(()=>{if(huy||!$("#vm-canh"))return;try{MO=dungMo($("#vm-canh"),g);MO.trangTri(ncCua(g));canhVung();capNhatVat();capNhatDen();if(VM.chon)MO.xem(MO_HINH[VM.chon]);if(VM.xemDV)MO.xem(MO_HINH[VM.xemDV])}catch(e){$("#cd-du-phong").hidden=false}}).catch(()=>{$("#cd-du-phong").hidden=false});
-  window._donDep=()=>{huy=true;VM.giong=false;VM.dongTam=0;clearTimeout(_dt);dungGiong();removeEventListener("keydown",phim);document.removeEventListener("pointerdown",cham);dungDoc();tatAmNen();if(MO){MO.huy();MO=null}}}}});
+  const nhip=setInterval(()=>{capNhatVat();if(VM.tab==="qua"&&$("#vm-bay")&&!document.querySelector(".tm-sheet"))veBang()},30000);
+  window._donDep=()=>{clearInterval(nhip);huy=true;VM.giong=false;VM.dongTam=0;clearTimeout(_dt);dungGiong();removeEventListener("keydown",phim);document.removeEventListener("pointerdown",cham);dungDoc();tatAmNen();if(MO){MO.huy();MO=null}}}}});
 
 /* ---------- đèn người nhà trước mộ, cùng khấn ---------- */
 function capNhatDen(them=[]){const g=gtById(VM.gt);if(!MO||!g)return;const ds=denHomNay(g.id).concat(them);MO.datDen(ds)}
@@ -3715,7 +3823,7 @@ Object.assign(IC,{"nha-mo":'<path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/>
   "ho-toc":'<path d="M4 20V10l4-3 4 3v10"/><path d="M12 20V8l4-3 4 3v12"/><path d="M2 20h20"/>'});
 
 /* catalog: kim cương = giá trong cảnh viếng online; doi = giá khi là mộ đôi */
-const NC_NHOM=[["kieu","Kiểu mộ","nha-mo"],["cay","Cây","cay"],["ghe","Ghế đá","ghe-da"],["da","Đồ đá","den-da"],["linh","Linh vật","tim"]];
+const NC_NHOM=[["kieu","Kiểu mộ","nha-mo"],["cay","Cây","cay"],["ghe","Bàn ghế","ghe-da"],["do","Đồ cúng","le-vat"],["da","Đồ đá","den-da"],["linh","Linh vật","tim"]];
 const NC=[
   {id:"nguyen-ban",nhom:"kieu",ten:"Như mộ thật",phu:"Giữ đúng dáng mộ người giữ đèn chụp",kc:0},
   {id:"da-xanh",nhom:"kieu",ten:"Mộ đá xanh tam cấp",phu:"Đá xanh Thanh Hoá, ba bậc lên",kc:390,doi:620},
@@ -3742,7 +3850,19 @@ const NC=[
   {id:"cun-muc",nhom:"linh",ten:"Cún mực giữ mộ",phu:"Nằm bên phải bậc mộ",kc:120},
   {id:"chu-tieu",nhom:"linh",ten:"Chú tiểu quét sân",phu:"Quét lá bên lối vào",kc:180},
   {id:"hac",nhom:"linh",ten:"Đôi hạc đồng",phu:"Đứng hai bên phía sau mộ",kc:200},
-  {id:"rua",nhom:"linh",ten:"Rùa đá",phu:"Nằm yên góc sau, biểu tượng trường thọ",kc:90}];
+  {id:"rua",nhom:"linh",ten:"Rùa đá",phu:"Nằm yên góc sau, biểu tượng trường thọ",kc:90},
+  {id:"truc",nhom:"cay",ten:"Bụi trúc vàng",phu:"Góc sau bên trái, lay theo gió",kc:90},
+  {id:"mai-vang",nhom:"cay",ten:"Cây mai vàng",phu:"Nở rộ quanh năm, đứng bên phải",kc:160},
+  {id:"cuc-chau",nhom:"cay",ten:"Đôi chậu cúc vàng",phu:"Chậu men nâu hai bên lối vào",kc:70},
+  {id:"ban-co",nhom:"ghe",ten:"Bàn cờ tướng đá",phu:"Bàn đá khắc bàn cờ, hai đôn ngồi",kc:180},
+  {id:"don-su",nhom:"ghe",ten:"Đôi đôn sứ men lam",phu:"Ngồi bên bàn trà",kc:110},
+  {id:"am-tra",nhom:"do",ten:"Bộ ấm chén trà",phu:"Bàn trà đá, ấm men lam bốc khói",kc:140},
+  {id:"chum",nhom:"do",ten:"Chum nước cúng",phu:"Chum sành nắp gỗ, gáo dừa",kc:120},
+  {id:"mieu-tho",nhom:"do",ten:"Miếu thờ thổ thần",phu:"Miếu nhỏ góc sau, đèn sáng về đêm",kc:320},
+  {id:"chuong-gio",nhom:"do",ten:"Chuông gió đồng",phu:"Treo cột tre, đung đưa theo gió",kc:60},
+  {id:"voi",nhom:"linh",ten:"Cặp voi đá",phu:"Đứng hai bên lối vào",kc:280},
+  {id:"meo",nhom:"linh",ten:"Mèo mướp nằm sưởi",phu:"Nằm cạnh đèn đá, vẫy đuôi",kc:90},
+  {id:"chim",nhom:"linh",ten:"Đôi chim sẻ",phu:"Nhảy nhót mổ hạt trước mộ",kc:50}];
 const ncById=id=>NC.find(x=>x.id===id);
 const moKey=g=>g.mo||g.id;
 const giaNC=(x,g)=>moDoi(g)&&x.doi?x.doi:x.kc;
@@ -4360,7 +4480,7 @@ function moCuaHang(){
   r.fn=(p,q)=>{const m=goc(p,q);let da=true;try{da=sessionStorage.getItem("tm-ch-mo")==="1";if(!da)sessionStorage.setItem("tm-ch-mo","1")}catch(e){}
     if(!da)setTimeout(moCuaHang,0);return m}})();
 
-const VER="1793908156";try{fetch("ver.txt?"+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{v=(v||"").trim();if(v&&v!==VER){let ok=true;try{ok=!sessionStorage.getItem("tm-rl"+v);sessionStorage.setItem("tm-rl"+v,"1")}catch(e){}if(ok)location.reload()}}).catch(()=>{})}catch(e){}
+const VER="1793910004";try{fetch("ver.txt?"+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{v=(v||"").trim();if(v&&v!==VER){let ok=true;try{ok=!sessionStorage.getItem("tm-rl"+v);sessionStorage.setItem("tm-rl"+v,"1")}catch(e){}if(ok)location.reload()}}).catch(()=>{})}catch(e){}
 apTheme();ghiNgan();ve();
 if(matchMedia)matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>{});</script>
 
