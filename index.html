@@ -1180,6 +1180,29 @@ button.cay__nut{font:inherit;cursor:pointer}
 .cong__chu .t-nhan{color:#e9cf8f;letter-spacing:.06em}
 .cong__chu b{font:700 26px/1.2 var(--font-serif,"Playfair Display",serif);text-wrap:balance}
 .cong__chu span:last-child{font:500 14px/1.4 var(--font-sans);opacity:.85}
+
+.cong-cho{position:fixed;inset:0;background:#1a110a}
+/* mở cửa hàng */
+.ch-mo{position:fixed;inset:0;z-index:190;display:flex;align-items:center;justify-content:center;background:rgba(26,17,10,.94);transition:opacity .42s ease,background .6s ease 1.2s;overflow:hidden}
+.ch-mo.mo{background:rgba(26,17,10,0)}
+.ch-mo.mo .ch-mo__den{opacity:0;transition:opacity .4s ease 1.2s}
+.ch-mo.tat{opacity:0;pointer-events:none}
+.ch-mo__sang{position:absolute;left:50%;top:50%;width:30px;height:70vh;transform:translate(-50%,-50%);background:radial-gradient(closest-side,rgba(255,226,160,.95),rgba(255,190,90,.35) 60%,rgba(255,190,90,0));filter:blur(8px);opacity:0;transition:width .9s cubic-bezier(.3,.7,.2,1) .35s,opacity .5s ease .3s}
+.ch-mo.mo .ch-mo__sang{width:140vw;opacity:1}
+.ch-mo__khung{position:relative;width:min(78vw,360px);display:flex;flex-direction:column;align-items:center;gap:10px;transition:transform .7s cubic-bezier(.5,0,.75,0) 1.15s,opacity .5s ease 1.3s}
+.ch-mo.mo .ch-mo__khung{transform:scale(2.6) translateY(4%);opacity:0}
+.ch-mo__bien{display:flex;align-items:center;gap:10px;padding:10px 18px;border-radius:6px;background:linear-gradient(#4a2610,#2e170a);box-shadow:inset 0 0 0 2px #b8893c,inset 0 0 0 6px #2e170a,inset 0 0 0 7px #8a6428;color:#e9c97e;font:700 17px/1.2 var(--font-serif);letter-spacing:.02em;white-space:nowrap;transform:translateY(-8px);opacity:0;transition:transform .5s ease,opacity .5s ease}
+.ch-mo__bien img{width:26px;height:26px}
+.ch-mo.mo .ch-mo__bien{transform:none;opacity:1}
+.ch-mo__cua{position:relative;width:100%;aspect-ratio:400/520;display:flex;perspective:900px;box-shadow:0 0 0 8px #2a160b,0 0 0 10px #8a6428,0 24px 60px rgba(0,0,0,.5);background:radial-gradient(circle at 50% 55%,#ffe3a6,#e9a85a 55%,#8a4d1e)}
+.ch-mo__canh{flex:1;height:100%;transition:transform 1.05s cubic-bezier(.55,.05,.25,1) .45s;backface-visibility:hidden}
+.ch-mo__canh svg{display:block;width:100%;height:100%}
+.ch-mo__canh.trai{transform-origin:left center}.ch-mo__canh.phai{transform-origin:right center}
+.ch-mo.mo .ch-mo__canh.trai{transform:rotateY(-108deg)}.ch-mo.mo .ch-mo__canh.phai{transform:rotateY(108deg)}
+.ch-mo__den{position:absolute;top:calc(50% - min(78vw,360px)*.7 - 10px);width:2px;height:70px;background:#3a2414;transform-origin:top center;animation:ch-dua 1.8s ease-in-out infinite alternate}
+.ch-mo__den.t{left:calc(50% - min(78vw,360px)/2 - 24px)}.ch-mo__den.p{left:calc(50% + min(78vw,360px)/2 + 22px);animation-delay:-.9s}
+.ch-mo__den i{position:absolute;top:66px;left:-17px;width:36px;height:44px;border-radius:45%;background:radial-gradient(circle at 45% 40%,#ff8a5a,#c8301e 60%,#8a1c10);box-shadow:0 0 22px rgba(255,110,60,.55),inset 0 4px 0 -1px #c9a04a,inset 0 -4px 0 -1px #c9a04a}
+@keyframes ch-dua{from{transform:rotate(-5deg)}to{transform:rotate(5deg)}}
 </style>
 </head>
 <body>
@@ -3949,24 +3972,29 @@ function tabDon(tab,q){const dem=tatCaDon();return `<div class="tm-phan" role="t
    Khi bấm "Vào chùa": một người áo lam bước tới cổng tam quan, chắp tay vái,
    rồi đi qua cổng. Biển cổng ghi đúng tên ngôi chùa. Chạm "Bỏ qua" để vào ngay. */
 let _cong=null;
-function diQuaCong(id,toi){
-  const c=chuaById(id);
+function moHoatCanh(o){
   const giam=matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if(giam||_cong||!c){di(toi);return}
+  const vao=()=>{if(hienTai().path===o.toi.split("?")[0])ve(true);else di(o.toi,o.thay)};
+  if(giam||_cong){vao();return}
   let coGL=false;try{const t=document.createElement("canvas");coGL=!!(t.getContext("webgl")||t.getContext("experimental-webgl"))}catch(e){}
-  if(!coGL){di(toi);return}
-  const lop=document.createElement("div");lop.className="cong";lop.setAttribute("role","dialog");lop.setAttribute("aria-label",`Đang vào ${c.ten}`);
+  if(!coGL){vao();return}
+  const lop=document.createElement("div");lop.className="cong";lop.setAttribute("role","dialog");lop.setAttribute("aria-label",`${o.nhan} ${o.ten}`);
   lop.innerHTML=`<canvas class="cong__canh" aria-hidden="true"></canvas><div class="cong__man" aria-hidden="true"></div>
    <button class="cong__bo" type="button">Bỏ qua</button>
-   <div class="cong__chu"><span class="t-nhan">Đang vào chùa</span><b>${esc(c.ten)}</b><span>${esc(c.noi||"")}</span></div>`;
+   <div class="cong__chu"><span class="t-nhan">${esc(o.nhan)}</span><b>${esc(o.ten)}</b><span>${esc(o.phu||"")}</span></div>`;
   document.body.appendChild(lop);requestAnimationFrame(()=>lop.classList.add("hien"));
   const ket={xong:false,raf:0,R:null};_cong=ket;
   function ketThuc(){if(ket.xong)return;ket.xong=true;cancelAnimationFrame(ket.raf);lop.classList.add("trang");
-    setTimeout(()=>{try{if(ket.R){ket.R.dispose();ket.R.forceContextLoss()}}catch(e){}di(toi);
+    setTimeout(()=>{try{if(ket.R){ket.R.dispose();ket.R.forceContextLoss()}}catch(e){}vao();
       setTimeout(()=>{lop.classList.add("tat");setTimeout(()=>{lop.remove();_cong=null},520)},180)},420)}
   lop.querySelector(".cong__bo").onclick=e=>{e.stopPropagation();ketThuc()};
-  taiThree().then(T=>{if(!ket.xong)dungCong(T,lop.querySelector("canvas"),c,ket,ketThuc)}).catch(()=>ketThuc());
+  const p0=hienTai().path,pT=o.toi.split("?")[0];
+  const huy=()=>{const p=hienTai().path;if(ket.xong||p===p0||p===pT)return;ket.xong=true;cancelAnimationFrame(ket.raf);try{if(ket.R){ket.R.dispose();ket.R.forceContextLoss()}}catch(e){}lop.remove();_cong=null;removeEventListener("hashchange",huy)};
+  addEventListener("hashchange",huy);
+  taiThree().then(T=>{if(!ket.xong)o.dung(T,lop.querySelector("canvas"),ket,ketThuc)}).catch(()=>ketThuc());
 }
+function diQuaCong(id,toi){const c=chuaById(id);if(!c){di(toi);return}
+  moHoatCanh({nhan:"Đang vào chùa",ten:c.ten,phu:c.noi,toi,dung:(T,cv,k,x)=>dungCong(T,cv,c,k,x)})}
 
 /* chữ trên biển: tự co cỡ để vừa một dòng */
 function bienTen(T,ten){const w=1024,h=256;
@@ -3991,7 +4019,7 @@ function texNgoi(T){const t=texVe(256,256,(x,w,h)=>{x.fillStyle="#6e3420";x.fill
   for(let i=0;i<1500;i++){x.fillStyle=`rgba(${Math.random()<.5?"30,40,20":"0,0,0"},${Math.random()*.12})`;x.fillRect(Math.random()*w,Math.random()*h,3,3)}});
   t.wrapS=t.wrapT=T.RepeatWrapping;return t}
 
-function dungCong(T,canvas,c,ket,ketThuc){
+function canhNen(T,canvas,ket){
   const W=innerWidth,H=innerHeight,yeu=MAY_YEU(),tg=window._congGio||gioCanh(),dem=tg==="dem";
   const R=new T.WebGLRenderer({canvas,antialias:!yeu});ket.R=R;
   R.setPixelRatio(Math.min(devicePixelRatio,yeu?1.5:2));R.setSize(W,H,false);R.outputEncoding=T.sRGBEncoding;
@@ -4010,6 +4038,10 @@ function dungCong(T,canvas,c,ket,ketThuc){
   const M=(mau,o={})=>new T.MeshStandardMaterial({color:new T.Color(mau),roughness:o.r??.85,metalness:o.m??0,map:o.map||null,emissive:new T.Color(o.e||"#000"),emissiveIntensity:o.ei??1});
   const bo=(m)=>{m.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true}});return m};
 
+  return {R,sc,cam,M,bo,dem,yeu,tg}}
+
+function dungCong(T,canvas,c,ket,ketThuc){
+  const {R,sc,cam,M,bo,dem,yeu}=canhNen(T,canvas,ket);
   /* nền: cỏ, đường lát đá, bậc tam cấp */
   const co=new T.Mesh(new T.PlaneGeometry(120,120),M(dem?"#26301c":"#6f8a48",{map:texVe(256,256,(x,w)=>{x.fillStyle="#7a8f55";x.fillRect(0,0,w,w);for(let i=0;i<4000;i++){x.fillStyle=["#6b8148","#879c5d","#5f7440"][i%3];x.fillRect(Math.random()*w,Math.random()*w,1.5,3)}})}));
   co.material.map.wrapS=co.material.map.wrapT=T.RepeatWrapping;co.material.map.repeat.set(30,30);co.rotation.x=-Math.PI/2;co.receiveShadow=true;sc.add(co);
@@ -4111,21 +4143,7 @@ function dungCong(T,canvas,c,ket,ketThuc){
   const sang=texSang();const khoi=[];
   for(let i=0;i<10;i++){const s=new T.Sprite(new T.SpriteMaterial({map:sang,color:new T.Color(dem?"#ffd8a0":"#fff6e6"),transparent:true,opacity:0,depthWrite:false}));s.userData={t:Math.random()*4,x:(Math.random()-.5)*3};s.scale.set(1.6,1.6,1);sc.add(s);khoi.push(s)}
 
-  /* người áo lam */
-  const mAo=M(dem?"#3f4b5a":"#4e5d70",{r:.95}),mDa=M("#e2b894",{r:.7}),mToc=M("#1d1612",{r:.6});
-  const ng=new T.Group();
-  const aoP=[[0,.06],[.29,.06],[.27,.3],[.22,.62],[.19,.86],[.2,1.02],[.16,1.1],[.08,1.16],[0,1.17]].map(([a,b])=>new T.Vector2(a,b));
-  const ao=new T.Mesh(new T.LatheGeometry(aoP,28),mAo);ng.add(ao);
-  const co2=new T.Mesh(new T.CylinderGeometry(.055,.06,.1,12),mDa);co2.position.y=1.2;ng.add(co2);
-  const dau=new T.Group();dau.position.y=1.38;ng.add(dau);
-  const mat=new T.Mesh(new T.SphereGeometry(.16,24,18),mDa);mat.scale.set(1,1.1,1);dau.add(mat);
-  const toc=new T.Mesh(new T.SphereGeometry(.172,24,18,0,Math.PI*2,0,Math.PI*.62),mToc);toc.rotation.x=-.75;toc.position.set(0,.01,-.018);toc.scale.set(1,1.1,1.04);dau.add(toc);
-  const bui=new T.Mesh(new T.SphereGeometry(.085,16,12),mToc);bui.position.set(0,.06,-.16);dau.add(bui);
-  function tay(s){const g=new T.Group();g.position.set(s*.2,1.05,0);const ong=new T.Mesh(new T.CylinderGeometry(.06,.085,.48,10),mAo);ong.position.y=-.24;g.add(ong);
-    const bt=new T.Mesh(new T.SphereGeometry(.045,10,8),mDa);bt.position.y=-.5;g.add(bt);ng.add(g);return g}
-  const tT=tay(-1),tP=tay(1);
-  const chan=[-1,1].map(s=>{const m=new T.Mesh(new T.BoxGeometry(.09,.06,.2),M("#3a2c22"));m.position.set(s*.09,.03,.04);ng.add(m);return m});
-  bo(ng);ng.scale.setScalar(1.12);sc.add(ng);
+  const {ng,tuThe}=nguoiAoLam(T,M,bo,dem);sc.add(ng);
 
   /* đường đi: tới trước cổng, vái, rồi qua cổng */
   const Z0=9.2,Z1=2.25,Z2=-6.5,T1=2.7,T2=1.5,T3=2.4,TONG=T1+T2+T3;
@@ -4140,11 +4158,7 @@ function dungCong(T,canvas,c,ket,ketThuc){
     const pha=t*7.2;
     const hY=z>2.05?0:z>1.55?.16*Math.min(1,(2.05-z)/.12):z>-1.1?.16+.1*Math.min(1,(1.55-z)/.12):Math.max(0,.26-(-1.1-z)*.8);ng.position.set(0,hY+Math.abs(Math.sin(pha))*.03*buoc,z);
     ng.rotation.y=Math.PI;
-    chan[0].position.z=.04+Math.sin(pha)*.13*buoc;chan[1].position.z=.04-Math.sin(pha)*.13*buoc;
-    ao.rotation.z=Math.sin(pha)*.03*buoc;
-    tT.rotation.x=Math.sin(pha)*.35*buoc*(1-chap)-chap*1.25;tP.rotation.x=-Math.sin(pha)*.35*buoc*(1-chap)-chap*1.25;
-    tT.rotation.z=chap*.5;tP.rotation.z=-chap*.5;
-    ng.rotation.x=-cui*.32;dau.rotation.x=cui*.15;
+    tuThe(pha,buoc,chap,cui);
     /* máy quay theo sau lưng, lúc vái thì dừng cho rõ biển tên, rồi lướt qua vòm */
     let cz,cy,lz,ly;const xa=cam.aspect<.7?1.25:1;
     if(t<T1+T2){const k=Math.min(1,t/T1);cz=Z1+7.4*xa+(1-k)*2.2;cy=2.1+(1-k)*.4;lz=0;ly=3.15}
@@ -4162,9 +4176,191 @@ function dungCong(T,canvas,c,ket,ketThuc){
   const huy=()=>removeEventListener("resize",doiCo);const tr=setInterval(()=>{if(ket.xong){huy();clearInterval(tr)}},300);
 }
 
+function nguoiAoLam(T,M,bo,dem){
+  const mAo=M(dem?"#3f4b5a":"#4e5d70",{r:.95}),mDa=M("#e2b894",{r:.7}),mToc=M("#1d1612",{r:.6});
+  const ng=new T.Group();
+  const aoP=[[0,.06],[.29,.06],[.27,.3],[.22,.62],[.19,.86],[.2,1.02],[.16,1.1],[.08,1.16],[0,1.17]].map(([a,b])=>new T.Vector2(a,b));
+  const ao=new T.Mesh(new T.LatheGeometry(aoP,28),mAo);ng.add(ao);
+  const co2=new T.Mesh(new T.CylinderGeometry(.055,.06,.1,12),mDa);co2.position.y=1.2;ng.add(co2);
+  const dau=new T.Group();dau.position.y=1.38;ng.add(dau);
+  const mat=new T.Mesh(new T.SphereGeometry(.16,24,18),mDa);mat.scale.set(1,1.1,1);dau.add(mat);
+  const toc=new T.Mesh(new T.SphereGeometry(.172,24,18,0,Math.PI*2,0,Math.PI*.62),mToc);toc.rotation.x=-.75;toc.position.set(0,.01,-.018);toc.scale.set(1,1.1,1.04);dau.add(toc);
+  const bui=new T.Mesh(new T.SphereGeometry(.085,16,12),mToc);bui.position.set(0,.06,-.16);dau.add(bui);
+  function tay(s){const g=new T.Group();g.position.set(s*.2,1.05,0);const ong=new T.Mesh(new T.CylinderGeometry(.06,.085,.48,10),mAo);ong.position.y=-.24;g.add(ong);
+    const bt=new T.Mesh(new T.SphereGeometry(.045,10,8),mDa);bt.position.y=-.5;g.add(bt);ng.add(g);return g}
+  const tT=tay(-1),tP=tay(1);
+  const chan=[-1,1].map(s=>{const m=new T.Mesh(new T.BoxGeometry(.09,.06,.2),M("#3a2c22"));m.position.set(s*.09,.03,.04);ng.add(m);return m});
+  bo(ng);ng.scale.setScalar(1.12);
+
+  function tuThe(pha,buoc,chap,cui){
+    chan[0].position.z=.04+Math.sin(pha)*.13*buoc;chan[1].position.z=.04-Math.sin(pha)*.13*buoc;
+    ao.rotation.z=Math.sin(pha)*.03*buoc;
+    tT.rotation.x=Math.sin(pha)*.35*buoc*(1-chap)-chap*1.25;tP.rotation.x=-Math.sin(pha)*.35*buoc*(1-chap)-chap*1.25;
+    tT.rotation.z=chap*.5;tP.rotation.z=-chap*.5;
+    ng.rotation.x=-cui*.32;dau.rotation.x=cui*.15}
+  return {ng,tuThe}}
+
 ACT["cd-vao"]=t=>diQuaCong(TU.chua,"/chua/chanh-dien");
 
-const VER="1793907323";try{fetch("ver.txt?"+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{v=(v||"").trim();if(v&&v!==VER){let ok=true;try{ok=!sessionStorage.getItem("tm-rl"+v);sessionStorage.setItem("tm-rl"+v,"1")}catch(e){}if(ok)location.reload()}}).catch(()=>{})}catch(e){}
+/* ================= VÀO NGHĨA TRANG VIẾNG GIA TIÊN =================
+   Lần đầu viếng một gia tiên trong phiên: người áo lam đi qua cổng nghĩa trang
+   (biển ghi đúng tên nghĩa trang), theo lối đi tới đúng ngôi mộ, quay vào chắp tay vái. */
+function texBia(T,dong){return texVe(256,384,(x,w,h)=>{
+  const g=x.createLinearGradient(0,0,0,h);g.addColorStop(0,"#26231f");g.addColorStop(1,"#14120f");x.fillStyle=g;x.fillRect(0,0,w,h);
+  for(let i=0;i<3000;i++){x.fillStyle=`rgba(255,255,255,${Math.random()*.05})`;x.fillRect(Math.random()*w,Math.random()*h,1,1)}
+  x.strokeStyle="#b8923e";x.lineWidth=4;x.strokeRect(12,12,w-24,h-24);
+  x.textAlign="center";x.fillStyle="#d9b25a";let y=70;
+  dong.forEach(([chu,co,dam])=>{let c=co;do{x.font=`${dam?700:500} ${c}px "Be Vietnam Pro", system-ui, sans-serif`;c-=2}while(x.measureText(chu).width>w-40&&c>12);x.fillText(chu,w/2,y);y+=co*1.5})})}
+
+function dungNghiaTrang(T,canvas,g,ket,ketThuc){
+  const {R,sc,cam,M,bo,dem,yeu}=canhNen(T,canvas,ket);
+  /* cỏ, lối đi */
+  const co=new T.Mesh(new T.PlaneGeometry(120,120),M(dem?"#26301c":"#6f8a48",{map:texVe(256,256,(x,w)=>{x.fillStyle="#7a8f55";x.fillRect(0,0,w,w);for(let i=0;i<4000;i++){x.fillStyle=["#6b8148","#879c5d","#5f7440"][i%3];x.fillRect(Math.random()*w,Math.random()*w,1.5,3)}})}));
+  co.material.map.wrapS=co.material.map.wrapT=T.RepeatWrapping;co.material.map.repeat.set(30,30);co.rotation.x=-Math.PI/2;co.receiveShadow=true;sc.add(co);
+  const da=texVe(256,512,(x,w,h)=>{x.fillStyle="#bdb5a6";x.fillRect(0,0,w,h);for(let r=0;r<8;r++)for(let k=0;k<2;k++){const v=168+Math.random()*30;x.fillStyle=`rgb(${v},${v-4},${v-14})`;x.fillRect(k*128+3,r*64+3,122,58)}
+    for(let i=0;i<5000;i++){x.fillStyle=`rgba(0,0,0,${Math.random()*.08})`;x.fillRect(Math.random()*w,Math.random()*h,2,2)}});
+  da.wrapS=da.wrapT=T.RepeatWrapping;da.repeat.set(1,11);
+  const duong=new T.Mesh(new T.PlaneGeometry(2.0,48),M("#ffffff",{map:da}));duong.rotation.x=-Math.PI/2;duong.position.set(0,.012,-6);duong.receiveShadow=true;sc.add(duong);
+
+  /* cổng nghĩa trang: tường vôi trắng, một vòm lớn hai vòm nhỏ, mái ngói xám rêu */
+  const mVoi=M("#ffffff",{map:texTuong(T,dem?"#77736a":"#e9e4d6",true),r:.95}),mVien=M(dem?"#55524a":"#cfc8b4",{r:.9});
+  function khoiVom(x0,x1,cao,rv,cv,day){const s=new T.Shape();s.moveTo(x0,0);s.lineTo(x1,0);s.lineTo(x1,cao);s.lineTo(x0,cao);s.lineTo(x0,0);
+    const cx=(x0+x1)/2,h=new T.Path();h.moveTo(cx-rv,0);h.lineTo(cx-rv,cv-rv);h.absarc(cx,cv-rv,rv,Math.PI,0,true);h.lineTo(cx+rv,0);h.lineTo(cx-rv,0);s.holes.push(h);
+    const ge=new T.ExtrudeGeometry(s,{depth:day,bevelEnabled:false,curveSegments:24});ge.translate(0,0,-day/2);
+    const uv=ge.attributes.uv;for(let i=0;i<uv.count;i++)uv.setXY(i,uv.getX(i)*.35,uv.getY(i)*.35);return new T.Mesh(ge,mVoi)}
+  const tNgoi=texNgoi(T),mNgoi=new T.MeshStandardMaterial({map:tNgoi,color:new T.Color(dem?"#3c4038":"#8f9a88"),roughness:.85,side:T.DoubleSide});
+  function mai(rong,sau,cao,vong,y){const gr=new T.Group(),nu=24,nv=8;
+    [1,-1].forEach(mat=>{const geo=new T.PlaneGeometry(1,1,nu,nv),p=geo.attributes.position;
+      for(let i=0;i<p.count;i++){const u=p.getX(i),v=p.getY(i)+.5,uu=Math.abs(u*2);p.setXYZ(i,u*rong,cao*v-(.1*Math.sin(Math.PI*v))+vong*Math.pow(uu,5)*(1-v*.6),mat*(sau*(1-v)+.02))}
+      geo.computeVertexNormals();const uv=geo.attributes.uv;for(let i=0;i<uv.count;i++)uv.setXY(i,uv.getX(i)*rong*.6,uv.getY(i)*sau*1.1);gr.add(new T.Mesh(geo,mNgoi))});
+    const noc=new T.Mesh(new T.BoxGeometry(rong*.92,.14,.18),mVien);noc.position.y=cao+.03;gr.add(noc);gr.position.y=y;return gr}
+  const cong=new T.Group();sc.add(cong);
+  cong.add(khoiVom(-1.6,1.6,3.5,.85,2.7,.6));cong.add(khoiVom(1.6,3.1,2.6,.38,1.75,.5));cong.add(khoiVom(-3.1,-1.6,2.6,.38,1.75,.5));
+  [-1.7,1.7,-3.2,3.2].forEach((x,i)=>{const cao=i<2?4.3:3.1;const tr=new T.Mesh(new T.BoxGeometry(.36,cao,.74),mVoi);tr.position.set(x,cao/2,0);cong.add(tr);
+    const dau=new T.Mesh(new T.BoxGeometry(.48,.14,.86),mVien);dau.position.set(x,cao,0);cong.add(dau);
+    const sen=new T.Mesh(new T.SphereGeometry(.16,14,10,0,Math.PI*2,0,Math.PI*.55),mVien);sen.position.set(x,cao+.07,0);cong.add(sen);
+    const nu=new T.Mesh(new T.ConeGeometry(.07,.2,10),mVien);nu.position.set(x,cao+.27,0);cong.add(nu)});
+  const vv=new T.Mesh(new T.TorusGeometry(.9,.06,8,32,Math.PI),mVien);vv.position.set(0,1.85,.32);cong.add(vv);
+  const bien=new T.Mesh(new T.PlaneGeometry(2.8,.66),new T.MeshStandardMaterial({map:bienTen(T,g.nghiaTrang||"Nghĩa trang"),roughness:.55}));bien.position.set(0,3.08,.322);cong.add(bien);
+  const kb=new T.Mesh(new T.BoxGeometry(2.92,.78,.05),M("#a88a48",{r:.45,m:.4}));kb.position.set(0,3.08,.29);cong.add(kb);
+  cong.add(mai(3.9,1.0,.7,.42,3.72));[-1,1].forEach(s=>{const m=mai(1.9,.75,.5,.25,2.85);m.position.x=s*2.4;cong.add(m)});
+  /* tường rào hai bên */
+  [-1,1].forEach(s=>{const t=new T.Mesh(new T.BoxGeometry(14,1.3,.3),mVoi);t.position.set(s*(3.2+7),.65,0);cong.add(t);
+    for(let k=1;k<=4;k++){const tr=new T.Mesh(new T.BoxGeometry(.34,1.6,.4),mVoi);tr.position.set(s*(3.2+k*3.4),.8,0);cong.add(tr)}});
+  bo(cong);
+
+  /* mộ hai bên lối đi, bia quay ra lối */
+  const mDa=M(dem?"#6a665e":"#b3ad9f",{map:VAN_DA(T).da,r:.8}),mDaTrang=M(dem?"#7a776f":"#d8d3c6",{map:VAN_DA(T).da,r:.75}),mDen=M("#2a2724",{r:.35,m:.1});
+  const hinhBia=(()=>{const s=new T.Shape();s.moveTo(-.28,0);s.lineTo(.28,0);s.lineTo(.28,.62);s.quadraticCurveTo(.28,.86,0,.9);s.quadraticCurveTo(-.28,.86,-.28,.62);s.lineTo(-.28,0);const ge=new T.ExtrudeGeometry(s,{depth:.09,bevelEnabled:true,bevelSize:.012,bevelThickness:.012,bevelSegments:2});ge.translate(0,0,-.045);return ge})();
+  function mo(x,z,huong,o={}){const gr=new T.Group();
+    const nen=new T.Mesh(new T.BoxGeometry(1.15,.18,2.0),o.trang?mDaTrang:mDa);nen.position.y=.09;gr.add(nen);
+    const than=new T.Mesh(new T.BoxGeometry(.85,.3,1.5),o.trang?mDaTrang:mDa);than.position.set(0,.33,-.12);gr.add(than);
+    const nap=new T.Mesh(new T.CylinderGeometry(.42,.42,1.42,16,1,false,0,Math.PI),o.trang?mDaTrang:mDa);nap.rotation.z=Math.PI/2;nap.rotation.y=Math.PI/2;nap.scale.set(1,1,.35);nap.position.set(0,.48,-.12);gr.add(nap);
+    const bia=new T.Mesh(hinhBia,o.biaMat?[o.biaMat,mDen]:mDen);bia.position.set(0,.18,.78);gr.add(bia);
+    if(o.hoa!==false){[-.42,.42].forEach(dx=>{const lo=new T.Mesh(new T.CylinderGeometry(.06,.05,.18,10),M("#7a6a50"));lo.position.set(dx,.27,.86);gr.add(lo);
+      if(Math.random()<.6||o.chinh){const hh=new T.Mesh(new T.IcosahedronGeometry(.1,1),M(o.chinh?"#f0c23a":["#e9c440","#d8d0c0","#c95a3a"][Math.floor(Math.random()*3)],{r:.9}));hh.position.set(dx,.42,.86);gr.add(hh)}})}
+    gr.position.set(x,0,z);gr.rotation.y=huong;sc.add(bo(gr));return gr}
+  const ZM=-9.2,XM=2.2;
+  const doi=typeof moDoi==="function"&&moDoi(g);
+  const dongBia=[[(doi?"Mộ "+tenMo(g):g.ten),26,1],[g.sinh&&g.mat?`${g.sinh} – ${g.mat}`:"",22,0],[doi?`${doi.ten}`:"",22,0],[g.viTri||"",16,0]].filter(d=>d[0]);
+  const biaMat=new T.MeshStandardMaterial({map:texBia(T,dongBia),roughness:.35,metalness:.1});
+  const tex=biaMat.map;tex.offset.set(.5,0);tex.repeat.set(1/0.56,1/0.9);tex.wrapS=tex.wrapT=T.ClampToEdgeWrapping;
+  /* ExtrudeGeometry đặt uv theo toạ độ x,y; dời để chữ nằm giữa mặt bia */
+  for(let r=0;r<5;r++){const z=-3-r*3.1;
+    [-1,1].forEach(s=>{for(let c=0;c<3;c++){const x=s*(XM+c*1.7);if(s===1&&c===0&&Math.abs(z-ZM)<.5)continue;
+      mo(x,z,s>0?-Math.PI/2:Math.PI/2,{trang:Math.random()<.35})}})}
+  const moChinh=mo(XM,ZM,-Math.PI/2,{chinh:true,biaMat});
+  /* nhang đang cháy trước mộ chính */
+  const sang=texSang();const khoi=[];
+  const lh=new T.Mesh(new T.CylinderGeometry(.08,.07,.12,12),M("#8a6a3a",{r:.5,m:.3}));lh.position.set(XM-.95,.24,ZM);sc.add(lh);
+  [-.03,0,.03].forEach(dz=>{const q=new T.Mesh(new T.CylinderGeometry(.006,.006,.34,4),M("#b5432a"));q.position.set(XM-.95,.45,ZM+dz);sc.add(q);
+    const dom=new T.Sprite(new T.SpriteMaterial({map:sang,color:new T.Color("#ff8a3a"),transparent:true,opacity:.9,blending:T.AdditiveBlending,depthWrite:false}));dom.scale.set(.08,.08,1);dom.position.set(XM-.95,.62,ZM+dz);sc.add(dom)});
+  for(let i=0;i<8;i++){const sp=new T.Sprite(new T.SpriteMaterial({map:sang,color:new T.Color(dem?"#d8d0c8":"#ffffff"),transparent:true,opacity:0,depthWrite:false}));sp.userData={t:i*.45};sp.scale.set(.5,.5,1);sc.add(sp);khoi.push(sp)}
+  if(dem){const l=new T.PointLight(0xffb070,.8,5);l.position.set(XM-.6,1,ZM);sc.add(l)}
+
+  /* cây: tùng, hoa sứ trắng */
+  const mLa=M(dem?"#1e2a1a":"#3f5e2c",{r:.95}),mLa2=M(dem?"#26331f":"#557a38",{r:.95}),mGo=M("#5a4030"),mSu=M(dem?"#cfc8bc":"#fbf7ee",{r:.8,e:"#fff6e0",ei:dem?.15:.05});
+  function tung(x,z,s){const gr=new T.Group();const than=new T.Mesh(new T.CylinderGeometry(.08*s,.14*s,1.6*s,8),mGo);than.position.y=.8*s;gr.add(than);
+    [[0,1.5,0,.85],[.35,1.15,.1,.6],[-.3,1.25,-.1,.65],[0,1.95,0,.6]].forEach(([a,b,cz,r])=>{const t=new T.Mesh(new T.IcosahedronGeometry(r*s,1),a?mLa2:mLa);t.scale.y=.62;t.position.set(a*s,b*s,cz*s);gr.add(t)});
+    gr.position.set(x,0,z);sc.add(bo(gr))}
+  function hoaSu(x,z,s){const gr=new T.Group();const than=new T.Mesh(new T.CylinderGeometry(.07*s,.12*s,1.2*s,7),mGo);than.position.y=.6*s;gr.add(than);
+    for(let i=0;i<5;i++){const a=i/5*Math.PI*2,nh=new T.Mesh(new T.CylinderGeometry(.03*s,.06*s,.8*s,6),mGo);nh.position.set(Math.cos(a)*.3*s,1.5*s,Math.sin(a)*.3*s);nh.rotation.z=Math.cos(a)*.7;nh.rotation.x=-Math.sin(a)*.7;gr.add(nh);
+      const la=new T.Mesh(new T.IcosahedronGeometry(.5*s,1),mLa2);la.scale.y=.55;la.position.set(Math.cos(a)*.62*s,1.95*s,Math.sin(a)*.62*s);gr.add(la);
+      for(let k=0;k<4;k++){const b=new T.Mesh(new T.SphereGeometry(.085*s,8,6),mSu);b.position.set(Math.cos(a)*.62*s+(Math.random()-.5)*.5*s,2.14*s,Math.sin(a)*.62*s+(Math.random()-.5)*.3*s);gr.add(b)}}
+    gr.position.set(x,0,z);sc.add(bo(gr))}
+  hoaSu(-2.6,2.2,1.1);hoaSu(2.6,2.4,1.05);tung(-4.6,4,1);tung(4.4,5.2,1.1);
+  for(let r=0;r<5;r++){tung(-8.4,-3-r*3.4,.9+Math.random()*.4);tung(8.6,-4-r*3.2,.9+Math.random()*.4)}
+  hoaSu(-1.25,-12.5,.9);hoaSu(3.9,-7.4,.85);
+  for(let i=0;i<10;i++)tung((Math.random()-.5)*22,-20-Math.random()*8,1+Math.random()*.6);
+
+  const {ng,tuThe}=nguoiAoLam(T,M,bo,dem);sc.add(ng);
+
+  /* đi qua cổng, theo lối tới mộ, quay vào, vái */
+  const Z0=8.4,T1=4.0,T2=.6,T3=1.8,TONG=T1+T2+T3,ZD=ZM,XD=XM-1.95;
+  const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;const t0=performance.now();let vai=false;
+  function khung(){const now=performance.now(),t=window._congT!=null?window._congT:(now-t0)/1000;
+    let x=0,z,huong=Math.PI,buoc=0,chap=0,cui=0;
+    if(t<T1){const k=t/T1;z=Z0+(ZD-Z0)*(k<.9?k/.9*.97:.97+(k-.9)/.1*.03);buoc=k<.92?1:(1-k)/.08}
+    else if(t<T1+T2){const k=ease((t-T1)/T2);z=ZD;x=XD*k;huong=Math.PI-Math.PI/2*k;buoc=.6}
+    else{const k=(t-T1-T2)/T3;z=ZD;x=XD;huong=Math.PI/2;chap=Math.min(1,k*3);cui=Math.sin(Math.min(1,Math.max(0,(k-.2)/.6))*Math.PI);
+      if(!vai&&k>.25){vai=true;try{amChuongNho(392,0,.12,2.4)}catch(e){}}}
+    const pha=t*7.2;ng.position.set(x,Math.abs(Math.sin(pha))*.03*buoc,z);ng.rotation.set(0,huong,0);tuThe(pha,buoc,chap,cui);
+    /* máy quay: sau lưng qua cổng, rồi lùi sang lối đi nhìn chéo vào mộ */
+    const xa=cam.aspect<.7?1.2:1;let cx,cy,cz,lx,ly,lz;
+    if(t<T1*.35){const k=t/(T1*.35);cx=0;cy=2.0+(1-k)*.4;cz=Math.max(z+6.2*xa,Z0+1);lx=0;ly=2.7-.6*k;lz=z-8}
+    else if(t<T1){cx=0;cy=2.0;cz=z+6.2*xa;lx=0;ly=2.1-.4*Math.min(1,(t-T1*.35)/(T1*.4));lz=z-8}
+    else{const k=ease(Math.min(1,(t-T1)/(T2+T3*.6)));const ax=0,az=ZD+6.2*xa,bx=-.85,bz=ZD+4.3*xa;cx=ax+(bx-ax)*k;cz=az+(bz-az)*k;cy=2.0-.1*k;lx=1.25*k;ly=1.7-1.0*k;lz=ZD-8*(1-k)-.3*k}
+    cam.position.set(cx+Math.sin(t*.4)*.12,cy,cz);cam.lookAt(lx,ly,lz);
+    khoi.forEach(s=>{s.userData.t+=.016;const k=(s.userData.t%3.6)/3.6;s.position.set(XM-.95+Math.sin(k*6)*.08,.65+k*1.6,ZM+Math.cos(k*4)*.06);s.scale.setScalar(.25+k*.7);s.material.opacity=Math.sin(k*Math.PI)*(dem?.2:.28)});
+    R.render(sc,cam);
+    if(t>=TONG-.1&&window._congT==null){ketThuc();return}
+    ket.raf=requestAnimationFrame(khung)}
+  const doiCo=()=>{const w=innerWidth,h=innerHeight;cam.aspect=w/h;cam.fov=w/h<.7?52:44;cam.updateProjectionMatrix();R.setSize(w,h,false)};
+  addEventListener("resize",doiCo);ket.raf=requestAnimationFrame(khung);
+  const tr=setInterval(()=>{if(ket.xong){removeEventListener("resize",doiCo);clearInterval(tr)}},300);
+}
+
+/* gắn vào trang viếng: lần đầu viếng mỗi gia tiên trong phiên thì đi qua cổng trước */
+(function(){const r=ROUTES.find(x=>x.re.test("/gia-tien/ba/vieng"));if(!r)return;const goc=r.fn;
+  const daQua=id=>{try{return sessionStorage.getItem("tm-nt-"+id)==="1"}catch(e){return true}};
+  const ghi=id=>{try{sessionStorage.setItem("tm-nt-"+id,"1")}catch(e){}};
+  r.fn=(p,q)=>{const g=gtById(p.id);
+    if(g&&!daQua(p.id)&&!_cong&&!matchMedia("(prefers-reduced-motion: reduce)").matches){ghi(p.id);
+      setTimeout(()=>moHoatCanh({nhan:`Viếng ${g.xung}`,ten:g.nghiaTrang||"Nghĩa trang",phu:g.viTri||"",toi:`/gia-tien/${p.id}/vieng`,dung:(T,cv,k,x)=>dungNghiaTrang(T,cv,g,k,x)}),0);
+      return {tran:true,nav:false,tieuDe:`Viếng ${g.xung}`,body:`<div class="cong-cho" aria-hidden="true"></div>`}}
+    return goc(p,q)}})();
+
+/* ================= MỞ CỬA HÀNG =================
+   Lần đầu vào Cửa hàng trong phiên: hai cánh cửa gỗ chạm sen mở ra, đèn lồng đung đưa, ánh sáng ấm hắt ra. */
+function canhCua(ben){const id="g"+ben;
+  return `<svg viewBox="0 0 200 520" preserveAspectRatio="none" aria-hidden="true"><defs>
+   <linearGradient id="${id}" x1="0" x2="1"><stop offset="0" stop-color="#4a2512"/><stop offset=".5" stop-color="#5e3018"/><stop offset="1" stop-color="#43210f"/></linearGradient>
+   <pattern id="${id}v" width="7" height="520" patternUnits="userSpaceOnUse"><rect width="7" height="520" fill="none"/><path d="M3 0 Q5 130 3 260 T3 520" stroke="rgba(0,0,0,.18)" fill="none"/></pattern></defs>
+   <rect width="200" height="520" fill="url(#${id})"/><rect width="200" height="520" fill="url(#${id}v)"/>
+   <rect x="16" y="18" width="168" height="150" rx="3" fill="none" stroke="#2c140a" stroke-width="5"/><rect x="24" y="26" width="152" height="134" rx="2" fill="none" stroke="#7a4524" stroke-width="2"/>
+   <g transform="translate(100 93)" fill="none" stroke="#b8893c" stroke-width="2.4" stroke-linejoin="round"><path d="M0 -38 C14 -22 14 -6 0 8 C-14 -6 -14 -22 0 -38Z"/><path d="M0 8 C-8 -8 -26 -14 -38 -8 C-30 6 -14 10 0 8Z"/><path d="M0 8 C8 -8 26 -14 38 -8 C30 6 14 10 0 8Z"/><path d="M-30 18 Q0 30 30 18"/></g>
+   <rect x="16" y="186" width="168" height="230" rx="3" fill="none" stroke="#2c140a" stroke-width="5"/><rect x="24" y="194" width="152" height="214" rx="2" fill="none" stroke="#7a4524" stroke-width="2"/>
+   <g stroke="#6b3a1c" stroke-width="3">${[0,1,2,3,4,5].map(i=>`<line x1="${36+i*26}" y1="204" x2="${36+i*26}" y2="398"/>`).join("")}</g>
+   <rect x="16" y="434" width="168" height="68" rx="3" fill="none" stroke="#2c140a" stroke-width="5"/>
+   <g transform="translate(${ben==="trai"?178:22} 300)"><circle r="15" fill="none" stroke="#c9a04a" stroke-width="5"/><circle r="6" fill="#a8823a"/></g></svg>`}
+function moCuaHang(){
+  if(_cong||matchMedia("(prefers-reduced-motion: reduce)").matches)return;
+  const lop=document.createElement("div");lop.className="ch-mo";lop.setAttribute("aria-hidden","true");
+  lop.innerHTML=`<div class="ch-mo__sang"></div>
+   <div class="ch-mo__khung"><div class="ch-mo__bien"><img src="logo/bieu-tuong-ep-kim.svg" alt=""><span>Cửa hàng Trường Minh</span></div>
+    <div class="ch-mo__cua"><div class="ch-mo__canh trai">${canhCua("trai")}</div><div class="ch-mo__canh phai">${canhCua("phai")}</div></div></div>
+   <span class="ch-mo__den t"><i></i></span><span class="ch-mo__den p"><i></i></span>`;
+  document.body.appendChild(lop);
+  const xong=()=>{if(lop.classList.contains("tat"))return;lop.classList.add("tat");setTimeout(()=>lop.remove(),450)};
+  lop.addEventListener("click",xong);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>lop.classList.add("mo")));
+  try{amChuongNho(523,.35,.08,1.6)}catch(e){}
+  setTimeout(xong,1900)}
+(function(){const r=ROUTES.find(x=>x.re.test("/cua-hang"));if(!r)return;const goc=r.fn;
+  r.fn=(p,q)=>{const m=goc(p,q);let da=true;try{da=sessionStorage.getItem("tm-ch-mo")==="1";if(!da)sessionStorage.setItem("tm-ch-mo","1")}catch(e){}
+    if(!da)setTimeout(moCuaHang,0);return m}})();
+
+const VER="1793908156";try{fetch("ver.txt?"+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{v=(v||"").trim();if(v&&v!==VER){let ok=true;try{ok=!sessionStorage.getItem("tm-rl"+v);sessionStorage.setItem("tm-rl"+v,"1")}catch(e){}if(ok)location.reload()}}).catch(()=>{})}catch(e){}
 apTheme();ghiNgan();ve();
 if(matchMedia)matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>{});</script>
 
