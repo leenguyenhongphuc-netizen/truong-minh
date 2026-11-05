@@ -1167,6 +1167,19 @@ button.cay__nut{font:inherit;cursor:pointer}
 .don-lk{display:flex;align-items:center;gap:10px;min-height:48px;padding:8px 14px;border:1px solid var(--vien);border-radius:var(--radius-sm);background:var(--be-mat);color:var(--muc);text-decoration:none;font:500 14px/20px var(--font-sans)}.don-lk span{flex:1}.don-lk b{color:var(--dong-dam)}.don-lk svg{width:20px;height:20px;color:var(--dong);flex:none}
 
 #cd-nhip{height:44px;margin:0}
+
+/* đi qua cổng chùa */
+.cong{position:fixed;inset:0;z-index:200;background:#1a110a;opacity:0;transition:opacity .35s ease}
+.cong.hien{opacity:1}
+.cong__canh{position:absolute;inset:0;width:100%;height:100%;display:block}
+.cong__man{position:absolute;inset:0;background:#f6ecd8;opacity:0;pointer-events:none;transition:opacity .42s ease}
+.cong.trang .cong__man{opacity:1}
+.cong.tat{opacity:0;pointer-events:none}
+.cong__bo{position:absolute;top:calc(env(safe-area-inset-top,0px) + 12px);right:calc(env(safe-area-inset-right,0px) + 14px);min-height:44px;padding:0 18px;border-radius:22px;border:1px solid rgba(255,240,210,.5);background:rgba(30,18,8,.45);color:#fbf1dc;font:600 15px/1 var(--font-sans);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.cong__chu{position:absolute;left:0;right:0;bottom:0;padding:48px max(20px,env(safe-area-inset-left,0px)) calc(env(safe-area-inset-bottom,0px) + 28px);display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;color:#fbf1dc;background:linear-gradient(to top,rgba(20,12,6,.72),rgba(20,12,6,0));pointer-events:none}
+.cong__chu .t-nhan{color:#e9cf8f;letter-spacing:.06em}
+.cong__chu b{font:700 26px/1.2 var(--font-serif,"Playfair Display",serif);text-wrap:balance}
+.cong__chu span:last-child{font:500 14px/1.4 var(--font-sans);opacity:.85}
 </style>
 </head>
 <body>
@@ -2300,7 +2313,7 @@ ACT["dat-lai"]=t=>{const o=DATA.donHang.find(x=>x.id===t.dataset.id);batDauDat(o
 /* ================= E. CHÙA ================= */
 function chua(){const ram=tim(x=>x.ad===15,cong(homNay,1)),mot=tim(x=>x.ad===1,cong(homNay,1)),vl=tim(x=>x.ad===15&&x.am===7);
   return {tieuDe:"Chùa",body:`
-  <a class="cd-vao" href="#/chua/chanh-dien" aria-label="Vào chánh điện: gõ mõ, tụng kinh, dâng hương, hồi hướng cho gia tiên">
+  <a class="cd-vao" href="#/chua/chanh-dien" data-act="cd-vao" aria-label="Vào chánh điện: gõ mõ, tụng kinh, dâng hương, hồi hướng cho gia tiên">
    <img class="cd-vao__nen" src="${anh("chua-viet")}" alt=""><span class="cd-vao__hao" aria-hidden="true"></span><span class="cd-vao__nhan">ảnh minh hoạ</span>
    <span class="cd-vao__chu"><span class="t-nhan">Chánh điện Trường Minh</span><b class="chu-kim">Gõ mõ, tụng kinh, hồi hướng cho gia tiên</b><span class="t-nho">Niệm Phật · Bát Nhã Tâm Kinh · Chú Vãng Sanh</span></span>
    <span class="tm-btn tm-btn--kim tm-btn--rong">Vào chánh điện</span></a>
@@ -3115,7 +3128,7 @@ ACT["hh-su"]=t=>{const c=chuaById(t.dataset.v),x=CHUA_TT[c.id]||{};const d=(n,v)
   ${x.ghi?`<p class="t-than">${esc(x.ghi)}</p>`:""}
   ${x.nguon?`<p class="t-nho">Nguồn: ${x.nguon.map(([n,u])=>`<a class="tm-lk" href="${u}" target="_blank" rel="noopener">${esc(n)}</a>`).join(", ")}</p>`:""}
   <div class="tm-sheet__day"><button class="tm-btn tm-btn--chinh tm-btn--rong" data-act="hh-vao" data-v="${c.id}">Vào chùa</button></div>`,"Thông tin chùa")};
-ACT["hh-vao"]=t=>{const id=t.dataset.v;dongSheet(true);vaoChua(id);di("/chua/chanh-dien")};
+ACT["hh-vao"]=t=>{const id=t.dataset.v,cu=TU.chua===id;dongSheet(true);vaoChua(id);if(cu&&t.textContent.includes("Về"))di("/chua/chanh-dien");else diQuaCong(id,"/chua/chanh-dien")};
 function vaoChua(id){TU.chua=id;if(!TU.an[id]){TU.an[id]=iso(homNay);themCD(10);setTimeout(()=>bao(`Nhận ấn ${chuaById(id).ten}: +10 công đức`),500)}luuTU()}
 ACT["cd-hanh-huong"]=()=>di("/chua/hanh-huong");
 route("/chua/hanh-huong",()=>{if(!HH.vb){HH.vb=[0,0,700,800];HH.vuaLai=true}if(!HH.chon)HH.chon=TU.chua;return {tran:true,tieuDe:"Hành hương",body:`
@@ -3932,7 +3945,226 @@ function theDonDang(){const ds=tatCaDon().filter(d=>!d.xong);if(!ds.length)retur
 function tabDon(tab,q){const dem=tatCaDon();return `<div class="tm-phan" role="tablist"><a role="tab" class="tm-phan__a" aria-selected="${tab==="dang"}" href="#/don-hang?tab=dang">Đang làm · ${dem.filter(d=>!d.xong).length}</a><a role="tab" class="tm-phan__a" aria-selected="${tab==="xong"}" href="#/don-hang?tab=xong">Đã xong · ${dem.filter(d=>d.xong).length}</a><a role="tab" class="tm-phan__a" aria-selected="${tab==="ls"}" href="#/don-hang?tab=ls">Lịch sử mua</a></div>
   ${tab==="ls"?`<p class="t-nho">Mọi lần trả kim cương, giọt dầu và đảnh lễ ở chánh điện, mới nhất ở trên. Số dư ví: ${kcHtml(VI.so)}.</p>`:""}`}
 
-const VER="1793762028";try{fetch("ver.txt?"+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{v=(v||"").trim();if(v&&v!==VER){let ok=true;try{ok=!sessionStorage.getItem("tm-rl"+v);sessionStorage.setItem("tm-rl"+v,"1")}catch(e){}if(ok)location.reload()}}).catch(()=>{})}catch(e){}
+/* ================= ĐI QUA CỔNG CHÙA =================
+   Khi bấm "Vào chùa": một người áo lam bước tới cổng tam quan, chắp tay vái,
+   rồi đi qua cổng. Biển cổng ghi đúng tên ngôi chùa. Chạm "Bỏ qua" để vào ngay. */
+let _cong=null;
+function diQuaCong(id,toi){
+  const c=chuaById(id);
+  const giam=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if(giam||_cong||!c){di(toi);return}
+  let coGL=false;try{const t=document.createElement("canvas");coGL=!!(t.getContext("webgl")||t.getContext("experimental-webgl"))}catch(e){}
+  if(!coGL){di(toi);return}
+  const lop=document.createElement("div");lop.className="cong";lop.setAttribute("role","dialog");lop.setAttribute("aria-label",`Đang vào ${c.ten}`);
+  lop.innerHTML=`<canvas class="cong__canh" aria-hidden="true"></canvas><div class="cong__man" aria-hidden="true"></div>
+   <button class="cong__bo" type="button">Bỏ qua</button>
+   <div class="cong__chu"><span class="t-nhan">Đang vào chùa</span><b>${esc(c.ten)}</b><span>${esc(c.noi||"")}</span></div>`;
+  document.body.appendChild(lop);requestAnimationFrame(()=>lop.classList.add("hien"));
+  const ket={xong:false,raf:0,R:null};_cong=ket;
+  function ketThuc(){if(ket.xong)return;ket.xong=true;cancelAnimationFrame(ket.raf);lop.classList.add("trang");
+    setTimeout(()=>{try{if(ket.R){ket.R.dispose();ket.R.forceContextLoss()}}catch(e){}di(toi);
+      setTimeout(()=>{lop.classList.add("tat");setTimeout(()=>{lop.remove();_cong=null},520)},180)},420)}
+  lop.querySelector(".cong__bo").onclick=e=>{e.stopPropagation();ketThuc()};
+  taiThree().then(T=>{if(!ket.xong)dungCong(T,lop.querySelector("canvas"),c,ket,ketThuc)}).catch(()=>ketThuc());
+}
+
+/* chữ trên biển: tự co cỡ để vừa một dòng */
+function bienTen(T,ten){const w=1024,h=256;
+  return texVe(w,h,(x)=>{
+    const g=x.createLinearGradient(0,0,0,h);g.addColorStop(0,"#4a2610");g.addColorStop(1,"#2e170a");x.fillStyle=g;x.fillRect(0,0,w,h);
+    for(let i=0;i<2600;i++){x.fillStyle=`rgba(0,0,0,${Math.random()*.12})`;x.fillRect(Math.random()*w,Math.random()*h,Math.random()*40,1)}
+    x.strokeStyle="#c9a14a";x.lineWidth=10;x.strokeRect(14,14,w-28,h-28);x.lineWidth=3;x.strokeRect(34,34,w-68,h-68);
+    const chu=ten.toLocaleUpperCase("vi");let co=118;
+    do{x.font=`700 ${co}px "Playfair Display", Georgia, serif`;co-=4}while(x.measureText(chu).width>w-140&&co>40);
+    x.textAlign="center";x.textBaseline="middle";
+    const vg=x.createLinearGradient(0,h*.3,0,h*.75);vg.addColorStop(0,"#f6dc8f");vg.addColorStop(.5,"#d6a640");vg.addColorStop(1,"#a8761f");
+    x.shadowColor="rgba(0,0,0,.55)";x.shadowBlur=6;x.shadowOffsetY=3;x.fillStyle=vg;x.fillText(chu,w/2,h/2+6)})}
+
+function texTuong(T,mau,ban){return texVe(256,256,(x,w,h)=>{x.fillStyle=mau;x.fillRect(0,0,w,h);
+  for(let i=0;i<5000;i++){const v=Math.random();x.fillStyle=v<.5?`rgba(255,255,240,${Math.random()*.08})`:`rgba(60,30,0,${Math.random()*.09})`;x.fillRect(Math.random()*w,Math.random()*h,2+Math.random()*3,2+Math.random()*3)}
+  if(ban){const g=x.createLinearGradient(0,h*.7,0,h);g.addColorStop(0,"rgba(40,30,10,0)");g.addColorStop(1,"rgba(40,30,10,.35)");x.fillStyle=g;x.fillRect(0,0,w,h)}})}
+
+function texNgoi(T){const t=texVe(256,256,(x,w,h)=>{x.fillStyle="#6e3420";x.fillRect(0,0,w,h);
+  for(let r=0;r<16;r++){const y=r*16;x.fillStyle=r%2?"#7c3d25":"#64301c";x.fillRect(0,y,w,14);
+    for(let k=0;k<16;k++){x.fillStyle=`rgba(0,0,0,${.18+Math.random()*.1})`;x.fillRect(k*16+(r%2?8:0),y,2,14)}
+    x.fillStyle="rgba(255,220,180,.10)";x.fillRect(0,y,w,2)}
+  for(let i=0;i<1500;i++){x.fillStyle=`rgba(${Math.random()<.5?"30,40,20":"0,0,0"},${Math.random()*.12})`;x.fillRect(Math.random()*w,Math.random()*h,3,3)}});
+  t.wrapS=t.wrapT=T.RepeatWrapping;return t}
+
+function dungCong(T,canvas,c,ket,ketThuc){
+  const W=innerWidth,H=innerHeight,yeu=MAY_YEU(),tg=window._congGio||gioCanh(),dem=tg==="dem";
+  const R=new T.WebGLRenderer({canvas,antialias:!yeu});ket.R=R;
+  R.setPixelRatio(Math.min(devicePixelRatio,yeu?1.5:2));R.setSize(W,H,false);R.outputEncoding=T.sRGBEncoding;
+  R.toneMapping=T.ACESFilmicToneMapping;R.toneMappingExposure=dem?1.05:.9;R.shadowMap.enabled=!yeu;R.shadowMap.type=T.PCFSoftShadowMap;
+  const sc=new T.Scene();
+  const TROI={ngay:["#cfe0e6","#f3e6c8"],sang:["#e9c9a4","#f7e3c2"],chieu:["#d79a6a","#f2cf9c"],dem:["#0f1420","#2a2030"]}[tg];
+  sc.background=texVe(4,256,(x,w,h)=>{const g=x.createLinearGradient(0,0,0,h);g.addColorStop(0,TROI[0]);g.addColorStop(1,TROI[1]);x.fillStyle=g;x.fillRect(0,0,w,h)});
+  sc.fog=new T.Fog(new T.Color(TROI[1]),16,46);
+  const cam=new T.PerspectiveCamera(W/H<.7?52:44,W/H,.1,120);
+
+  /* ánh sáng */
+  sc.add(new T.HemisphereLight(dem?0x6a6f90:0xfff3df,dem?0x1a140e:0x5a4a32,dem?.55:.6));
+  const mt=new T.DirectionalLight(dem?0x9fb0e0:0xffe2b8,dem?.45:1.25);mt.position.set(-7,12,9);mt.castShadow=!yeu;
+  mt.shadow.mapSize.set(1024,1024);Object.assign(mt.shadow.camera,{left:-10,right:10,top:10,bottom:-10,near:1,far:40});mt.shadow.bias=-.0004;mt.shadow.normalBias=.03;sc.add(mt);
+
+  const M=(mau,o={})=>new T.MeshStandardMaterial({color:new T.Color(mau),roughness:o.r??.85,metalness:o.m??0,map:o.map||null,emissive:new T.Color(o.e||"#000"),emissiveIntensity:o.ei??1});
+  const bo=(m)=>{m.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true}});return m};
+
+  /* nền: cỏ, đường lát đá, bậc tam cấp */
+  const co=new T.Mesh(new T.PlaneGeometry(120,120),M(dem?"#26301c":"#6f8a48",{map:texVe(256,256,(x,w)=>{x.fillStyle="#7a8f55";x.fillRect(0,0,w,w);for(let i=0;i<4000;i++){x.fillStyle=["#6b8148","#879c5d","#5f7440"][i%3];x.fillRect(Math.random()*w,Math.random()*w,1.5,3)}})}));
+  co.material.map.wrapS=co.material.map.wrapT=T.RepeatWrapping;co.material.map.repeat.set(30,30);co.rotation.x=-Math.PI/2;co.receiveShadow=true;sc.add(co);
+  const da=texVe(256,512,(x,w,h)=>{x.fillStyle="#b9b0a0";x.fillRect(0,0,w,h);for(let r=0;r<8;r++)for(let k=0;k<2;k++){const v=170+Math.random()*30;x.fillStyle=`rgb(${v},${v-6},${v-18})`;x.fillRect(k*128+3+(r%2?0:0),r*64+3,122,58)}
+    for(let i=0;i<5000;i++){x.fillStyle=`rgba(0,0,0,${Math.random()*.08})`;x.fillRect(Math.random()*w,Math.random()*h,2,2)}});
+  da.wrapS=da.wrapT=T.RepeatWrapping;da.repeat.set(1,10);
+  const duong=new T.Mesh(new T.PlaneGeometry(2.6,44),M("#ffffff",{map:da}));duong.rotation.x=-Math.PI/2;duong.position.set(0,.012,-5);duong.receiveShadow=true;sc.add(duong);
+  const mauDa=dem?"#5e5850":"#a49b8a";
+  [[0,.08,1.55,7.4,.16,.9],[0,.2,1.2,6.6,.12,.6]].forEach(([x,y,z,w,h,d])=>{const b=new T.Mesh(new T.BoxGeometry(w,h,d),M(mauDa,{map:VAN_DA(T).da}));b.position.set(x,y,z);sc.add(bo(b))});
+  const sanCong=new T.Mesh(new T.BoxGeometry(8,.26,2.2),M(mauDa,{map:VAN_DA(T).da}));sanCong.position.set(0,.13,0);sc.add(bo(sanCong));
+
+  /* cổng tam quan: tường vàng có vòm, mái ngói cong, hai tầng ở giữa */
+  const vang=dem?"#8a7448":"#d8b366",tTuong=texTuong(T,vang,true);
+  const mTuong=M("#ffffff",{map:tTuong,r:.92}),mNau=M(dem?"#3a1c0e":"#6b2f17",{r:.7}),mVien=M(dem?"#6a5a3a":"#efe0b8",{r:.9});
+  function khoiVom(x0,x1,cao,rv,cv,day){const s=new T.Shape();s.moveTo(x0,0);s.lineTo(x1,0);s.lineTo(x1,cao);s.lineTo(x0,cao);s.lineTo(x0,0);
+    const cx=(x0+x1)/2,h=new T.Path();h.moveTo(cx-rv,0);h.lineTo(cx-rv,cv-rv);h.absarc(cx,cv-rv,rv,Math.PI,0,true);h.lineTo(cx+rv,0);h.lineTo(cx-rv,0);s.holes.push(h);
+    const g=new T.ExtrudeGeometry(s,{depth:day,bevelEnabled:false,curveSegments:24});g.translate(0,0,-day/2);
+    const uv=g.attributes.uv;for(let i=0;i<uv.count;i++)uv.setXY(i,uv.getX(i)*.35,uv.getY(i)*.35);
+    const m=new T.Mesh(g,mTuong);m.position.y=.26;return m}
+  const cong=new T.Group();sc.add(cong);
+  cong.add(khoiVom(-1.85,1.85,4.1,1.0,3.05,.8));
+  cong.add(khoiVom(1.85,3.75,3.0,.48,2.05,.62));cong.add(khoiVom(-3.75,-1.85,3.0,.48,2.05,.62));
+  /* trụ biểu, chỉ vữa viền vòm */
+  [-1.95,1.95,-3.85,3.85].forEach((x,i)=>{const cao=i<2?4.9:3.6;const tr=new T.Mesh(new T.BoxGeometry(.42,cao,.92),mTuong);tr.position.set(x,.26+cao/2,0);cong.add(tr);
+    const dau=new T.Mesh(new T.BoxGeometry(.56,.16,1.04),mVien);dau.position.set(x,.26+cao,0);cong.add(dau);
+    const lo=new T.Mesh(new T.CylinderGeometry(.1,.16,.42,12),mVien);lo.position.set(x,.26+cao+.29,0);cong.add(lo);
+    const ngoc=new T.Mesh(new T.SphereGeometry(.12,14,10),M("#c9a14a",{r:.4,m:.5}));ngoc.position.set(x,.26+cao+.58,0);cong.add(ngoc);
+    if(i<2){const doi=new T.Mesh(new T.BoxGeometry(.26,2.4,.03),M("#3b1a0c",{r:.6}));doi.position.set(x,1.9,.48);cong.add(doi);
+      const vien=new T.Mesh(new T.BoxGeometry(.3,2.44,.02),M("#b98f3e",{r:.4,m:.4}));vien.position.set(x,1.9,.47);cong.add(vien)}});
+  const vienVom=new T.Mesh(new T.TorusGeometry(1.06,.07,8,32,Math.PI),mVien);vienVom.position.set(0,.26+2.05,.42);cong.add(vienVom);
+  [-2.8,2.8].forEach(x=>{const v=new T.Mesh(new T.TorusGeometry(.53,.05,8,24,Math.PI),mVien);v.position.set(x,.26+1.57,.33);cong.add(v)});
+  /* biển tên chùa */
+  const bien=new T.Mesh(new T.PlaneGeometry(3.1,.78),new T.MeshStandardMaterial({map:bienTen(T,c.ten),roughness:.55,emissive:new T.Color("#ffffff"),emissiveMap:null,emissiveIntensity:0}));
+  bien.position.set(0,3.76,.452);cong.add(bien);
+  const khungB=new T.Mesh(new T.BoxGeometry(3.22,.9,.06),M("#b98f3e",{r:.45,m:.5}));khungB.position.set(0,3.76,.4);cong.add(khungB);
+  /* mái cong: mặt cong vểnh hai đầu đao */
+  const tNgoi=texNgoi(T),mNgoi=new T.MeshStandardMaterial({map:tNgoi,color:new T.Color(dem?"#5a3a2c":"#ffffff"),roughness:.8,side:T.DoubleSide});
+  function mai(rong,sau,cao,vong,y){const g=new T.Group(),nu=26,nv=8;
+    [1,-1].forEach(mat=>{const geo=new T.PlaneGeometry(1,1,nu,nv),p=geo.attributes.position;
+      for(let i=0;i<p.count;i++){const u=p.getX(i),v=p.getY(i)+.5;const x=u*rong,uu=Math.abs(u*2);
+        const z=mat*(sau*(1-v)+.02),yy=cao*v-(.12*Math.sin(Math.PI*v))+vong*Math.pow(uu,5)*(1-v*.6);p.setXYZ(i,x,yy,z)}
+      geo.computeVertexNormals();const uv=geo.attributes.uv;for(let i=0;i<uv.count;i++)uv.setXY(i,uv.getX(i)*rong*.6,uv.getY(i)*sau*1.1);
+      const m=new T.Mesh(geo,mNgoi);m.castShadow=true;m.receiveShadow=true;g.add(m)});
+    const noc=new T.Mesh(new T.BoxGeometry(rong*.92,.16,.2),M(dem?"#3a2a1e":"#d9c9a6"));noc.position.y=cao+.04;g.add(noc);
+    [-1,1].forEach(s=>{const dc=new T.TubeGeometry(new T.CatmullRomCurve3([new T.Vector3(s*rong*.47,cao-.02,0),new T.Vector3(s*rong*.5,cao+.12,0),new T.Vector3(s*rong*.53,cao+.36,0),new T.Vector3(s*rong*.5,cao+.5,0)]),12,.045,6);
+      g.add(new T.Mesh(dc,M(dem?"#3a2a1e":"#d9c9a6")))});
+    g.position.y=y;return g}
+  const maiDuoi=mai(4.6,1.25,.85,.55,4.36);cong.add(maiDuoi);
+  const tangTren=new T.Mesh(new T.BoxGeometry(2.6,.7,.7),mTuong);tangTren.position.set(0,5.4,0);cong.add(tangTren);
+  const banhXe=new T.Mesh(new T.CircleGeometry(.24,24),M("#b98f3e",{r:.4,m:.5}));banhXe.position.set(0,5.42,.36);cong.add(banhXe);
+  const maiTren=mai(3.5,.95,.7,.42,5.72);cong.add(maiTren);
+  [-1,1].forEach(s=>{const mm=mai(2.3,.9,.6,.32,3.26);mm.position.x=s*2.8;cong.add(mm)});
+  /* lưỡng long chầu nhật trên nóc */
+  const nguyet=new T.Mesh(new T.SphereGeometry(.16,16,12),M("#e0b04c",{r:.35,m:.6,e:"#8a5a10",ei:dem?.8:.2}));nguyet.position.set(0,6.62,0);cong.add(nguyet);
+  [-1,1].forEach(s=>{const rong=new T.TubeGeometry(new T.CatmullRomCurve3([new T.Vector3(s*1.45,6.5,0),new T.Vector3(s*1.05,6.58,0),new T.Vector3(s*.7,6.85,0),new T.Vector3(s*.45,6.68,0),new T.Vector3(s*.3,6.75,0)]),24,.05,6);
+    cong.add(new T.Mesh(rong,M("#7a9c8a",{r:.5,m:.2})))});
+  bo(cong);
+
+  /* đèn lồng đỏ dưới vòm, đung đưa */
+  const dl=[];const mDen=M("#b8241a",{r:.55,e:"#d8401c",ei:dem?.55:.18});
+  [[0,2.9,.62],[-2.8,1.95,.5],[2.8,1.95,.5],[-1.2,3.2,.62],[1.2,3.2,.62]].forEach(([x,y,z],i)=>{const g=new T.Group();g.position.set(x,y,z);
+    const day=new T.Mesh(new T.CylinderGeometry(.01,.01,.35,4),M("#2a1a10"));day.position.y=-.17;g.add(day);
+    const than=new T.Mesh(new T.SphereGeometry(.2,16,12),mDen);than.scale.y=1.15;than.position.y=-.55;g.add(than);
+    [-.25,.25].forEach(dy=>{const n=new T.Mesh(new T.CylinderGeometry(.09,.09,.06,12),M("#c9a14a",{r:.4,m:.5}));n.position.y=-.55+dy;g.add(n)});
+    const tua=new T.Mesh(new T.CylinderGeometry(.015,.04,.25,6),M("#e0b04c"));tua.position.y=-.92;g.add(tua);
+    if(dem){const l=new T.PointLight(0xff7a3a,.7,4);l.position.y=-.55;g.add(l)}
+    g.userData.p=i*1.3;cong.add(g);dl.push(g)});
+
+  [-1.8,1.8].forEach(x=>[-6,-11,-16].forEach(z=>{const g=new T.Group();const de=new T.Mesh(new T.BoxGeometry(.32,.5,.32),M(mauDa,{map:VAN_DA(T).da}));de.position.y=.25;g.add(de);
+    const than=new T.Mesh(new T.CylinderGeometry(.12,.16,.7,6),M(mauDa,{map:VAN_DA(T).da}));than.position.y=.85;g.add(than);
+    const hop=new T.Mesh(new T.BoxGeometry(.34,.3,.34),M("#f3d9a0",{e:"#ffb860",ei:dem?.9:.12}));hop.position.y=1.35;g.add(hop);
+    const no=new T.Mesh(new T.ConeGeometry(.3,.25,4),M(mauDa));no.position.y=1.62;no.rotation.y=Math.PI/4;g.add(no);g.position.set(x,0,z);sc.add(bo(g))}));
+  /* cờ Phật giáo hai bên đường */
+  const tCo=texVe(256,160,(x,w,h)=>{const m=["#2a5db0","#f2c230","#c8322a","#f4f1ea","#e8862b"];const sw=w/6;
+    m.forEach((c2,i)=>{x.fillStyle=c2;x.fillRect(i*sw,0,sw,h)});m.forEach((c2,i)=>{x.fillStyle=c2;x.fillRect(5*sw,i*h/5,sw,h/5)})});
+  const coPhat=[];
+  [[-2.2,3.6],[2.2,3.6],[-2.2,7.6],[2.2,7.6]].forEach(([x,z])=>{const cot=new T.Mesh(new T.CylinderGeometry(.04,.05,3.6,8),M("#8a6a3a",{r:.5}));cot.position.set(x,1.8,z);sc.add(bo(cot));
+    const g=new T.PlaneGeometry(1.0,.62,16,6),m=new T.Mesh(g,new T.MeshStandardMaterial({map:tCo,side:T.DoubleSide,roughness:.9}));
+    m.position.set(x+(x<0?.52:-.52),3.18,z);m.rotation.y=x<0?0:Math.PI;m.userData.goc=g.attributes.position.array.slice();sc.add(m);coPhat.push(m)});
+
+  /* cây hai bên: tùng, cau, tre */
+  const mLa=M(dem?"#1e2a1a":"#3f5e2c",{r:.95}),mLa2=M(dem?"#26331f":"#557a38",{r:.95}),mGo=M("#5a4030");
+  function tung(x,z,s){const g=new T.Group();const than=new T.Mesh(new T.CylinderGeometry(.08*s,.14*s,1.6*s,8),mGo);than.position.y=.8*s;g.add(than);
+    [[0,1.5,0,.85],[.35,1.15,.1,.6],[-.3,1.25,-.1,.65],[0,1.95,0,.6]].forEach(([a,b,cz,r])=>{const t=new T.Mesh(new T.IcosahedronGeometry(r*s,1),a?mLa2:mLa);t.scale.y=.62;t.position.set(a*s,b*s,cz*s);g.add(t)});
+    g.position.set(x,0,z);sc.add(bo(g))}
+  function cau(x,z,s){const g=new T.Group();const than=new T.Mesh(new T.CylinderGeometry(.06*s,.08*s,5*s,8),M("#8b8070"));than.position.y=2.5*s;g.add(than);
+    for(let i=0;i<8;i++){const la=new T.Mesh(new T.ConeGeometry(.12*s,1.5*s,4),mLa2);const a=i/8*Math.PI*2;la.position.set(Math.cos(a)*.55*s,5*s,Math.sin(a)*.55*s);la.rotation.z=Math.cos(a)*1.25;la.rotation.x=-Math.sin(a)*1.25;g.add(la)}
+    g.position.set(x,0,z);sc.add(bo(g))}
+  tung(-4.6,1.8,1.1);tung(4.6,1.8,1.1);tung(-3.4,6,.9);tung(3.4,6,.9);cau(-6,-1.5,1);cau(6.2,-1.2,1.05);cau(-7.5,4,.95);cau(7.4,5.5,1);
+  for(let i=0;i<14;i++){const x=(i%2?1:-1)*(5.4+Math.random()*3),z=-4-Math.random()*6;tung(x,z,.9+Math.random()*.6)}
+
+  /* phía sau: chánh điện và núi, mờ trong sương */
+  const cd=new T.Group();const tcd=new T.Mesh(new T.BoxGeometry(9,2.6,4),mTuong);tcd.position.y=1.3;cd.add(tcd);
+  const mcd=mai(11,2.8,1.8,.9,2.6);cd.add(mcd);const mcd2=mai(7,2,1.3,.6,4.1);cd.add(mcd2);cd.position.set(0,.2,-21);sc.add(cd);
+  const nuiT=texVe(512,128,(x,w,h)=>{x.fillStyle=dem?"#232030":"#9fa79a";x.beginPath();x.moveTo(0,h);let y=h*.5;for(let i=0;i<=24;i++){y=Math.max(h*.08,Math.min(h*.85,y+(Math.random()-.5)*h*.35));x.lineTo(i/24*w,y)}x.lineTo(w,h);x.fill()});
+  const nui=new T.Mesh(new T.PlaneGeometry(70,14),new T.MeshBasicMaterial({map:nuiT,transparent:true,fog:true}));nui.position.set(0,5,-34);sc.add(nui);
+
+  /* khói hương nhẹ trước cổng */
+  const sang=texSang();const khoi=[];
+  for(let i=0;i<10;i++){const s=new T.Sprite(new T.SpriteMaterial({map:sang,color:new T.Color(dem?"#ffd8a0":"#fff6e6"),transparent:true,opacity:0,depthWrite:false}));s.userData={t:Math.random()*4,x:(Math.random()-.5)*3};s.scale.set(1.6,1.6,1);sc.add(s);khoi.push(s)}
+
+  /* người áo lam */
+  const mAo=M(dem?"#3f4b5a":"#4e5d70",{r:.95}),mDa=M("#e2b894",{r:.7}),mToc=M("#1d1612",{r:.6});
+  const ng=new T.Group();
+  const aoP=[[0,.06],[.29,.06],[.27,.3],[.22,.62],[.19,.86],[.2,1.02],[.16,1.1],[.08,1.16],[0,1.17]].map(([a,b])=>new T.Vector2(a,b));
+  const ao=new T.Mesh(new T.LatheGeometry(aoP,28),mAo);ng.add(ao);
+  const co2=new T.Mesh(new T.CylinderGeometry(.055,.06,.1,12),mDa);co2.position.y=1.2;ng.add(co2);
+  const dau=new T.Group();dau.position.y=1.38;ng.add(dau);
+  const mat=new T.Mesh(new T.SphereGeometry(.16,24,18),mDa);mat.scale.set(1,1.1,1);dau.add(mat);
+  const toc=new T.Mesh(new T.SphereGeometry(.172,24,18,0,Math.PI*2,0,Math.PI*.62),mToc);toc.rotation.x=-.75;toc.position.set(0,.01,-.018);toc.scale.set(1,1.1,1.04);dau.add(toc);
+  const bui=new T.Mesh(new T.SphereGeometry(.085,16,12),mToc);bui.position.set(0,.06,-.16);dau.add(bui);
+  function tay(s){const g=new T.Group();g.position.set(s*.2,1.05,0);const ong=new T.Mesh(new T.CylinderGeometry(.06,.085,.48,10),mAo);ong.position.y=-.24;g.add(ong);
+    const bt=new T.Mesh(new T.SphereGeometry(.045,10,8),mDa);bt.position.y=-.5;g.add(bt);ng.add(g);return g}
+  const tT=tay(-1),tP=tay(1);
+  const chan=[-1,1].map(s=>{const m=new T.Mesh(new T.BoxGeometry(.09,.06,.2),M("#3a2c22"));m.position.set(s*.09,.03,.04);ng.add(m);return m});
+  bo(ng);ng.scale.setScalar(1.12);sc.add(ng);
+
+  /* đường đi: tới trước cổng, vái, rồi qua cổng */
+  const Z0=9.2,Z1=2.25,Z2=-6.5,T1=2.7,T2=1.5,T3=2.4,TONG=T1+T2+T3;
+  const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+  const t0=performance.now();let vai=false;
+  function khung(){const now=performance.now(),t=window._congT!=null?window._congT:(now-t0)/1000;
+    let z,buoc=0,cui=0,chap=0;
+    if(t<T1){const k=t/T1;z=Z0+(Z1-Z0)*(1-Math.pow(1-k,1.6));buoc=1-k*.4}
+    else if(t<T1+T2){z=Z1;const k=(t-T1)/T2;chap=Math.min(1,k*3)*(k>.85?(1-k)/.15:1);cui=Math.sin(Math.min(1,Math.max(0,(k-.25)/.55))*Math.PI);
+      if(!vai&&k>.3){vai=true;try{amChuong(.55)}catch(e){}}}
+    else{const k=Math.min(1,(t-T1-T2)/T3);z=Z1+(Z2-Z1)*ease(k);buoc=.9}
+    const pha=t*7.2;
+    const hY=z>2.05?0:z>1.55?.16*Math.min(1,(2.05-z)/.12):z>-1.1?.16+.1*Math.min(1,(1.55-z)/.12):Math.max(0,.26-(-1.1-z)*.8);ng.position.set(0,hY+Math.abs(Math.sin(pha))*.03*buoc,z);
+    ng.rotation.y=Math.PI;
+    chan[0].position.z=.04+Math.sin(pha)*.13*buoc;chan[1].position.z=.04-Math.sin(pha)*.13*buoc;
+    ao.rotation.z=Math.sin(pha)*.03*buoc;
+    tT.rotation.x=Math.sin(pha)*.35*buoc*(1-chap)-chap*1.25;tP.rotation.x=-Math.sin(pha)*.35*buoc*(1-chap)-chap*1.25;
+    tT.rotation.z=chap*.5;tP.rotation.z=-chap*.5;
+    ng.rotation.x=-cui*.32;dau.rotation.x=cui*.15;
+    /* máy quay theo sau lưng, lúc vái thì dừng cho rõ biển tên, rồi lướt qua vòm */
+    let cz,cy,lz,ly;const xa=cam.aspect<.7?1.25:1;
+    if(t<T1+T2){const k=Math.min(1,t/T1);cz=Z1+7.4*xa+(1-k)*2.2;cy=2.1+(1-k)*.4;lz=0;ly=3.15}
+    else{const k=ease(Math.min(1,(t-T1-T2)/T3));const d=7.4*xa+(3.2-7.4*xa)*k;cz=Math.min(Z1+7.4*xa,z+d);cy=2.1+(1.6-2.1)*k;lz=z-6;ly=3.15+(1.4-3.15)*k}
+    cam.position.set(Math.sin(t*.35)*.25,cy,cz);cam.lookAt(0,ly,lz);
+    dl.forEach(g=>{g.rotation.z=Math.sin(t*1.4+g.userData.p)*.06;g.rotation.x=Math.cos(t*1.1+g.userData.p)*.04});
+    coPhat.forEach((m,j)=>{const p=m.geometry.attributes.position,g=m.userData.goc;for(let i=0;i<p.count;i++){const x=g[i*3],k=(x+.5);p.setZ(i,Math.sin(x*6-t*5+j)*.06*k)}p.needsUpdate=true});
+    khoi.forEach(s=>{s.userData.t+=.016;const k=(s.userData.t%4)/4;s.position.set(s.userData.x+Math.sin(k*5)*.2,.4+k*2.6,1.4);s.material.opacity=Math.sin(k*Math.PI)*(dem?.16:.22)});
+    R.render(sc,cam);
+    if(t>=TONG-.15&&window._congT==null){ketThuc();return}
+    ket.raf=requestAnimationFrame(khung)}
+  const doiCo=()=>{const w=innerWidth,h=innerHeight;cam.aspect=w/h;cam.fov=w/h<.7?52:44;cam.updateProjectionMatrix();R.setSize(w,h,false)};
+  addEventListener("resize",doiCo);
+  ket.raf=requestAnimationFrame(khung);
+  const huy=()=>removeEventListener("resize",doiCo);const tr=setInterval(()=>{if(ket.xong){huy();clearInterval(tr)}},300);
+}
+
+ACT["cd-vao"]=t=>diQuaCong(TU.chua,"/chua/chanh-dien");
+
+const VER="1793907323";try{fetch("ver.txt?"+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{v=(v||"").trim();if(v&&v!==VER){let ok=true;try{ok=!sessionStorage.getItem("tm-rl"+v);sessionStorage.setItem("tm-rl"+v,"1")}catch(e){}if(ok)location.reload()}}).catch(()=>{})}catch(e){}
 apTheme();ghiNgan();ve();
 if(matchMedia)matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>{});</script>
 
