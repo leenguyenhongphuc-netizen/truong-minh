@@ -3709,8 +3709,8 @@ function batAmNen(){if(_nen||!AM.bat||!AM.nen)return;const a=ac();if(!a)return;c
 function tatAmNen(){if(!_nen)return;try{_nen.s.stop()}catch(e){}clearInterval(_nen.iv);_nen=null}
 
 /* ---------- dữ liệu cho cảnh ---------- */
-function vatTren(g){const ds=[];dangBay(g).forEach(d=>{for(let i=0;i<Math.min(3,d.sl);i++)ds.push({k:MO_HINH[d.id],ten:quaById(d.id).ten,ai:d.ai})});
-  const don=DATA.donHang.find(d=>d.gt===g.id&&d.buoc<4);if(don)don.items.forEach(i=>{if(MO_HINH[i.id])ds.push({k:MO_HINH[i.id],ma:true,ten:spById(i.id).ten,don})});return ds}
+function vatTren(g){const ds=[];dangBay(g).forEach(d=>ds.push({k:MO_HINH[d.id],ten:quaById(d.id).ten,ai:d.ai}));
+  const don=DATA.donHang.find(d=>d.gt===g.id&&d.buoc<4);if(don)don.items.forEach(i=>{if(MO_HINH[i.id]&&!ds.some(x=>x.k===MO_HINH[i.id]))ds.push({k:MO_HINH[i.id],ma:true,ten:spById(i.id).ten,don})});return ds}
 function capNhatVat(){const g=gtById(VM.gt);if(MO&&g)MO.dat(vatTren(g))}
 
 /* ---------- bảng điều khiển ---------- */
@@ -4480,7 +4480,7 @@ function moCuaHang(){
   r.fn=(p,q)=>{const m=goc(p,q);let da=true;try{da=sessionStorage.getItem("tm-ch-mo")==="1";if(!da)sessionStorage.setItem("tm-ch-mo","1")}catch(e){}
     if(!da)setTimeout(moCuaHang,0);return m}})();
 
-const VER="1793910004";try{fetch("ver.txt?"+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{v=(v||"").trim();if(v&&v!==VER){let ok=true;try{ok=!sessionStorage.getItem("tm-rl"+v);sessionStorage.setItem("tm-rl"+v,"1")}catch(e){}if(ok)location.reload()}}).catch(()=>{})}catch(e){}
+const VER="1793935514";try{fetch("ver.txt?"+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{v=(v||"").trim();if(v&&v!==VER){let ok=true;try{ok=!sessionStorage.getItem("tm-rl"+v);sessionStorage.setItem("tm-rl"+v,"1")}catch(e){}if(ok)location.reload()}}).catch(()=>{})}catch(e){}
 apTheme();ghiNgan();ve();
 if(matchMedia)matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>{});</script>
 
